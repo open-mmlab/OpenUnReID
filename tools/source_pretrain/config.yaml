@@ -1,0 +1,115 @@
+DATA_ROOT: '../datasets/'
+LOGS_ROOT: '../logs/'
+
+
+MODEL:
+  # architecture
+  backbone: 'resnet50'
+  pooling: 'gem'
+  embed_feat: 0
+  dropout: 0.
+
+  dsbn: False
+
+  sync_bn: True
+  samples_per_bn: 64
+
+  mean_net: False
+
+  # pretraining
+  imagenet_pretrained: True
+  source_pretrained: null
+
+
+DATA:
+
+  height: 256
+  width: 128
+  norm_mean: [0.485, 0.456, 0.406]
+  norm_std: [0.229, 0.224, 0.225]
+
+  TRAIN:
+    # augmentation
+    is_autoaug: True
+
+    is_flip: True
+    flip_prob: 0.5
+
+    is_pad: True
+    pad_size: 10
+
+    is_blur: False
+    blur_prob: 0.5
+
+    is_erase: False
+    erase_prob: 0.5
+
+    # dual augmentation for MMT
+    is_mutual_transform: False
+    mutual_times: 2
+
+
+TRAIN:
+  seed: 1
+  deterministic: True
+
+  # datasets
+  datasets: {'market1501': 'trainval',}
+  unsup_dataset_indexes: null
+
+  epochs: 120
+  iters: 200
+  
+  LOSS:
+    losses: {'cross_entropy': 1., 'softmax_triplet': 1.}
+    margin: 0.
+
+  # validate
+  val_dataset: 'market1501'
+  val_freq: 40
+
+  # sampler
+  SAMPLER:
+    num_instances: 4
+    is_shuffle: True
+
+  # data loader
+  LOADER:
+    samples_per_gpu: 16
+    workers_per_gpu: 2
+
+  # optim
+  OPTIM:
+    optim: 'adam'
+    lr: 0.00035
+    weight_decay: 0.0005
+
+  SCHEDULER:
+    lr_scheduler: 'warmup_multi_step'
+    stepsize: [40, 70]
+    gamma: 0.1
+    warmup_factor: 0.01
+    warmup_steps: 10
+
+
+TEST:
+
+  # datasets
+  datasets: ['market1501',]
+
+  # data loader
+  LOADER:
+    samples_per_gpu: 32
+    workers_per_gpu: 4
+
+  # ranking setting
+  dist_metric: 'euclidean'
+  norm_feat: True
+  dist_cuda: True
+
+  # post processing
+  rerank: False
+  search_type: 0 # 0,1,2 for GPU, 3 for CPU (work for faiss)
+  k1: 20
+  k2: 6
+  lambda_value: 0.3

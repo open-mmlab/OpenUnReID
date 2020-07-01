@@ -1,0 +1,16 @@
+numpy
+sklearn
+Cython
+h5py
+pyzmq
+tornado
+pillow-simd
+six
+scipy
+opencv-python
+matplotlib
+faiss-gpu
+easydict
+pyyaml
+requests
+multiprocess
