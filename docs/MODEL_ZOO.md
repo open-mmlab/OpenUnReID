@@ -62,8 +62,8 @@
 
 | Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
 | ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
-| Direct infer | ResNet50 | DukeMTMC-reID | 27.2 | 58.9 | 75.7 | 81.4 | ~1h | [[config]](https://drive.google.com/file/d/1_gnPfjwf9uTOJyg1VsBzbMNQ-SGuhohP/view?usp=sharing) [[model]](https://drive.google.com/file/d/1MH-eIuWICkkQ8Ka3stXbiTq889yUZjBV/view?usp=sharing) |
-| [UDA_TP](../tools/UDA_TP) | ResNet50 | DukeMTMC-reID | 52.3 | 76.0 | 87.8 | 91.9 | ~2h | [[config]](https://drive.google.com/file/d/1NgbBQrM8jbnKJJHQ1WUZ1sPeXvH6luAd/view?usp=sharing) [[model]](https://drive.google.com/file/d/1ciAk7GxnShm8z25hVqarhaG_8fz_tiyX/view?usp=sharing) |
+| Direct infer | ResNet50 | DukeMTMC | 27.2 | 58.9 | 75.7 | 81.4 | ~1h | [[config]](https://drive.google.com/file/d/1_gnPfjwf9uTOJyg1VsBzbMNQ-SGuhohP/view?usp=sharing) [[model]](https://drive.google.com/file/d/1MH-eIuWICkkQ8Ka3stXbiTq889yUZjBV/view?usp=sharing) |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | DukeMTMC | 52.3 | 76.0 | 87.8 | 91.9 | ~2h | [[config]](https://drive.google.com/file/d/1NgbBQrM8jbnKJJHQ1WUZ1sPeXvH6luAd/view?usp=sharing) [[model]](https://drive.google.com/file/d/1ciAk7GxnShm8z25hVqarhaG_8fz_tiyX/view?usp=sharing) |
 | [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 75.6 | 90.9 | 96.6 | 97.8 | ~3h | [[config]](https://drive.google.com/file/d/1Oe5QQ-NEJy9YsQr7hsMr5CJlZ0XHJS5P/view?usp=sharing) [[model]](https://drive.google.com/file/d/18t9HOCnQzQlgkRkSs8uFaDFYioGRtcLO/view?usp=sharing) |
 | [MMT](../tools/MMT/) | ResNet50 | ImageNet | 80.9 | 92.2 | 97.6 | 98.4 | ~6h | [[config]](https://drive.google.com/file/d/1iFiOLbrzVQcEtIlFvsDIcDf4FcT9Z60U/view?usp=sharing) [[model]](https://drive.google.com/file/d/1XGOrt1iTHQNuFPebBcNjPrkTEwBXXRr_/view?usp=sharing) |
 | [SpCL](../tools/SpCL/) | ResNet50 | ImageNet | 78.2 | 90.5 | 96.6 | 97.8 | ~3h | [[config]](https://drive.google.com/file/d/1O8XxCJDzpI7VIRR7crh0kkOK8vebmIgj/view?usp=sharing) [[model]](https://drive.google.com/file/d/1LvrHptXgzWspN2jwYtom4L_jUKYHpU_z/view?usp=sharing) |
@@ -81,8 +81,8 @@
 
 | Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
 | ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
-| Direct infer | ResNet50 | Market-1501 | 28.1 | 49.3 | 64.3 | 69.7 | ~1h | [[config]](https://drive.google.com/file/d/1FOuW_Hwl2ASPx0iXeDNxZ1R9MwFBr3gx/view?usp=sharing) [[model]](https://drive.google.com/file/d/13dkhrjz-VIH3jCjIep185MLZxFSD_F7R/view?usp=sharing) |
-| [UDA_TP](../tools/UDA_TP) | ResNet50 | Market-1501 | 45.7 | 65.5 | 78.0 | 81.7 | ~2h | [[config]](https://drive.google.com/file/d/1Dvd-D4lTYJ44SJK0gMpTJ-W8cTgMF0vD/view?usp=sharing) [[model]](https://drive.google.com/file/d/1805D3yqtY3QY8pM83BanLkMLBnBSBgIz/view?usp=sharing) |
+| Direct infer | ResNet50 | Market | 28.1 | 49.3 | 64.3 | 69.7 | ~1h | [[config]](https://drive.google.com/file/d/1FOuW_Hwl2ASPx0iXeDNxZ1R9MwFBr3gx/view?usp=sharing) [[model]](https://drive.google.com/file/d/13dkhrjz-VIH3jCjIep185MLZxFSD_F7R/view?usp=sharing) |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | Market | 45.7 | 65.5 | 78.0 | 81.7 | ~2h | [[config]](https://drive.google.com/file/d/1Dvd-D4lTYJ44SJK0gMpTJ-W8cTgMF0vD/view?usp=sharing) [[model]](https://drive.google.com/file/d/1805D3yqtY3QY8pM83BanLkMLBnBSBgIz/view?usp=sharing) |
 | [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 60.4 | 75.9 | 86.2 | 89.8 | ~3h | [[config]](https://drive.google.com/file/d/1-y5o5j6_K037s1BKKlY5IHf-hJ37XEtK/view?usp=sharing) [[model]](https://drive.google.com/file/d/1IVTJkfdlubV_bfH_ipxIEsubraxGbQMI/view?usp=sharing) |
 | [MMT](../tools/MMT/) | ResNet50 | ImageNet | 67.7 | 80.3 | 89.9 | 92.9 | ~6h | [[config]](https://drive.google.com/file/d/1KcRmKH-8VZudb6N-KHj12DhV3ECmdBuM/view?usp=sharing) [[model]](https://drive.google.com/file/d/1tgqTZDLIZQrPS56PF0Yguy6lfNdSAIa9/view?usp=sharing) |
 | [SpCL](../tools/SpCL/) | ResNet50 | ImageNet | 70.4 | 83.8 | 91.2 | 93.4 | ~3h | [[config]](https://drive.google.com/file/d/1ILiId7BF_49kv4dT1pcZE0HQEdeTPXjU/view?usp=sharing) [[model]](https://drive.google.com/file/d/17WQyMnS7PiDy3EpD2RJbk45LVxcRZNi2/view?usp=sharing) |
