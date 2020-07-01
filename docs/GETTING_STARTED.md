@@ -67,7 +67,7 @@ python ${METHOD}/main.py ${METHOD}/config.yaml --work-dir ${WORK_DIR} --launcher
 #### Arguments
 
 + `${METHOD}`: method for training, e.g. `source_pretrain`, `UDA_TP`, `MMT`, `SpCL`.
-+ `${WORK_DIR}`: folder for saving logs and checkpoints, e.g. `cluster/market1501`, the absolute path will be `LOGS_ROOT/${WORK_DIR}` (`LOGS_ROOT` is defined in config files).
++ `${WORK_DIR}`: folder for saving logs and checkpoints, e.g. `MMT/market1501`, the absolute path will be `LOGS_ROOT/${WORK_DIR}` (`LOGS_ROOT` is defined in config files).
 + `[optional arguments]`: modify some key values from the loaded config file, e.g. `TRAIN.val_freq 10`. (it's also ok to make the modification directly in the config file)
 
 #### Configs
