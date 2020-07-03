@@ -29,7 +29,10 @@ def init_dist(args, backend="nccl"):
 
     elif args.launcher == "none":
         # DataParallel or single GPU
-        args.total_gpus = torch.cuda.device_count()
+        if ("CUDA_VISIBLE_DEVICES" in os.environ):
+            args.total_gpus = len(os.environ["CUDA_VISIBLE_DEVICES"])
+        else:
+            args.total_gpus = torch.cuda.device_count()
         if args.total_gpus > 1:
             warnings.warn(
                 "It is highly recommended to use DistributedDataParallel by setting "
@@ -53,11 +56,10 @@ def init_dist_pytorch(args, backend="nccl"):
     args.rank = int(os.environ["LOCAL_RANK"])
     args.ngpus_per_node = torch.cuda.device_count()
     args.gpu = args.rank
-    args.world_size = args.ngpus_per_node
     torch.cuda.set_device(args.gpu)
     dist.init_process_group(backend=backend)
     args.total_gpus = dist.get_world_size()
-
+    args.world_size = args.total_gpus
 
 def init_dist_slurm(args, backend="nccl"):
     args.rank = int(os.environ["SLURM_PROCID"])
