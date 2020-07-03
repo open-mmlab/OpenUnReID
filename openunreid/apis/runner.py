@@ -6,6 +6,7 @@ import time
 import warnings
 
 import torch
+from torch.nn.parallel import DataParallel, DistributedDataParallel
 
 from ..core.label_generators import LabelGenerator
 from ..core.metrics.accuracy import accuracy
@@ -133,7 +134,7 @@ class BaseRunner(object):
 
         # update classifier centers
         start_cls_id = 0
-        for idx in self.cfg.TRAIN.datasets:
+        for idx in range(len(self.cfg.TRAIN.datasets)):
             if idx in self.cfg.TRAIN.unsup_dataset_indexes:
                 labels = torch.arange(
                     start_cls_id, start_cls_id + self.train_sets[idx].num_pids
@@ -141,9 +142,14 @@ class BaseRunner(object):
                 centers = label_centers[self.cfg.TRAIN.unsup_dataset_indexes.index(idx)]
                 if isinstance(self.model, list):
                     for model in self.model:
-                        model.module.initialize_centers(centers, labels)
+                        if isinstance(model, (DataParallel, DistributedDataParallel)):
+                            model = model.module
+                        model.initialize_centers(centers, labels)
                 else:
-                    self.model.module.initialize_centers(centers, labels)
+                    model = self.model
+                    if isinstance(model, (DataParallel, DistributedDataParallel)):
+                        model = model.module
+                    model.initialize_centers(centers, labels)
             start_cls_id += self.train_sets[idx].num_pids
 
         print(f"\n{sep} Finished updating pseudo label {sep}n")

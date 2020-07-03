@@ -3,11 +3,10 @@ import os
 import os.path as osp
 import subprocess
 import time
-from distutils.extension import Extension
 
 import numpy as np
 from Cython.Build import cythonize
-from setuptools import find_packages, setup
+from setuptools import Extension, find_packages, setup
 
 
 def readme():
