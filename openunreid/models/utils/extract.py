@@ -4,12 +4,10 @@ import time
 from collections import OrderedDict
 
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
 
 from ...utils.dist_utils import all_gather_tensor, get_dist_info, synchronize
-from ...utils.meters import AverageMeter, Meters, ProgressMeter
-from ...utils.torch_utils import to_torch
+from ...utils.meters import Meters
 
 
 @torch.no_grad()
@@ -19,9 +17,9 @@ def extract_features(
     dataset,  # dataset with file paths, etc
     cuda=True,  # extract on GPU
     normalize=True,  # normalize feature
-    with_path=False,  # return a dict {path:feat} if True, otherwise, return only feat (Tensor)
+    with_path=False,  # return a dict {path:feat} if True, otherwise, return only feat (Tensor)  # noqa
     print_freq=10,  # log print frequence
-    save_memory=False,  # gather features from different GPUs all together or in sequence, only for distributed
+    save_memory=False,  # gather features from different GPUs all together or in sequence, only for distributed  # noqa
     for_testing=True,
     prefix="Extract: ",
 ):

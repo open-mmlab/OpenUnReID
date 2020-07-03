@@ -1,7 +1,5 @@
-import warnings
-
-from .resnet import *
-from .resnet_ibn_a import *
+from .resnet import resnet18, resnet34, resnet50, resnet101, resnet152
+from .resnet_ibn_a import resnet50_ibn_a, resnet101_ibn_a
 
 __all__ = ["build_bakcbone", "names"]
 

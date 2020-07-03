@@ -56,7 +56,8 @@ def convert_dsbn(model, num_domains=2, target_bn_idx=-1):
 def convert_bn(model, target_bn_idx=-1):
     """
     convert all domain-specific bn layers in the model back to normal bn layers
-    you need to do convert_sync_bn again after this function, if you use sync bn in the model
+    you need to do convert_sync_bn again after this function, if you use sync bn in the
+    model
     """
 
     for _, (child_name, child) in enumerate(model.named_children()):
@@ -91,7 +92,7 @@ def switch_target_bn(model, target_bn_idx=-1):
     switch the target_bn_idx of all domain-specific bn layers
     """
 
-    for _, (child_name, child) in enumerate(model.named_children()):
+    for _, child in model.named_children():
 
         if isinstance(child, DSBN):
             child.target_bn_idx = target_bn_idx

@@ -1,19 +1,18 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 __all__ = ["CrossEntropyLoss", "SoftEntropyLoss"]
 
 
 class CrossEntropyLoss(nn.Module):
     """Cross entropy loss with label smoothing regularizer.
-	Reference:
-	Szegedy et al. Rethinking the Inception Architecture for Computer Vision. CVPR 2016.
-	Equation: y = (1 - epsilon) * y + epsilon / K.
-	Args:
-	num_classes (int): number of classes.
-	epsilon (float): weight.
-	"""
+    Reference:
+    Szegedy et al. Rethinking the Inception Architecture for Computer Vision. CVPR 2016.
+    Equation: y = (1 - epsilon) * y + epsilon / K.
+    Args:
+    num_classes (int): number of classes.
+    epsilon (float): weight.
+    """
 
     def __init__(self, num_classes, epsilon=0.1):
         super(CrossEntropyLoss, self).__init__()
@@ -25,10 +24,10 @@ class CrossEntropyLoss(nn.Module):
 
     def forward(self, results, targets):
         """
-		Args:
-		inputs: prediction matrix (before softmax) with shape (batch_size, num_classes)
-		targets: ground truth labels with shape (num_classes)
-		"""
+        Args:
+        inputs: prediction matrix (before softmax) with shape (batch_size, num_classes)
+        targets: ground truth labels with shape (num_classes)
+        """
 
         inputs = results["prob"]
 

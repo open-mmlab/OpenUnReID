@@ -1,11 +1,9 @@
 # Written by Yixiao Ge
 
-import torch
-import torch.nn as nn
 
-from .classification import *
+from .classification import CrossEntropyLoss, SoftEntropyLoss
 from .memory import HybridMemory
-from .triplet import *
+from .triplet import SoftmaxTripletLoss, SoftSoftmaxTripletLoss, TripletLoss
 
 
 def build_loss(

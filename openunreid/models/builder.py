@@ -1,7 +1,6 @@
 # Written by Yixiao Ge
 
 import copy
-import os
 import warnings
 
 import torch
@@ -66,9 +65,8 @@ class ReIDBaseModel(nn.Module):
             ].copy_(centers.to(self.classifier.weight.device))
         else:
             warnings.warn(
-                "there is no classifier in the {}, the initialization does not function".format(
-                    self.__class__.__name__
-                )
+                f"there is no classifier in the {self.__class__.__name__}, "
+                f"the initialization does not function"
             )
 
     def forward(self, x):
@@ -206,9 +204,10 @@ def build_model(
         else:
             target_domain_idx = -1
             warnings.warn(
-                "the domain of {} for validation is not within train sets, we use {}'s BN intead, which may cause unsatisfied performance.".format(
-                    cfg.TRAIN.val_dataset, list(cfg.TRAIN.datasets.keys())[-1]
-                )
+                f"the domain of {cfg.TRAIN.val_dataset} for validation is not within "
+                f"train sets, we use "
+                f"{list(cfg.TRAIN.datasets.keys())[-1]}'s BN intead, "
+                f"which may cause unsatisfied performance."
             )
         convert_dsbn(model, num_domains, target_domain_idx)
     else:
@@ -237,17 +236,17 @@ def build_model(
             else:
                 dist_groups = None
                 warnings.warn(
-                    "'Dist_group' is switched off, since samples_per_bn ({}) is larger than or equal to total_batch_size ({}).".format(
-                        cfg.MODEL.samples_per_bn, total_batch_size
-                    )
+                    f"'Dist_group' is switched off, since samples_per_bn "
+                    f"({cfg.MODEL.samples_per_bn,}) is larger than or equal to "
+                    f"total_batch_size ({total_batch_size})."
                 )
             convert_sync_bn(model, dist_groups)
 
         else:
             warnings.warn(
-                "Sync BN is switched off, since samples ({}) per BN are fewer than or same as samples ({}) per GPU.".format(
-                    cfg.MODEL.samples_per_bn, cfg.TRAIN.LOADER.samples_per_gpu
-                )
+                f"Sync BN is switched off, since samples ({cfg.MODEL.samples_per_bn, })"
+                f" per BN are fewer than or same as samples "
+                f"({cfg.TRAIN.LOADER.samples_per_gpu}) per GPU."
             )
             cfg.MODEL.sync_bn = False
 

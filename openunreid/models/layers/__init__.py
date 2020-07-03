@@ -1,8 +1,12 @@
-import torch.nn as nn
-
-from .domain_specific_bn import *
-from .embedding import *
-from .pooling import *
+from .domain_specific_bn import DSBN  # noqa
+from .embedding import Embedding  # noqa
+from .pooling import (  # noqa
+    AdaptiveAvgMaxPool2d,
+    FastGlobalAvgPool2d,
+    GeneralizedMeanPoolingP,
+    avg_pooling,
+    max_pooling,
+)
 
 __pooling_factory = {
     "avg": avg_pooling,

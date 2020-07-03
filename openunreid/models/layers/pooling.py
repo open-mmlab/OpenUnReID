@@ -14,7 +14,8 @@ __all__ = [
 
 
 class GeneralizedMeanPooling(nn.Module):
-    r"""Applies a 2D power-average adaptive pooling over an input signal composed of several input planes.
+    r"""Applies a 2D power-average adaptive pooling over an input signal composed of
+    several input planes.
     The function computed is: :math:`f(X) = pow(sum(pow(X, p)), 1/p)`
         - At p = infinity, one gets Max Pooling
         - At p = 1, one gets Average Pooling
@@ -23,8 +24,8 @@ class GeneralizedMeanPooling(nn.Module):
     Args:
         output_size: the target output size of the image of the form H x W.
                      Can be a tuple (H, W) or a single H for a square image H x H
-                     H and W can be either a ``int``, or ``None`` which means the size will
-                     be the same as that of the input.
+                     H and W can be either a ``int``, or ``None`` which means the size
+                     will be the same as that of the input.
     """
 
     def __init__(self, norm, output_size=1, eps=1e-6):

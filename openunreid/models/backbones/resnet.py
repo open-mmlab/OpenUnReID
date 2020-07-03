@@ -1,6 +1,5 @@
 # Credit to https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py
 
-import torch
 import torch.nn as nn
 from torch.hub import load_state_dict_from_url
 
@@ -58,7 +57,7 @@ class BasicBlock(nn.Module):
             raise ValueError("BasicBlock only supports groups=1 and base_width=64")
         if dilation > 1:
             raise NotImplementedError("Dilation > 1 not supported in BasicBlock")
-        # Both self.conv1 and self.downsample layers downsample the input when stride != 1
+        # Both conv1 and downsample layers downsample the input when stride != 1
         self.conv1 = conv3x3(inplanes, planes, stride)
         self.bn1 = norm_layer(planes)
         self.relu = nn.ReLU(inplace=True)
@@ -87,9 +86,10 @@ class BasicBlock(nn.Module):
 
 
 class Bottleneck(nn.Module):
-    # Bottleneck in torchvision places the stride for downsampling at 3x3 convolution(self.conv2)
-    # while original implementation places the stride at the first 1x1 convolution(self.conv1)
-    # according to "Deep residual learning for image recognition"https://arxiv.org/abs/1512.03385.
+    # Bottleneck in torchvision places the stride for downsampling at 3x3
+    # convolution(self.conv2) while original implementation places the stride at the
+    # first 1x1 convolution(self.conv1) according to "Deep residual learning for image
+    # recognition" https://arxiv.org/abs/1512.03385.
     # This variant is also known as ResNet V1.5 and improves accuracy according to
     # https://ngc.nvidia.com/catalog/model-scripts/nvidia:resnet_50_v1_5_for_pytorch.
 
@@ -110,7 +110,7 @@ class Bottleneck(nn.Module):
         if norm_layer is None:
             norm_layer = nn.BatchNorm2d
         width = int(planes * (base_width / 64.0)) * groups
-        # Both self.conv2 and self.downsample layers downsample the input when stride != 1
+        # Both conv2 and downsample layers downsample the input when stride != 1
         self.conv1 = conv1x1(inplanes, width)
         self.bn1 = norm_layer(width)
         self.conv2 = conv3x3(width, width, stride, groups, dilation)
@@ -203,8 +203,10 @@ class ResNet(nn.Module):
                 nn.init.constant_(m.bias, 0)
 
         # Zero-initialize the last BN in each residual branch,
-        # so that the residual branch starts with zeros, and each residual block behaves like an identity.
-        # This improves the model by 0.2~0.3% according to https://arxiv.org/abs/1706.02677
+        # so that the residual branch starts with zeros, and each residual block
+        # behaves like an identity.
+        # This improves the model by 0.2~0.3% according to
+        # https://arxiv.org/abs/1706.02677
         if zero_init_residual:
             for m in self.modules():
                 if isinstance(m, Bottleneck):
@@ -286,7 +288,8 @@ def _resnet(arch, block, layers, pretrained, progress, **kwargs):
 
 def resnet18(pretrained=False, progress=True, **kwargs):
     r"""ResNet-18 model from
-    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_
+    `"Deep Residual Learning for Image Recognition"
+    <https://arxiv.org/pdf/1512.03385.pdf>`_
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
@@ -296,7 +299,8 @@ def resnet18(pretrained=False, progress=True, **kwargs):
 
 def resnet34(pretrained=False, progress=True, **kwargs):
     r"""ResNet-34 model from
-    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_
+    `"Deep Residual Learning for Image Recognition"
+    <https://arxiv.org/pdf/1512.03385.pdf>`_
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
@@ -306,7 +310,8 @@ def resnet34(pretrained=False, progress=True, **kwargs):
 
 def resnet50(pretrained=False, progress=True, **kwargs):
     r"""ResNet-50 model from
-    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_
+    `"Deep Residual Learning for Image Recognition"
+    <https://arxiv.org/pdf/1512.03385.pdf>`_
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
@@ -316,7 +321,8 @@ def resnet50(pretrained=False, progress=True, **kwargs):
 
 def resnet101(pretrained=False, progress=True, **kwargs):
     r"""ResNet-101 model from
-    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_
+    `"Deep Residual Learning for Image Recognition"
+    <https://arxiv.org/pdf/1512.03385.pdf>`_
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
@@ -328,7 +334,8 @@ def resnet101(pretrained=False, progress=True, **kwargs):
 
 def resnet152(pretrained=False, progress=True, **kwargs):
     r"""ResNet-152 model from
-    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_
+    `"Deep Residual Learning for Image Recognition"
+    <https://arxiv.org/pdf/1512.03385.pdf>`_
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr

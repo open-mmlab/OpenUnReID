@@ -2,7 +2,6 @@
 
 import torch
 import torch.distributed as dist
-import torch.nn.functional as F
 from torch import nn
 
 from ...utils.dist_utils import get_dist_info
@@ -49,9 +48,9 @@ def _batch_hard(mat_distance, mat_similarity, return_indices=False):
 
 class TripletLoss(nn.Module):
     """
-	Compute Triplet loss augmented with Batch Hard
-	Details can be seen in 'In defense of the Triplet Loss for Person Re-Identification'
-	"""
+    Compute Triplet loss augmented with Batch Hard
+    Details can be seen in 'In defense of the Triplet Loss for Person Re-Identification'
+    """
 
     __dist_factory = {
         "euclidean": euclidean_dist,

@@ -1,21 +1,19 @@
 # Credit to https://github.com/XingangPan/IBN-Net
 
 import math
-import os.path as osp
 
 import torch
 import torch.nn as nn
-import torch.utils.model_zoo as model_zoo
 from torch.hub import load_state_dict_from_url
 
-from ...utils.torch_utils import copy_state_dict, load_checkpoint
+from ...utils.torch_utils import copy_state_dict
 
 __all__ = ["resnet50_ibn_a", "resnet101_ibn_a"]
 
 
 model_urls = {
-    "resnet50_ibn_a": "https://github.com/XingangPan/IBN-Net/releases/download/v1.0/resnet50_ibn_a-d9d0bb7b.pth",
-    "resnet101_ibn_a": "https://github.com/XingangPan/IBN-Net/releases/download/v1.0/resnet101_ibn_a-59ea0ac6.pth",
+    "resnet50_ibn_a": "https://github.com/XingangPan/IBN-Net/releases/download/v1.0/resnet50_ibn_a-d9d0bb7b.pth",  # noqa
+    "resnet101_ibn_a": "https://github.com/XingangPan/IBN-Net/releases/download/v1.0/resnet101_ibn_a-59ea0ac6.pth",  # noqa
 }
 
 
@@ -169,7 +167,7 @@ class ResNet(nn.Module):
             ibn = False
         layers.append(block(self.inplanes, planes, ibn, stride, downsample))
         self.inplanes = planes * block.expansion
-        for i in range(1, blocks):
+        for _ in range(1, blocks):
             layers.append(block(self.inplanes, planes, ibn))
 
         return nn.Sequential(*layers)
