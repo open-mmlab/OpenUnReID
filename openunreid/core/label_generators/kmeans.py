@@ -1,13 +1,9 @@
 # Written by Yixiao Ge
 
-import collections
-import os
 import warnings
 
-import numpy as np
-import torch
-
 import faiss
+import torch
 
 from ...utils.torch_utils import to_numpy, to_torch
 

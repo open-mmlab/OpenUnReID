@@ -1,4 +1,4 @@
-# Modified from https://github.com/KaiyangZhou/deep-person-reid/blob/master/torchreid/optim/optimizer.py
+# Modified from https://github.com/KaiyangZhou/deep-person-reid/blob/master/torchreid/optim/optimizer.py  # noqa
 
 import warnings
 
@@ -29,19 +29,21 @@ def build_optimizer(
         optim (str, optional): optimizer. Default is "adam".
         lr (float, optional): learning rate. Default is 0.0003.
         weight_decay (float, optional): weight decay (L2 penalty). Default is 5e-04.
-        momentum (float, optional): momentum factor in sgd. Default is 0.9,
+        momentum (float, optional): momentum factor in sgd. Default is 0.9
         sgd_dampening (float, optional): dampening for momentum. Default is 0.
         sgd_nesterov (bool, optional): enables Nesterov momentum. Default is False.
-        rmsprop_alpha (float, optional): smoothing constant for rmsprop. Default is 0.99.
+        rmsprop_alpha (float, optional): smoothing constant for rmsprop. Default is 0.99
         adam_beta1 (float, optional): beta-1 value in adam. Default is 0.9.
         adam_beta2 (float, optional): beta-2 value in adam. Default is 0.99,
-        staged_lr (bool, optional): uses different learning rates for base and new layers. Base
-            layers are pretrained layers while new layers are randomly initialized, e.g. the
-            identity classification layer. Enabling ``staged_lr`` can allow the base layers to
-            be trained with a smaller learning rate determined by ``base_lr_mult``, while the new
-            layers will take the ``lr``. Default is False.
+        staged_lr (bool, optional): uses different learning rates for base and new
+            layers. Base layers are pretrained layers while new layers are randomly
+            initialized, e.g. the identity classification layer. Enabling ``staged_lr``
+            can allow the base layers to be trained with a smaller learning rate
+            determined by ``base_lr_mult``, while the new layers will take the ``lr``.
+            Default is False.
         new_layers (str or list): attribute names in ``model``. Default is empty.
-        base_lr_mult (float, optional): learning rate multiplier for base layers. Default is 0.1.
+        base_lr_mult (float, optional): learning rate multiplier for base layers.
+            Default is 0.1.
     Examples::
         >>> # A normal optimizer can be built by
         >>> optimizer = torchreid.optim.build_optimizer(model, optim='sgd', lr=0.01)
@@ -108,10 +110,6 @@ def build_optimizer(
                 for value in model.parameters()
                 if value.requires_grad
             ]
-
-        # debug
-        # params_names = [key for key, value in model.named_parameters() if value.requires_grad]
-        # import pdb; pdb.set_trace()
 
         param_groups.extend(params)
 

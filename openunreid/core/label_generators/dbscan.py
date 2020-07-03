@@ -1,11 +1,9 @@
 # Written by Yixiao Ge
 
 import collections
-import os
 
 import numpy as np
 import torch
-
 from sklearn.cluster import DBSCAN
 
 from ...utils.torch_utils import to_torch
@@ -110,7 +108,7 @@ def label_generator_dbscan(cfg, features, cuda=True, indep_thres=None, **kwargs)
             collections.defaultdict(list),
         )
         cluster_img_num = collections.defaultdict(int)
-        for i, (comp, indep, label) in enumerate(zip(R_comp, R_indep, labels_normal)):
+        for comp, indep, label in zip(R_comp, R_indep, labels_normal):
             cluster_R_comp[label.item()].append(comp.item())
             cluster_R_indep[label.item()].append(indep.item())
             cluster_img_num[label.item()] += 1

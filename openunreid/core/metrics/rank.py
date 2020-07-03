@@ -5,8 +5,6 @@ from collections import defaultdict
 
 import numpy as np
 
-from ...utils import bcolors
-
 try:
     from .rank_cylib.rank_cy import evaluate_cy
 
@@ -21,7 +19,7 @@ except ImportError:
 
 def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
     """Evaluation with cuhk03 metric
-    Key: one image for each gallery identity is randomly sampled for each query identity.
+    Key: one image for each gallery identity is randomly sampled for each query identity
     Random sampling is performed num_repeats times.
     """
     num_repeats = 10
@@ -63,7 +61,7 @@ def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
             g_pids_dict[pid].append(idx)
 
         cmc = 0.0
-        for repeat_idx in range(num_repeats):
+        for _repeat_idx in range(num_repeats):
             mask = np.zeros(len(raw_cmc), dtype=np.bool)
             for _, idxs in g_pids_dict.items():
                 # randomly sample one image for each gallery person
@@ -96,7 +94,8 @@ def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
 
 def eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
     """Evaluation with market1501 metric
-    Key: for each query identity, its gallery images from the same camera view are discarded.
+    Key: for each query identity, its gallery images from the same camera view are
+        discarded.
     """
     num_q, num_g = distmat.shape
 
@@ -137,7 +136,6 @@ def eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
         num_valid_q += 1.0
 
         # compute average precision
-        # reference: https://en.wikipedia.org/wiki/Evaluation_measures_(information_retrieval)#Average_precision
         num_rel = raw_cmc.sum()
         tmp_cmc = raw_cmc.cumsum()
         tmp_cmc = [x / (i + 1.0) for i, x in enumerate(tmp_cmc)]
@@ -172,7 +170,7 @@ def evaluate_rank(
     max_rank=50,
     use_metric_cuhk03=False,
     use_cython=True,
-    cmc_topk=[1, 5, 10],
+    cmc_topk=(1, 5, 10),
     verbose=True,
 ):
     """Evaluates CMC rank.
@@ -191,8 +189,8 @@ def evaluate_rank(
         use_metric_cuhk03 (bool, optional): use single-gallery-shot setting for cuhk03.
             Default is False. This should be enabled when using cuhk03 classic split.
         use_cython (bool, optional): use cython code for evaluation. Default is True.
-            This is highly recommended as the cython code can speed up the cmc computation
-            by more than 10x. This requires Cython to be installed.
+            This is highly recommended as the cython code can speed up the cmc
+            computation by more than 10x. This requires Cython to be installed.
     """
     if use_cython and IS_CYTHON_AVAI:
         cmc, map = evaluate_cy(

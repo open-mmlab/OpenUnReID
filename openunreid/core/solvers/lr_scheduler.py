@@ -1,4 +1,4 @@
-# Modified from https://github.com/KaiyangZhou/deep-person-reid/blob/master/torchreid/optim/lr_scheduler.py
+# Modified from https://github.com/KaiyangZhou/deep-person-reid/blob/master/torchreid/optim/lr_scheduler.py  # noqa
 # and https://github.com/JDAI-CV/fast-reid/blob/master/fastreid/solver/lr_scheduler.py
 
 from bisect import bisect_right
@@ -22,10 +22,11 @@ def build_lr_scheduler(
     """A function wrapper for building a learning rate scheduler.
     Args:
         optimizer (Optimizer): an Optimizer.
-        lr_scheduler (str, optional): learning rate scheduler method. Default is single_step.
-        stepsize (int or list, optional): step size to decay learning rate. When ``lr_scheduler``
-            is "single_step", ``stepsize`` should be an integer. When ``lr_scheduler`` is
-            "multi_step", ``stepsize`` is a list. Default is 1.
+        lr_scheduler (str, optional): learning rate scheduler method. Default is
+            single_step.
+        stepsize (int or list, optional): step size to decay learning rate.
+            When ``lr_scheduler`` is "single_step", ``stepsize`` should be an integer.
+            When ``lr_scheduler`` is "multi_step", ``stepsize`` is a list. Default is 1.
         gamma (float, optional): decay rate. Default is 0.1.
         max_epoch (int, optional): maximum epoch (for cosine annealing). Default is 1.
     Examples::

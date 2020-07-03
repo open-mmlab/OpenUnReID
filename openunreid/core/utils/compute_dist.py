@@ -1,15 +1,11 @@
 # Written by Yixiao Ge
 
-import copy
-import os
-import sys
 import time
 
+import faiss
 import numpy as np
 import torch
 import torch.nn.functional as F
-
-import faiss
 
 from .faiss_utils import (
     index_init_cpu,
@@ -69,7 +65,7 @@ def build_dist(
             return dist
 
     else:
-        assert "Unknown distance metric: {}".format(dist_metric)
+        assert "Unknown distance metric: {}".format(dist_m)
 
 
 def k_reciprocal_neigh(initial_rank, i, k1):
@@ -142,9 +138,8 @@ def compute_jaccard_distance(
 
         k_reciprocal_expansion_index = np.unique(
             k_reciprocal_expansion_index
-        )  ## element-wise unique
+        )  # element-wise unique
 
-        # dist = 2-2*torch.mm(features[i].unsqueeze(0).contiguous(), features[k_reciprocal_expansion_index].t())
         x = features[i].unsqueeze(0).contiguous()
         y = features[k_reciprocal_expansion_index]
         m, n = x.size(0), y.size(0)

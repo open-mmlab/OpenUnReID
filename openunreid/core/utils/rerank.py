@@ -1,13 +1,7 @@
-# -*- coding: utf-8 -*-
-# CVPR2017 paper:Zhong Z, Zheng L, Cao D, et al. Re-ranking Person Re-identification with k-reciprocal Encoding[J]. 2017.
-# url:http://openaccess.thecvf.com/content_cvpr_2017/papers/Zhong_Re-Ranking_Person_Re-Identification_CVPR_2017_paper.pdf
+# CVPR2017 paper:Zhong Z, Zheng L, Cao D, et al. Re-ranking Person Re-identification with k-reciprocal Encoding[J]. 2017.  # noqa
+# url:http://openaccess.thecvf.com/content_cvpr_2017/papers/Zhong_Re-Ranking_Person_Re-Identification_CVPR_2017_paper.pdf  # noqa
 # Matlab version: https://github.com/zhunzhong07/person-re-ranking
 # author@ Hao Luo
-
-import copy
-import os
-import sys
-import time
 
 import numpy as np
 

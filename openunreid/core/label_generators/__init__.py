@@ -15,8 +15,8 @@ from ...utils.dist_utils import (
     get_dist_info,
     synchronize,
 )
-from .dbscan import *
-from .kmeans import *
+from .dbscan import label_generator_dbscan, label_generator_dbscan_single  # noqa
+from .kmeans import label_generator_kmeans
 
 
 class LabelGenerator(object):
@@ -71,7 +71,7 @@ class LabelGenerator(object):
             try:
                 indep_thres = self.indep_thres[idx]
                 num_classes = self.num_classes[idx]
-            except:
+            except Exception:
                 indep_thres = None
                 num_classes = None
 
@@ -88,7 +88,7 @@ class LabelGenerator(object):
                         with_path=False,
                         for_testing=False,
                         prefix="Cluster: ",
-                        **kwargs
+                        **kwargs,
                     )
                     all_features.append(features)
                 all_features = torch.stack(all_features, dim=0).mean(0)
@@ -147,7 +147,7 @@ class LabelGenerator(object):
             try:
                 self.indep_thres[idx] = indep_thres
                 self.num_classes[idx] = num_classes
-            except:
+            except Exception:
                 self.indep_thres.append(indep_thres)
                 self.num_classes.append(num_classes)
 
@@ -179,7 +179,8 @@ class LabelGenerator(object):
         clu_num = (index2label > 1).sum()
         unclu_ins_num = (index2label == 1).sum()
         print(
-            "\n==> Statistics for {} on epoch {}: {} clusters, {} un-clustered instances, {} unused instances\n".format(
-                dataset_name, epoch, clu_num, unclu_ins_num, unused_ins_num
-            )
+            f"\n==> Statistics for {dataset_name} on epoch {epoch}: "
+            f"{clu_num} clusters, "
+            f"{unclu_ins_num} un-clustered instances, "
+            f"{unused_ins_num} unused instances\n"
         )

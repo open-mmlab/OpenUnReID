@@ -1,9 +1,5 @@
-import os
-
-import numpy as np
-import torch
-
 import faiss
+import torch
 
 
 def swig_ptr_from_FloatTensor(x):
