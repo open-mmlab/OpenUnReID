@@ -1,7 +1,5 @@
 # Credit to https://github.com/KaiyangZhou/deep-person-reid
 
-from __future__ import absolute_import, division, print_function
-
 import warnings
 from collections import defaultdict
 

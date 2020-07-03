@@ -1,8 +1,6 @@
 # Modified from https://github.com/KaiyangZhou/deep-person-reid/blob/master/torchreid/optim/lr_scheduler.py
 # and https://github.com/JDAI-CV/fast-reid/blob/master/fastreid/solver/lr_scheduler.py
 
-from __future__ import absolute_import, print_function
-
 from bisect import bisect_right
 from typing import List
 

@@ -15,8 +15,12 @@ from openunreid.core.solvers import build_lr_scheduler, build_optimizer
 from openunreid.data import build_test_dataloader, build_train_dataloader
 from openunreid.models import build_model
 from openunreid.models.losses import build_loss
-from openunreid.utils.config import (cfg, cfg_from_list, cfg_from_yaml_file,
-                                     log_config_to_file)
+from openunreid.utils.config import (
+    cfg,
+    cfg_from_list,
+    cfg_from_yaml_file,
+    log_config_to_file,
+)
 from openunreid.utils.dist_utils import init_dist, synchronize
 from openunreid.utils.file_utils import mkdir_if_missing
 from openunreid.utils.logger import Logger

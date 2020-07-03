@@ -1,7 +1,5 @@
 # Written by Yixiao Ge
 
-from __future__ import absolute_import
-
 import torch
 import torch.distributed as dist
 import torch.nn.functional as F

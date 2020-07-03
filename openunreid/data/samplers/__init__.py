@@ -1,12 +1,14 @@
 # Written by Yixiao Ge
 
-from __future__ import absolute_import
-
 from ..utils.dataset_wrapper import JointDataset
-from .distributed_identity_sampler import (DistributedIdentitySampler,
-                                           DistributedJointIdentitySampler)
-from .distributed_slice_sampler import (DistributedJointSliceSampler,
-                                        DistributedSliceSampler)
+from .distributed_identity_sampler import (
+    DistributedIdentitySampler,
+    DistributedJointIdentitySampler,
+)
+from .distributed_slice_sampler import (
+    DistributedJointSliceSampler,
+    DistributedSliceSampler,
+)
 
 __all__ = ["build_train_sampler", "build_test_sampler"]
 

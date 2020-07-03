@@ -14,8 +14,12 @@ import torch
 from openunreid.apis import test_reid
 from openunreid.data import build_test_dataloader
 from openunreid.models import build_model
-from openunreid.utils.config import (cfg, cfg_from_list, cfg_from_yaml_file,
-                                     log_config_to_file)
+from openunreid.utils.config import (
+    cfg,
+    cfg_from_list,
+    cfg_from_yaml_file,
+    log_config_to_file,
+)
 from openunreid.utils.dist_utils import init_dist, synchronize
 from openunreid.utils.logger import Logger
 from openunreid.utils.torch_utils import copy_state_dict, load_checkpoint

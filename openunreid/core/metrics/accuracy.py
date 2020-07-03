@@ -1,7 +1,5 @@
 # Credit to https://github.com/KaiyangZhou/deep-person-reid
 
-from __future__ import absolute_import, division, print_function
-
 
 def accuracy(output, target, topk=(1,)):
     """Computes the accuracy over the k top predictions for

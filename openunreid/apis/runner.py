@@ -16,8 +16,7 @@ from ..data import build_train_dataloader, build_val_dataloader
 from ..utils import bcolors
 from ..utils.dist_utils import get_dist_info, synchronize
 from ..utils.meters import Meters
-from ..utils.torch_utils import (copy_state_dict, load_checkpoint,
-                                 save_checkpoint)
+from ..utils.torch_utils import copy_state_dict, load_checkpoint, save_checkpoint
 from .test import val_reid
 from .train import batch_processor, set_random_seed
 

@@ -1,7 +1,5 @@
 # Modified from https://github.com/JDAI-CV/fast-reid/blob/master/fastreid/data/transforms/build.py
 
-from __future__ import absolute_import
-
 import torchvision.transforms as T
 
 from .auto_augment import *

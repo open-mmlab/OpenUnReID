@@ -1,7 +1,5 @@
 # Credit to https://github.com/DeepVoltaire/AutoAugment/blob/master/autoaugment.py
 
-from __future__ import absolute_import
-
 import math
 import random
 

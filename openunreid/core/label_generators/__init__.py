@@ -9,8 +9,12 @@ import torch.nn.functional as F
 
 from ...data import build_val_dataloader
 from ...models.utils.extract import extract_features
-from ...utils.dist_utils import (broadcast_tensor, broadcast_value,
-                                 get_dist_info, synchronize)
+from ...utils.dist_utils import (
+    broadcast_tensor,
+    broadcast_value,
+    get_dist_info,
+    synchronize,
+)
 from .dbscan import *
 from .kmeans import *
 

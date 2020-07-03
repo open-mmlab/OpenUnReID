@@ -11,8 +11,12 @@ import torch.nn.functional as F
 
 import faiss
 
-from .faiss_utils import (index_init_cpu, index_init_gpu, search_index_pytorch,
-                          search_raw_array_pytorch)
+from .faiss_utils import (
+    index_init_cpu,
+    index_init_gpu,
+    search_index_pytorch,
+    search_raw_array_pytorch,
+)
 
 __all__ = [
     "build_dist",

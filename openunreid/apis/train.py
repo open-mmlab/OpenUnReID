@@ -8,8 +8,7 @@ import numpy as np
 import torch
 import torch.distributed as dist
 
-from ..data import (build_test_dataloader, build_train_dataloader,
-                    build_val_dataloader)
+from ..data import build_test_dataloader, build_train_dataloader, build_val_dataloader
 from ..models import build_model
 from ..utils.dist_utils import get_dist_info
 

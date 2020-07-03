@@ -1,7 +1,5 @@
 # Modified from https://github.com/KaiyangZhou/deep-person-reid/blob/master/torchreid/optim/optimizer.py
 
-from __future__ import absolute_import, print_function
-
 import warnings
 
 import torch
