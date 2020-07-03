@@ -1,17 +1,14 @@
 # Written by Yixiao Ge
 
 import collections
-import os
 import os.path as osp
 import time
 import warnings
 
-import numpy as np
 import torch
 
 from ..core.label_generators import LabelGenerator
 from ..core.metrics.accuracy import accuracy
-from ..core.solvers import build_lr_scheduler, build_optimizer
 from ..data import build_train_dataloader, build_val_dataloader
 from ..utils import bcolors
 from ..utils.dist_utils import get_dist_info, synchronize
@@ -35,17 +32,16 @@ class BaseRunner(object):
         train_loader,
         train_sets=None,
         lr_scheduler=None,
-        meter_formats={
-            "Time": ":.3f",
-            # 'Data': ':.3f',
-            "Acc@1": ":.2%",
-        },
+        meter_formats=None,
         print_freq=10,
         reset_optim=True,
         label_generator=None,
     ):
         super(BaseRunner, self).__init__()
         set_random_seed(cfg.TRAIN.seed, cfg.TRAIN.deterministic)
+
+        if meter_formats is None:
+            meter_formats = {"Time": ":.3f", "Acc@1": ":.2%"}
 
         self.cfg = cfg
         self.model = model
@@ -112,11 +108,8 @@ class BaseRunner(object):
             synchronize()
 
     def update_labels(self):
-        print(
-            "\n************************* Start updating pseudo labels on epoch {} *************************\n".format(
-                self._epoch
-            )
-        )
+        sep = "*************************"
+        print(f"\n{sep} Start updating pseudo labels on epoch {self._epoch} {sep}\n")
 
         # generate pseudo labels
         pseudo_labels, label_centers = self.label_generator(
@@ -140,7 +133,7 @@ class BaseRunner(object):
 
         # update classifier centers
         start_cls_id = 0
-        for idx, dataset in enumerate(self.cfg.TRAIN.datasets.keys()):
+        for idx in self.cfg.TRAIN.datasets:
             if idx in self.cfg.TRAIN.unsup_dataset_indexes:
                 labels = torch.arange(
                     start_cls_id, start_cls_id + self.train_sets[idx].num_pids
@@ -153,9 +146,7 @@ class BaseRunner(object):
                     self.model.module.initialize_centers(centers, labels)
             start_cls_id += self.train_sets[idx].num_pids
 
-        print(
-            "\n****************************** Finished updating pseudo label ******************************\n"
-        )
+        print(f"\n{sep} Finished updating pseudo label {sep}n")
 
     def train(self):
         # one loop for training
@@ -203,7 +194,8 @@ class BaseRunner(object):
         data = batch_processor(batch, self.cfg.MODEL.dsbn)
         if len(data["img"]) > 1:
             warnings.warn(
-                "please re-write the 'runner.train_step()' function to make use of mutual transformer."
+                "please re-write the 'runner.train_step()' function to make use of "
+                "mutual transformer."
             )
 
         inputs = data["img"][0].cuda()

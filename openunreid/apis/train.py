@@ -1,15 +1,11 @@
 # Written by Yixiao Ge
 
 import collections
-import os
 import random
 
 import numpy as np
 import torch
-import torch.distributed as dist
 
-from ..data import build_test_dataloader, build_train_dataloader, build_val_dataloader
-from ..models import build_model
 from ..utils.dist_utils import get_dist_info
 
 
@@ -90,7 +86,7 @@ def batch_processor_nondist(data):
     domain_num = len(data)
     try:
         device_num = torch.cuda.device_count()
-    except:
+    except Exception:
         device_num = 1  # cpu
 
     if (domain_num == 1) or (device_num == 1):

@@ -1,9 +1,7 @@
 # Written by Yixiao Ge
 
-import random
 import time
 import warnings
-from collections import OrderedDict
 from datetime import timedelta
 
 import numpy as np
@@ -13,7 +11,7 @@ from ..core.metrics.rank import evaluate_rank
 from ..core.utils.compute_dist import build_dist
 from ..models.utils.dsbn_utils import switch_target_bn
 from ..models.utils.extract import extract_features
-from ..utils.dist_utils import get_dist_info, synchronize
+from ..utils.dist_utils import get_dist_info
 
 # # Deprecated
 # from ..core.utils.rerank import re_ranking_cpu
@@ -36,17 +34,13 @@ def test_reid(
             switch_target_bn(model, bn_idx)
         else:
             warnings.warn(
-                "the domain of {} does not exist before, the performance may be bad.".format(
-                    dataset_name
-                )
+                f"the domain of {dataset_name} does not exist before, "
+                f"the performance may be bad."
             )
 
+    sep = "*******************************"
     if dataset_name is not None:
-        print(
-            "\n******************************* Start testing {} *******************************\n".format(
-                dataset_name
-            )
-        )
+        print(f"\n{sep} Start testing {dataset_name} {sep}\n")
 
     if rank is None:
         rank, _, _ = get_dist_info()
@@ -103,9 +97,7 @@ def test_reid(
 
     end_time = time.monotonic()
     print("Testing time: ", timedelta(seconds=end_time - start_time))
-    print(
-        "\n******************************* Finished testing *******************************\n"
-    )
+    print(f"\n{sep} Finished testing {sep}\n")
 
     return cmc, map
 
@@ -117,12 +109,9 @@ def val_reid(
 
     start_time = time.monotonic()
 
+    sep = "*************************"
     if dataset_name is not None:
-        print(
-            "\n************************* Start validating {} on epoch {} *************************\n".format(
-                dataset_name, epoch
-            )
-        )
+        print(f"\n{sep} Start validating {dataset_name} on epoch {epoch} {sep}n")
 
     if rank is None:
         rank, _, _ = get_dist_info()
@@ -152,8 +141,6 @@ def val_reid(
 
     end_time = time.monotonic()
     print("Validating time: ", timedelta(seconds=end_time - start_time))
-    print(
-        "\n******************************* Finished validating *******************************\n"
-    )
+    print(f"\n{sep} Finished validating {sep}\n")
 
     return cmc, map
