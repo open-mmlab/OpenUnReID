@@ -7,6 +7,7 @@ from datetime import timedelta
 from pathlib import Path
 
 import torch
+from torch.nn.parallel import DataParallel, DistributedDataParallel
 
 from openunreid.apis import BaseRunner, batch_processor, test_reid
 from openunreid.core.solvers import build_lr_scheduler, build_optimizer
@@ -176,9 +177,9 @@ def main():
             "output_device": cfg.gpu,
             "find_unused_parameters": True,
         }
-        model = torch.nn.parallel.DistributedDataParallel(model, **ddp_cfg)
+        model = DistributedDataParallel(model, **ddp_cfg)
     elif cfg.total_gpus > 1:
-        model = torch.nn.DataParallel(model)
+        model = DataParallel(model)
 
     # build optimizer
     optimizer = build_optimizer([model], **cfg.TRAIN.OPTIM)
@@ -199,9 +200,14 @@ def main():
             # class-level memory for labeled data
             num_memory += set.num_pids
 
+    if isinstance(model, (DataParallel, DistributedDataParallel)):
+        num_features = model.module.num_features
+    else:
+        num_features = model.num_features
+
     criterions = build_loss(
         cfg.TRAIN.LOSS,
-        num_features=model.module.num_features,
+        num_features=num_features,
         num_memory=num_memory,
         cuda=True,
     )
