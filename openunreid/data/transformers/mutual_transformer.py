@@ -1,10 +1,6 @@
 # Written by Yixiao Ge
 
 import copy
-import random
-
-import numpy as np
-from PIL import Image
 
 __all__ = ["MutualTransform"]
 

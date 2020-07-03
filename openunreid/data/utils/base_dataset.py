@@ -1,15 +1,10 @@
-# Modified from https://github.com/KaiyangZhou/deep-person-reid/blob/master/torchreid/data/datasets/dataset.py
+# Modified from https://github.com/KaiyangZhou/deep-person-reid/blob/master/torchreid/data/datasets/dataset.py  # noqa
 # to support unsupervised features
 
 import copy
 import os.path as osp
 import tarfile
-import warnings
 import zipfile
-from typing import List
-
-import numpy as np
-import torch
 
 from ...utils import bcolors
 from ...utils.dist_utils import get_dist_info, synchronize
@@ -127,7 +122,7 @@ class Dataset(object):
                 tar = tarfile.open(fpath)
                 tar.extractall(path=dataset_dir)
                 tar.close()
-            except:
+            except Exception:
                 zip_ref = zipfile.ZipFile(fpath, "r")
                 zip_ref.extractall(dataset_dir)
                 zip_ref.close()
@@ -213,9 +208,7 @@ class ImageDataset(Dataset):
         ), "the number of pseudo labels should be the same as that of data"
 
         data = []
-        for idx, (label, (img_path, _, camid)) in enumerate(
-            zip(pseudo_labels, self.all_data)
-        ):
+        for label, (img_path, _, camid) in zip(pseudo_labels, self.all_data):
             if label != -1:
                 data.append((img_path, label, camid))
         self.data = data

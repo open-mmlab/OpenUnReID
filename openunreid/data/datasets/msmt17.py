@@ -1,8 +1,6 @@
 # Written by Zhiwei Zhang
 
-import glob
 import os.path as osp
-import re
 import warnings
 
 from ..utils.base_dataset import ImageDataset
@@ -12,7 +10,8 @@ class MSMT17(ImageDataset):
     """MSMT17.
 
     Reference:
-        Wei et al. Person Transfer GAN to Bridge Domain Gap for Person Re-Identification. CVPR 2018.
+        Wei et al. Person Transfer GAN to Bridge Domain Gap for Person
+            Re-Identification. CVPR 2018.
 
     URL: `<http://www.pkuvmc.com/publications/msmt17.html>`_
 
@@ -61,7 +60,7 @@ class MSMT17(ImageDataset):
         }
         try:
             cfgs = subsets_cfgs[mode]
-        except KeyError as e:
+        except KeyError:
             raise ValueError(
                 "Invalid mode. Got {}, but expected to be "
                 "one of [train | val | trainval | query | gallery]".format(self.mode)
@@ -79,7 +78,7 @@ class MSMT17(ImageDataset):
 
         data = []
 
-        for img_idx, img_info in enumerate(lines):
+        for img_info in lines:
             img_path, pid = img_info.split(" ")
             pid = int(pid)  # no need to relabel
             camid = int(img_path.split("_")[2]) - 1  # index starts from 0

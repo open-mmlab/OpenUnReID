@@ -1,10 +1,5 @@
-import os
 import os.path as osp
-import sys
 
-import numpy as np
-import PIL
-import torch
 from PIL import Image
 
 
@@ -24,8 +19,7 @@ def read_image(path):
             got_img = True
         except IOError:
             print(
-                'IOError incurred when reading "{}". Will redo. Don\'t worry. Just chill.'.format(
-                    path
-                )
+                f'IOError incurred when reading "{path}". '
+                f"Will redo. Don't worry. Just chill."
             )
     return img

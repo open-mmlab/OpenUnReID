@@ -1,10 +1,7 @@
 # Written by Yixiao Ge
 
 import copy
-import platform
-import random
 import warnings
-from functools import partial
 
 import numpy as np
 from torch.utils.data import DataLoader
@@ -42,20 +39,15 @@ def build_train_dataloader(
         # generally for the first epoch
         if unsup_dataset_indexes is None:
             print(
-                "The training is in a fully-supervised manner with {} dataset(s) ({})".format(
-                    len(dataset_names), dataset_names
-                )
+                f"The training is in a fully-supervised manner with "
+                f"{len(dataset_names)} dataset(s) ({dataset_names})"
             )
         else:
+            no_label_datasets = [dataset_names[i] for i in unsup_dataset_indexes]
             print(
-                "The training is in a un/semi-supervised manner with {} dataset(s) ({}),".format(
-                    len(dataset_names), dataset_names
-                )
-            )
-            print(
-                "where {} have no labels.".format(
-                    [dataset_names[i] for i in unsup_dataset_indexes]
-                )
+                f"The training is in a un/semi-supervised manner with "
+                f"{len(dataset_names)} dataset(s) ({dataset_names}),\n"
+                f"where {no_label_datasets} have no labels."
             )
 
         # build transformer
@@ -82,11 +74,9 @@ def build_train_dataloader(
                         )
                     )
                 else:
-                    # assert pseudo_labels[dn], \
-                    #     "pseudo labels are required for unsupervised dataset: {}".format(dn)
                     try:
                         new_labels = pseudo_labels[unsup_dataset_indexes.index(idx)]
-                    except:
+                    except Exception:
                         new_labels = None
                         warnings.warn("No labels are provided for {}.".format(dn))
 
@@ -104,8 +94,6 @@ def build_train_dataloader(
     else:
         # update pseudo labels for unsupervised datasets
         for i, idx in enumerate(unsup_dataset_indexes):
-            # assert pseudo_labels[dataset_names[idx]], \
-            #     "pseudo labels are required for unsupervised dataset: {}".format(dataset_names[idx])
             datasets[idx].renew_labels(pseudo_labels[i])
 
     if joint:
@@ -137,7 +125,7 @@ def build_train_dataloader(
                     shuffle=False,
                     pin_memory=True,
                     drop_last=True,
-                    **kwargs
+                    **kwargs,
                 ),
                 length=cfg.TRAIN.iters,
             ),
@@ -158,7 +146,7 @@ def build_train_dataloader(
                         shuffle=False,
                         pin_memory=True,
                         drop_last=True,
-                        **kwargs
+                        **kwargs,
                     ),
                     length=cfg.TRAIN.iters,
                 )
@@ -198,7 +186,7 @@ def build_val_dataloader(
 
     # build individual datasets
     datasets, vals = [], []
-    for idx, (dn, dm) in enumerate(zip(dataset_names, dataset_modes)):
+    for dn, dm in zip(dataset_names, dataset_modes):
         val_data = build_dataset(
             dn,
             data_root,
@@ -236,7 +224,7 @@ def build_val_dataloader(
                 shuffle=False,
                 pin_memory=True,
                 drop_last=False,
-                **kwargs
+                **kwargs,
             )
         )
     return data_loaders, vals
@@ -257,7 +245,7 @@ def build_test_dataloader(cfg, one_gpu=False, **kwargs):
 
     # build individual datasets
     datasets, queries, galleries = [], [], []
-    for idx, dn in enumerate(dataset_names):
+    for dn in dataset_names:
         query_data = build_dataset(
             dn, data_root, "query", del_labels=False, transform=test_transformer
         )
@@ -294,7 +282,7 @@ def build_test_dataloader(cfg, one_gpu=False, **kwargs):
                 shuffle=False,
                 pin_memory=True,
                 drop_last=False,
-                **kwargs
+                **kwargs,
             )
         )
 

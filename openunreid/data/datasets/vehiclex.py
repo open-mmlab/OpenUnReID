@@ -12,8 +12,9 @@ class VehicleX(ImageDataset):
     """
     VeRi
     Reference:
-    PAMTRI: Pose-Aware Multi-Task Learning for Vehicle Re-Identification Using Highly Randomized Synthetic Data. In: ICCV 2019
-    URL: `<https://www.aicitychallenge.org/2020-track2-download/>`_
+    PAMTRI: Pose-Aware Multi-Task Learning for Vehicle Re-Identification Using Highly
+        Randomized Synthetic Data. In: ICCV 2019
+    URL: `<https://www.aicitychallenge.org/2020-track2-download/>`
     """
 
     dataset_dir = "vehiclex"
@@ -54,7 +55,7 @@ class VehicleX(ImageDataset):
         }
         try:
             cfgs = subsets_cfgs[mode]
-        except KeyError as e:
+        except KeyError:
             raise ValueError(
                 "Invalid mode. Got {}, but expected to be "
                 "one of [train | val | trainval]".format(self.mode)

@@ -1,11 +1,11 @@
-# Modified from https://github.com/JDAI-CV/fast-reid/blob/master/fastreid/data/transforms/build.py
+# Modified from https://github.com/JDAI-CV/fast-reid/blob/master/fastreid/data/transforms/build.py  # noqa
 
 import torchvision.transforms as T
 
-from .auto_augment import *
-from .gaussian_blur import *
-from .mutual_transformer import *
-from .random_erasing import *
+from .auto_augment import ImageNetPolicy
+from .gaussian_blur import GaussianBlur
+from .mutual_transformer import MutualTransform
+from .random_erasing import RandomErasing
 
 __all__ = ["build_train_transformer", "build_test_transformer"]
 

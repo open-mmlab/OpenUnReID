@@ -1,5 +1,3 @@
-import warnings
-
 from .dukemtmcreid import DukeMTMCreID
 from .market1501 import Market1501
 from .msmt17 import MSMT17
@@ -39,7 +37,8 @@ def build_dataset(name, root, mode, *args, **kwargs):
     val_split : float, optional
         The proportion of validation to all the trainval. Default: 0.3
     del_labels: bool, optional
-        If true, delete all ground-truth labels and replace them with all zeros. Default: False
+        If true, delete all ground-truth labels and replace them with all zeros.
+        Default: False
     transform : optional
         The transform for dataloader. Default: None
     """

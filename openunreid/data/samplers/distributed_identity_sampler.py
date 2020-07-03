@@ -1,13 +1,11 @@
 # Written by Yixiao Ge
 
-import copy
 import math
 import random
 from collections import defaultdict
 
 import numpy as np
 import torch
-from torch.utils.data.sampler import Sampler
 
 from .distributed_sampler import DistributedTemplateSampler
 

@@ -11,8 +11,9 @@ from ..utils.base_dataset import ImageDataset
 class PersonX(ImageDataset):
     """PersonX
     Reference:
-        Sun et al. Dissecting Person Re-identification from the Viewpoint of Viewpoint. CVPR 2019.
-    URL: `<https://github.com/sxzrt/Instructions-of-the-PersonX-dataset#a-more-chanllenging-subset-of-personx>`_
+        Sun et al. Dissecting Person Re-identification from the Viewpoint of Viewpoint.
+            CVPR 2019.
+    URL: `<https://github.com/sxzrt/Instructions-of-the-PersonX-dataset#a-more-chanllenging-subset-of-personx>`  # noqa
 
     Dataset statistics:
     # identities: 1266 (train + query)
@@ -72,7 +73,7 @@ class PersonX(ImageDataset):
         }
         try:
             cfgs = subsets_cfgs[mode]
-        except KeyError as e:
+        except KeyError:
             raise ValueError(
                 "Invalid mode. Got {}, but expected to be "
                 "one of [train | val | trainval | query | gallery]".format(self.mode)

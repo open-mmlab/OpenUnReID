@@ -1,13 +1,8 @@
 # Written by Yixiao Ge
 
-import copy
 import math
-import random
-from collections import defaultdict
 
-import numpy as np
 import torch
-from torch.utils.data.sampler import Sampler
 
 from .distributed_sampler import DistributedTemplateSampler
 
@@ -66,7 +61,7 @@ class DistributedJointSliceSampler(DistributedSliceSampler):
     def _generate_iter_list(self):
         # sample data list for each dataset
         rets = []
-        for idx, data_source in enumerate(self.data_sources):
+        for data_source in self.data_sources:
             # deterministically shuffle based on epoch
             if self.shuffle:
                 slices = torch.randperm(len(data_source), generator=self.g).tolist()

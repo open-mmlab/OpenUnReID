@@ -1,9 +1,7 @@
 import math
 import random
 
-import numpy as np
-from PIL import Image
-from torchvision.transforms import *
+from torchvision.transforms import *  # noqa
 
 __all__ = ["RandomErasing"]
 
@@ -13,7 +11,8 @@ class RandomErasing(object):
         'Random Erasing Data Augmentation' by Zhong et al.
         See https://arxiv.org/pdf/1708.04896.pdf
     Args:
-         probability: The probability that the Random Erasing operation will be performed.
+         probability: The probability that the Random Erasing operation will be
+            performed.
          sl: Minimum proportion of erased area against input image.
          sh: Maximum proportion of erased area against input image.
          r1: Minimum aspect ratio of erased area.
@@ -34,7 +33,7 @@ class RandomErasing(object):
         if random.uniform(0, 1) >= self.probability:
             return img
 
-        for attempt in range(100):
+        for _attempt in range(100):
             area = img.size()[1] * img.size()[2]
 
             target_area = random.uniform(self.sl, self.sh) * area

@@ -12,9 +12,10 @@ class VeRi(ImageDataset):
     """
     VeRi
     Reference:
-    Liu, X., Liu, W., Ma, H., Fu, H.: Large-scale vehicle re-identification in urban surveillance videos. In: IEEE   %
-    International Conference on Multimedia and Expo. (2016) accepted.
-    URL: `<https://github.com/JDAI-CV/VeRidataset>`_
+    Liu, X., Liu, W., Ma, H., Fu, H.: Large-scale vehicle re-identification in urban
+        surveillance videos. In: IEEE International Conference on Multimedia and Expo.
+        (2016) accepted.
+    URL: `<https://github.com/JDAI-CV/VeRidataset>`
 
     Dataset statistics:
     # identities: 776 vehicles(576 for training and 200 for testing)
@@ -61,7 +62,7 @@ class VeRi(ImageDataset):
         }
         try:
             cfgs = subsets_cfgs[mode]
-        except KeyError as e:
+        except KeyError:
             raise ValueError(
                 "Invalid mode. Got {}, but expected to be "
                 "one of [train | val | trainval | query | gallery]".format(self.mode)

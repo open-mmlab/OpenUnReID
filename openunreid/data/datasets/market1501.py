@@ -67,7 +67,7 @@ class Market1501(ImageDataset):
         }
         try:
             cfgs = subsets_cfgs[mode]
-        except KeyError as e:
+        except KeyError:
             raise ValueError(
                 "Invalid mode. Got {}, but expected to be "
                 "one of [train | val | trainval | query | gallery]".format(self.mode)

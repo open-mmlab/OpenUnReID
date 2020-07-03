@@ -162,7 +162,7 @@ class VehicleID(ImageDataset):
         # get all identities
         pid_container = []
         imgs_container = []
-        for img_idx, img_info in enumerate(lines):
+        for img_info in lines:
             img_path, pid = img_info.split(" ")
             # pid = int(pid)
             if pid == -1:

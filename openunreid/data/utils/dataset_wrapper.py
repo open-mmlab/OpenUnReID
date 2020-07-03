@@ -1,10 +1,6 @@
 # Written by Yixiao Ge
 
 import copy
-import os
-
-import numpy as np
-import torch
 
 from ...utils import bcolors
 from .base_dataset import Dataset
@@ -25,9 +21,9 @@ class JointDataset(Dataset):
         for dataset in self.datasets[1:]:
             for idx, data in enumerate(dataset.data):
                 new_data = (
-                    dataset.data[idx][0],
-                    dataset.data[idx][1] + start_pid,
-                    dataset.data[idx][2] + start_camid,
+                    data[0],
+                    data[1] + start_pid,
+                    data[2] + start_camid,
                 )
                 dataset.data[idx] = new_data
             start_pid += dataset.num_pids
@@ -95,6 +91,6 @@ class IterLoader:
     def next(self):
         try:
             return next(self.iter)
-        except:
+        except Exception:
             self.iter = iter(self.loader)
             return next(self.iter)

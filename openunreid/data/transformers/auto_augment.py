@@ -1,10 +1,9 @@
 # Credit to https://github.com/DeepVoltaire/AutoAugment/blob/master/autoaugment.py
 
-import math
 import random
 
 import numpy as np
-from PIL import Image, ImageEnhance, ImageFilter, ImageOps
+from PIL import Image, ImageEnhance, ImageOps
 
 __all__ = ["ImageNetPolicy"]
 
@@ -92,7 +91,7 @@ class SubPolicy(object):
             "invert": [0] * 10,
         }
 
-        # from https://stackoverflow.com/questions/5252170/specify-image-filling-color-when-rotating-in-python-with-pil-and-setting-expand
+        # from https://stackoverflow.com/questions/5252170/specify-image-filling-color-when-rotating-in-python-with-pil-and-setting-expand  # noqa
         def rotate_with_fill(img, magnitude):
             rot = img.convert("RGBA").rotate(magnitude)
             return Image.composite(
