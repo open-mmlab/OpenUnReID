@@ -1,13 +1,15 @@
 # Written by Yixiao Ge
 
-import os
 import collections
-import torch
-import numpy as np
+import os
 import warnings
 
+import numpy as np
+import torch
+
 import faiss
-from ...utils.torch_utils import to_torch, to_numpy
+
+from ...utils.torch_utils import to_numpy, to_torch
 
 __all__ = ["label_generator_kmeans"]
 

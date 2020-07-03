@@ -2,12 +2,11 @@
 
 from __future__ import absolute_import
 
-import random
 import math
+import random
+
 import numpy as np
-
-from PIL import Image, ImageEnhance, ImageOps, ImageFilter
-
+from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 
 __all__ = ["ImageNetPolicy"]
 

@@ -1,9 +1,10 @@
 # Written by Zhiwei Zhang
 
-from __future__ import division, print_function, absolute_import
-import re
+from __future__ import absolute_import, division, print_function
+
 import glob
 import os.path as osp
+import re
 import warnings
 
 from ..utils.base_dataset import ImageDataset

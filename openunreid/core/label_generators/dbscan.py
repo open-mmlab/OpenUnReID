@@ -1,15 +1,15 @@
 # Written by Yixiao Ge
 
-import os
 import collections
-import torch
+import os
+
 import numpy as np
+import torch
 
 from sklearn.cluster import DBSCAN
 
-from ..utils.compute_dist import build_dist
 from ...utils.torch_utils import to_torch
-
+from ..utils.compute_dist import build_dist
 
 __all__ = ["label_generator_dbscan_single", "label_generator_dbscan"]
 

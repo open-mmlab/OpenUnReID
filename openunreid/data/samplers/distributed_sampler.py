@@ -1,17 +1,17 @@
 # Written by Yixiao Ge
 
 from __future__ import absolute_import
-from collections import defaultdict
-import math
-import numpy as np
-import copy
-import random
 
+import copy
+import math
+import random
+from collections import defaultdict
+
+import numpy as np
 import torch
 from torch.utils.data.sampler import Sampler
 
 from ...utils.dist_utils import get_dist_info
-
 
 __all__ = ["DistributedTemplateSampler"]
 

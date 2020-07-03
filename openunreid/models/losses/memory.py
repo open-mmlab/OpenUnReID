@@ -2,11 +2,10 @@
 # Written by Yixiao Ge.
 
 import numpy as np
-
 import torch
 import torch.nn.functional as F
+from torch import autograd, nn
 from torch.nn import init
-from torch import nn, autograd
 
 from ...utils.dist_utils import all_gather_tensor
 

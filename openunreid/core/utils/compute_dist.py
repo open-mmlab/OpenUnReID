@@ -1,21 +1,18 @@
 # Written by Yixiao Ge
 
-import os, sys
-import time
-import numpy as np
 import copy
-import faiss
+import os
+import sys
+import time
 
+import numpy as np
 import torch
 import torch.nn.functional as F
 
-from .faiss_utils import (
-    search_index_pytorch,
-    search_raw_array_pytorch,
-    index_init_gpu,
-    index_init_cpu,
-)
+import faiss
 
+from .faiss_utils import (index_init_cpu, index_init_gpu, search_index_pytorch,
+                          search_raw_array_pytorch)
 
 __all__ = [
     "build_dist",

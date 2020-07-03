@@ -1,10 +1,11 @@
 from __future__ import absolute_import
+
 import os
 import sys
 
-from .file_utils import mkdir_if_missing
-from .dist_utils import get_dist_info, synchronize
 from . import bcolors
+from .dist_utils import get_dist_info, synchronize
+from .file_utils import mkdir_if_missing
 
 
 class Logger(object):

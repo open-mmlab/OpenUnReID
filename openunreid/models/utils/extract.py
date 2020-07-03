@@ -7,8 +7,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from ...utils.meters import AverageMeter, ProgressMeter, Meters
-from ...utils.dist_utils import get_dist_info, synchronize, all_gather_tensor
+from ...utils.dist_utils import all_gather_tensor, get_dist_info, synchronize
+from ...utils.meters import AverageMeter, Meters, ProgressMeter
 from ...utils.torch_utils import to_torch
 
 

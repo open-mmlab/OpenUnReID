@@ -1,3 +1,3 @@
-from .train import *
-from .test import *
 from .runner import *
+from .test import *
+from .train import *

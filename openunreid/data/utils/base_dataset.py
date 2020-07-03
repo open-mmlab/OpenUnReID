@@ -1,21 +1,23 @@
 # Modified from https://github.com/KaiyangZhou/deep-person-reid/blob/master/torchreid/data/datasets/dataset.py
 # to support unsupervised features
 
-from __future__ import division, print_function, absolute_import
+from __future__ import absolute_import, division, print_function
+
 import copy
-import numpy as np
 import os.path as osp
 import tarfile
+import warnings
 import zipfile
 from typing import List
-import warnings
 
+import numpy as np
 import torch
 
-from ...utils.file_utils import mkdir_if_missing, download_url, download_url_from_gd
-from ..utils.data_utils import read_image
-from ...utils.dist_utils import get_dist_info, synchronize
 from ...utils import bcolors
+from ...utils.dist_utils import get_dist_info, synchronize
+from ...utils.file_utils import (download_url, download_url_from_gd,
+                                 mkdir_if_missing)
+from ..utils.data_utils import read_image
 
 
 class Dataset(object):

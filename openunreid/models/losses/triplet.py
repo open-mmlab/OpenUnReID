@@ -3,9 +3,9 @@
 from __future__ import absolute_import
 
 import torch
-from torch import nn
-import torch.nn.functional as F
 import torch.distributed as dist
+import torch.nn.functional as F
+from torch import nn
 
 from ...utils.dist_utils import get_dist_info
 

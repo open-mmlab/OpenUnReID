@@ -9,12 +9,11 @@ from functools import partial
 import numpy as np
 from torch.utils.data import DataLoader
 
-from .datasets import build_dataset
-from .samplers import build_train_sampler, build_test_sampler
-from .transformers import build_train_transformer, build_test_transformer
-from .utils.dataset_wrapper import JointDataset, IterLoader
-
 from ..utils.dist_utils import get_dist_info
+from .datasets import build_dataset
+from .samplers import build_test_sampler, build_train_sampler
+from .transformers import build_test_transformer, build_train_transformer
+from .utils.dataset_wrapper import IterLoader, JointDataset
 
 __all__ = ["build_train_dataloader", "build_val_dataloader", "build_test_dataloader"]
 

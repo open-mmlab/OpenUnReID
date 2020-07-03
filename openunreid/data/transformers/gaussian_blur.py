@@ -1,7 +1,8 @@
 # Credit to https://github.com/facebookresearch/moco/blob/master/moco/loader.py
 
-from PIL import ImageFilter
 import random
+
+from PIL import ImageFilter
 
 __all__ = ["GaussianBlur"]
 

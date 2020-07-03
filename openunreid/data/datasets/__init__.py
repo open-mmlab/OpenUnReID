@@ -1,13 +1,14 @@
 from __future__ import absolute_import
+
 import warnings
 
 from .dukemtmcreid import DukeMTMCreID
 from .market1501 import Market1501
 from .msmt17 import MSMT17
 from .personx import PersonX
-from .veri import VeRi
 from .vehicleid import VehicleID
 from .vehiclex import VehicleX
+from .veri import VeRi
 
 __all__ = ["build_dataset", "names"]
 

@@ -1,13 +1,14 @@
 # Credit to https://github.com/XingangPan/IBN-Net
 
-import torch
-import torch.nn as nn
 import math
 import os.path as osp
+
+import torch
+import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
 from torch.hub import load_state_dict_from_url
 
-from ...utils.torch_utils import load_checkpoint, copy_state_dict
+from ...utils.torch_utils import copy_state_dict, load_checkpoint
 
 __all__ = ["resnet50_ibn_a", "resnet101_ibn_a"]
 

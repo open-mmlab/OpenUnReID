@@ -1,35 +1,29 @@
+import argparse
+import copy
 import os
 import os.path as osp
-import sys
-import copy
-import argparse
-import time
 import shutil
+import sys
+import time
 from datetime import timedelta
 from pathlib import Path
+
 import torch
 
-from openunreid.apis import test_reid, BaseRunner, batch_processor, val_reid
+from openunreid.apis import BaseRunner, batch_processor, test_reid, val_reid
+from openunreid.core.label_generators import LabelGenerator
+from openunreid.core.metrics.accuracy import accuracy
+from openunreid.core.solvers import build_lr_scheduler, build_optimizer
+from openunreid.data import build_test_dataloader, build_train_dataloader
 from openunreid.models import build_model
 from openunreid.models.losses import build_loss
-from openunreid.data import build_train_dataloader, build_test_dataloader
-from openunreid.core.solvers import build_optimizer, build_lr_scheduler
-from openunreid.core.metrics.accuracy import accuracy
-from openunreid.utils.config import (
-    cfg,
-    cfg_from_yaml_file,
-    cfg_from_list,
-    log_config_to_file,
-)
+from openunreid.utils.config import (cfg, cfg_from_list, cfg_from_yaml_file,
+                                     log_config_to_file)
 from openunreid.utils.dist_utils import init_dist, synchronize
-from openunreid.utils.logger import Logger
 from openunreid.utils.file_utils import mkdir_if_missing
-from openunreid.core.label_generators import LabelGenerator
-from openunreid.utils.torch_utils import (
-    copy_state_dict,
-    load_checkpoint,
-    save_checkpoint,
-)
+from openunreid.utils.logger import Logger
+from openunreid.utils.torch_utils import (copy_state_dict, load_checkpoint,
+                                          save_checkpoint)
 
 
 class MMTRunner(BaseRunner):

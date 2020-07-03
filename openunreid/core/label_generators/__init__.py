@@ -1,23 +1,18 @@
 # Written by Yixiao Ge
 
 import collections
-import numpy as np
 
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from ...data import build_val_dataloader
+from ...models.utils.extract import extract_features
+from ...utils.dist_utils import (broadcast_tensor, broadcast_value,
+                                 get_dist_info, synchronize)
 from .dbscan import *
 from .kmeans import *
-
-from ...models.utils.extract import extract_features
-from ...utils.dist_utils import (
-    synchronize,
-    get_dist_info,
-    broadcast_tensor,
-    broadcast_value,
-)
-from ...data import build_val_dataloader
 
 
 class LabelGenerator(object):

@@ -1,7 +1,10 @@
-from __future__ import division, print_function, absolute_import
-import os, sys
-import numpy as np
+from __future__ import absolute_import, division, print_function
+
+import os
 import os.path as osp
+import sys
+
+import numpy as np
 import PIL
 import torch
 from PIL import Image

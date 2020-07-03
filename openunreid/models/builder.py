@@ -1,17 +1,19 @@
 # Written by Yixiao Ge
 
-import os
 import copy
+import os
 import warnings
+
 import torch
 import torch.nn as nn
 from torch.nn import init
 
+from ..utils.dist_utils import (convert_sync_bn, get_dist_info,
+                                simple_group_split)
+from ..utils.torch_utils import copy_state_dict, load_checkpoint
 from .backbones import build_bakcbone
-from .layers import build_pooling_layer, build_embedding_layer
+from .layers import build_embedding_layer, build_pooling_layer
 from .utils.dsbn_utils import convert_dsbn
-from ..utils.torch_utils import load_checkpoint, copy_state_dict
-from ..utils.dist_utils import simple_group_split, convert_sync_bn, get_dist_info
 
 __all__ = ["ReIDBaseModel", "TeacherStudentNetwork", "build_model"]
 

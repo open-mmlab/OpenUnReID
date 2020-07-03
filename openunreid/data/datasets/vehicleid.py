@@ -1,16 +1,14 @@
 # Written by Zhiwei Zhang
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function
 
-import random
 import os.path as osp
-import warnings
+import random
 import shutil
+import warnings
+from collections import defaultdict
 
 from ..utils.base_dataset import ImageDataset
-from collections import defaultdict
 
 
 class VehicleID(ImageDataset):

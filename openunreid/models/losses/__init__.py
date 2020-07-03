@@ -4,8 +4,8 @@ import torch
 import torch.nn as nn
 
 from .classification import *
-from .triplet import *
 from .memory import HybridMemory
+from .triplet import *
 
 
 def build_loss(

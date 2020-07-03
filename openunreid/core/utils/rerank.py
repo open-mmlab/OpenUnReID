@@ -4,12 +4,14 @@
 # Matlab version: https://github.com/zhunzhong07/person-re-ranking
 # author@ Hao Luo
 
-from __future__ import absolute_import, print_function, division
+from __future__ import absolute_import, division, print_function
 
-import os, sys
-import time
-import numpy as np
 import copy
+import os
+import sys
+import time
+
+import numpy as np
 
 __all__ = ["re_ranking_cpu"]
 

@@ -1,6 +1,6 @@
 # Credit to https://github.com/KaiyangZhou/deep-person-reid
 
-from __future__ import division, print_function, absolute_import
+from __future__ import absolute_import, division, print_function
 
 
 def accuracy(output, target, topk=(1,)):

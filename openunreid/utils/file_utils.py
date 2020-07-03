@@ -1,16 +1,17 @@
 from __future__ import absolute_import
-import os
-import sys
-import json
-import time
-import errno
-import numpy as np
-import random
-import os.path as osp
-import warnings
-import requests
-import shutil
 
+import errno
+import json
+import os
+import os.path as osp
+import random
+import shutil
+import sys
+import time
+import warnings
+
+import numpy as np
+import requests
 import torch
 from torch.nn import Parameter
 

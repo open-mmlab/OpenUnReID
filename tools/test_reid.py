@@ -1,24 +1,21 @@
+import argparse
+import copy
 import os
 import os.path as osp
-import sys
-import copy
-import argparse
-import time
 import shutil
+import sys
+import time
 import warnings
 from datetime import timedelta
 from pathlib import Path
+
 import torch
 
 from openunreid.apis import test_reid
-from openunreid.models import build_model
 from openunreid.data import build_test_dataloader
-from openunreid.utils.config import (
-    cfg,
-    cfg_from_yaml_file,
-    cfg_from_list,
-    log_config_to_file,
-)
+from openunreid.models import build_model
+from openunreid.utils.config import (cfg, cfg_from_list, cfg_from_yaml_file,
+                                     log_config_to_file)
 from openunreid.utils.dist_utils import init_dist, synchronize
 from openunreid.utils.logger import Logger
 from openunreid.utils.torch_utils import copy_state_dict, load_checkpoint

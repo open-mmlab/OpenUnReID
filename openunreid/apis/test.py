@@ -3,16 +3,16 @@
 import random
 import time
 import warnings
-from datetime import timedelta
 from collections import OrderedDict
+from datetime import timedelta
 
 import numpy as np
 import torch
 
-from ..models.utils.extract import extract_features
-from ..models.utils.dsbn_utils import switch_target_bn
-from ..core.utils.compute_dist import build_dist
 from ..core.metrics.rank import evaluate_rank
+from ..core.utils.compute_dist import build_dist
+from ..models.utils.dsbn_utils import switch_target_bn
+from ..models.utils.extract import extract_features
 from ..utils.dist_utils import get_dist_info, synchronize
 
 # # Deprecated

@@ -6,7 +6,6 @@ from torch.hub import load_state_dict_from_url
 
 from ...utils.torch_utils import copy_state_dict
 
-
 __all__ = ["ResNet", "resnet18", "resnet34", "resnet50", "resnet101", "resnet152"]
 
 

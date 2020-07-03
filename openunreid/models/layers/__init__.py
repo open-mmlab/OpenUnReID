@@ -1,8 +1,8 @@
+import torch.nn as nn
+
 from .domain_specific_bn import *
 from .embedding import *
 from .pooling import *
-
-import torch.nn as nn
 
 __pooling_factory = {
     "avg": avg_pooling,

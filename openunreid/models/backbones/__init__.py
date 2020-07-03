@@ -1,9 +1,9 @@
 from __future__ import absolute_import
+
 import warnings
 
 from .resnet import *
 from .resnet_ibn_a import *
-
 
 __all__ = ["build_bakcbone", "names"]
 
