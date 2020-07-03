@@ -14,24 +14,39 @@ from openunreid.models import build_model
 from openunreid.models.losses import build_loss
 from openunreid.data import build_train_dataloader, build_test_dataloader
 from openunreid.core.solvers import build_optimizer, build_lr_scheduler
-from openunreid.utils.config import cfg, cfg_from_yaml_file, cfg_from_list, log_config_to_file
+from openunreid.utils.config import (
+    cfg,
+    cfg_from_yaml_file,
+    cfg_from_list,
+    log_config_to_file,
+)
 from openunreid.utils.dist_utils import init_dist, synchronize
 from openunreid.utils.logger import Logger
 from openunreid.utils.file_utils import mkdir_if_missing
 
 
 def parge_config():
-    parser = argparse.ArgumentParser(description='Strong cluster baseline training')
-    parser.add_argument('config', help='train config file path')
-    parser.add_argument('--work-dir', help='the dir to save logs and models', default='')
-    parser.add_argument('--resume-from', help='the checkpoint file to resume from')
-    parser.add_argument('--launcher', type=str,
-                        choices=['none', 'pytorch', 'slurm'],
-                        default='none', help='job launcher')
-    parser.add_argument('--tcp-port', type=str, default='5017')
-    parser.add_argument('--set', dest='set_cfgs', default=None,
-                        nargs=argparse.REMAINDER,
-                        help='set extra config keys if needed')
+    parser = argparse.ArgumentParser(description="Strong cluster baseline training")
+    parser.add_argument("config", help="train config file path")
+    parser.add_argument(
+        "--work-dir", help="the dir to save logs and models", default=""
+    )
+    parser.add_argument("--resume-from", help="the checkpoint file to resume from")
+    parser.add_argument(
+        "--launcher",
+        type=str,
+        choices=["none", "pytorch", "slurm"],
+        default="none",
+        help="job launcher",
+    )
+    parser.add_argument("--tcp-port", type=str, default="5017")
+    parser.add_argument(
+        "--set",
+        dest="set_cfgs",
+        default=None,
+        nargs=argparse.REMAINDER,
+        help="set extra config keys if needed",
+    )
     args = parser.parse_args()
 
     cfg_from_yaml_file(args.config, cfg)
@@ -44,7 +59,7 @@ def parge_config():
     if args.set_cfgs is not None:
         cfg_from_list(args.set_cfgs, cfg)
 
-    shutil.copy(args.config, cfg.work_dir / 'config.yaml')
+    shutil.copy(args.config, cfg.work_dir / "config.yaml")
 
     return args, cfg
 
@@ -58,7 +73,7 @@ def main():
     synchronize()
 
     # init logging file
-    logger = Logger(cfg.work_dir / 'log.txt', debug=False)
+    logger = Logger(cfg.work_dir / "log.txt", debug=False)
     sys.stdout = logger
     print("==========\nArgs:{}\n==========".format(args))
     log_config_to_file(cfg)
@@ -71,7 +86,7 @@ def main():
     # it is always larger than the number of clusters
     num_classes = 0
     for idx, set in enumerate(train_sets):
-        if (idx in cfg.TRAIN.unsup_dataset_indexes):
+        if idx in cfg.TRAIN.unsup_dataset_indexes:
             # number of clusters in an unsupervised dataset
             # must not be larger than the number of images
             num_classes += len(set)
@@ -85,12 +100,12 @@ def main():
 
     if dist:
         model = torch.nn.parallel.DistributedDataParallel(
-                    model,
-                    device_ids=[cfg.gpu],
-                    output_device=cfg.gpu,
-                    find_unused_parameters=True,
-                )
-    elif (cfg.total_gpus>1):
+            model,
+            device_ids=[cfg.gpu],
+            output_device=cfg.gpu,
+            find_unused_parameters=True,
+        )
+    elif cfg.total_gpus > 1:
         model = torch.nn.DataParallel(model)
 
     # build optimizer
@@ -107,15 +122,15 @@ def main():
 
     # build runner
     runner = BaseRunner(
-                cfg,
-                model,
-                optimizer,
-                criterions,
-                train_loader,
-                train_sets = train_sets,
-                lr_scheduler = lr_scheduler,
-                reset_optim = True,
-            )
+        cfg,
+        model,
+        optimizer,
+        criterions,
+        train_loader,
+        train_sets=train_sets,
+        lr_scheduler=lr_scheduler,
+        reset_optim=True,
+    )
 
     # resume
     if args.resume_from:
@@ -125,25 +140,19 @@ def main():
     runner.run()
 
     # load the best model
-    runner.resume(cfg.work_dir / 'model_best.pth')
+    runner.resume(cfg.work_dir / "model_best.pth")
 
     # final testing
     test_loaders, queries, galleries = build_test_dataloader(cfg)
     for i, (loader, query, gallery) in enumerate(zip(test_loaders, queries, galleries)):
         cmc, mAP = test_reid(
-                        cfg,
-                        model,
-                        loader,
-                        query,
-                        gallery,
-                        dataset_name = cfg.TEST.datasets[i]
-                    )
+            cfg, model, loader, query, gallery, dataset_name=cfg.TEST.datasets[i]
+        )
 
     # print time
     end_time = time.monotonic()
-    print('Total running time: ',
-        timedelta(seconds=end_time - start_time))
+    print("Total running time: ", timedelta(seconds=end_time - start_time))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

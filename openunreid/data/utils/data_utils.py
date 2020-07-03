@@ -19,11 +19,12 @@ def read_image(path):
         raise IOError('"{}" does not exist'.format(path))
     while not got_img:
         try:
-            img = Image.open(path).convert('RGB')
+            img = Image.open(path).convert("RGB")
             got_img = True
         except IOError:
             print(
-                'IOError incurred when reading "{}". Will redo. Don\'t worry. Just chill.'
-                .format(path)
+                'IOError incurred when reading "{}". Will redo. Don\'t worry. Just chill.'.format(
+                    path
+                )
             )
     return img

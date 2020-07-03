@@ -12,16 +12,11 @@ from torch.utils.data.sampler import Sampler
 
 from .distributed_sampler import DistributedTemplateSampler
 
-__all__ = ['DistributedSliceSampler',
-            'DistributedJointSliceSampler']
+__all__ = ["DistributedSliceSampler", "DistributedJointSliceSampler"]
+
 
 class DistributedSliceSampler(DistributedTemplateSampler):
-
-    def __init__(
-        self,
-        data_sources,
-        **kwargs
-    ):
+    def __init__(self, data_sources, **kwargs):
         super(DistributedSliceSampler, self).__init__(data_sources, **kwargs)
 
         self._init_data()
@@ -46,7 +41,7 @@ class DistributedSliceSampler(DistributedTemplateSampler):
             slices = torch.arange(len(self.data_sources)).tolist()
 
         # add extra samples to make it evenly divisible
-        slices += slices[:(self.total_size - len(slices))]
+        slices += slices[: (self.total_size - len(slices))]
         assert len(slices) == self.total_size
 
         # slice
@@ -60,9 +55,7 @@ class DistributedSliceSampler(DistributedTemplateSampler):
         yield from self._generate_iter_list()
 
 
-
 class DistributedJointSliceSampler(DistributedSliceSampler):
-
     def _init_data(self):
 
         self.num_samples, self.total_size = 0, 0
@@ -70,7 +63,6 @@ class DistributedJointSliceSampler(DistributedSliceSampler):
             num_samples, total_size = self._init_data_single(data_source)
             self.num_samples = max(self.num_samples, num_samples)
             self.total_size = max(self.total_size, total_size)
-
 
     def _generate_iter_list(self):
         # sample data list for each dataset
@@ -83,8 +75,8 @@ class DistributedJointSliceSampler(DistributedSliceSampler):
                 slices = torch.arange(len(data_source)).tolist()
 
             # add extra samples to make it evenly divisible
-            slices = slices * max(1, self.total_size//len(slices))
-            slices += slices[:(self.total_size - len(slices))]
+            slices = slices * max(1, self.total_size // len(slices))
+            slices += slices[: (self.total_size - len(slices))]
             assert len(slices) == self.total_size
 
             # slice

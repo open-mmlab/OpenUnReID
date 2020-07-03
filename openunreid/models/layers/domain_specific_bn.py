@@ -5,15 +5,14 @@ import torch.nn as nn
 
 
 class DSBN(nn.Module):
-
     def __init__(
         self,
         num_features,
         num_domains,
-        batchnorm_layer = nn.BatchNorm2d,
-        target_bn_idx = -1,
-        weight_requires_grad = True,
-        bias_requires_grad = True,
+        batchnorm_layer=nn.BatchNorm2d,
+        target_bn_idx=-1,
+        weight_requires_grad=True,
+        bias_requires_grad=True,
     ):
         super(DSBN, self).__init__()
         self.num_features = num_features
@@ -35,9 +34,9 @@ class DSBN(nn.Module):
 
     def _forward_train(self, x):
         bs = x.size(0)
-        assert (bs%self.num_domains==0), 'the batch size should be times of BN groups'
+        assert bs % self.num_domains == 0, "the batch size should be times of BN groups"
 
-        split = torch.split(x, int(bs//self.num_domains), 0)
+        split = torch.split(x, int(bs // self.num_domains), 0)
         out = []
         for idx, subx in enumerate(split):
             out.append(self.dsbn[idx](subx.contiguous()))

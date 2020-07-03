@@ -17,6 +17,7 @@ from ..utils.data_utils import read_image
 from ...utils.dist_utils import get_dist_info, synchronize
 from ...utils import bcolors
 
+
 class Dataset(object):
     """An abstract class representing a Dataset.
 
@@ -30,13 +31,7 @@ class Dataset(object):
     """
 
     def __init__(
-        self,
-        data,
-        mode,
-        transform = None,
-        verbose = True,
-        sort = True,
-        **kwargs,
+        self, data, mode, transform=None, verbose=True, sort=True, **kwargs,
     ):
         self.data = data
         self.transform = transform
@@ -58,9 +53,9 @@ class Dataset(object):
         return len(self.data)
 
     def __add__(self, other):
-        '''
+        """
         work for combining query and gallery into the test data loader
-        '''
+        """
         # data = copy.deepcopy(self.data)
         # for img_path, pid, camid in other.data:
         #     pid += self.num_pids
@@ -68,13 +63,13 @@ class Dataset(object):
         #     data.append((img_path, pid, camid))
 
         return ImageDataset(
-                    self.data + other.data,
-                    self.mode + '+' + other.mode,
-                    pseudo_labels = None,
-                    transform = self.transform,
-                    verbose = False,
-                    sort = False,
-                )
+            self.data + other.data,
+            self.mode + "+" + other.mode,
+            pseudo_labels=None,
+            transform=self.transform,
+            verbose=False,
+            sort=False,
+        )
 
     def parse_data(self, data):
         """Parses data list and returns the number of person IDs
@@ -104,16 +99,14 @@ class Dataset(object):
 
         if dataset_url is None:
             raise RuntimeError(
-                '{} dataset needs to be manually '
-                'prepared, please download this dataset '
-                'under the folder of {}'.format(
-                    self.__class__.__name__, dataset_dir
-                )
+                "{} dataset needs to be manually "
+                "prepared, please download this dataset "
+                "under the folder of {}".format(self.__class__.__name__, dataset_dir)
             )
 
         rank, _, _ = get_dist_info()
 
-        if (rank == 0):
+        if rank == 0:
 
             print('Creating directory "{}"'.format(dataset_dir))
             mkdir_if_missing(dataset_dir)
@@ -125,7 +118,7 @@ class Dataset(object):
                 )
             )
 
-            if (dataset_url_gid is not None):
+            if dataset_url_gid is not None:
                 download_url_from_gd(dataset_url_gid, fpath)
             else:
                 download_url(dataset_url, fpath)
@@ -136,11 +129,11 @@ class Dataset(object):
                 tar.extractall(path=dataset_dir)
                 tar.close()
             except:
-                zip_ref = zipfile.ZipFile(fpath, 'r')
+                zip_ref = zipfile.ZipFile(fpath, "r")
                 zip_ref.extractall(dataset_dir)
                 zip_ref.close()
 
-            print('{} dataset is ready'.format(self.__class__.__name__))
+            print("{} dataset is ready".format(self.__class__.__name__))
 
         synchronize()
 
@@ -157,12 +150,18 @@ class Dataset(object):
                 raise RuntimeError('"{}" is not found'.format(fpath))
 
     def __repr__(self):
-        msg = '  -----------------------------------------------------\n' \
-              '  dataset                 | # ids | # items | # cameras\n' \
-              '  -----------------------------------------------------\n' \
-              '  {:20s}    | {:5d} | {:7d} | {:9d}\n' \
-              '  -----------------------------------------------------\n'.format(
-                  self.__class__.__name__+'-'+self.mode, self.num_pids, len(self.data), self.num_cams)
+        msg = (
+            "  -----------------------------------------------------\n"
+            "  dataset                 | # ids | # items | # cameras\n"
+            "  -----------------------------------------------------\n"
+            "  {:20s}    | {:5d} | {:7d} | {:9d}\n"
+            "  -----------------------------------------------------\n".format(
+                self.__class__.__name__ + "-" + self.mode,
+                self.num_pids,
+                len(self.data),
+                self.num_cams,
+            )
+        )
 
         return msg
 
@@ -177,22 +176,16 @@ class ImageDataset(Dataset):
         data in each batch has shape (batch_size, channel, height, width).
     """
 
-    def __init__(
-        self,
-        data,
-        mode,
-        pseudo_labels = None,
-        **kwargs
-    ):
-        if ('verbose' not in kwargs.keys()):
-            kwargs['verbose'] = False if (pseudo_labels is not None) else True
+    def __init__(self, data, mode, pseudo_labels=None, **kwargs):
+        if "verbose" not in kwargs.keys():
+            kwargs["verbose"] = False if (pseudo_labels is not None) else True
         super(ImageDataset, self).__init__(data, mode, **kwargs)
 
         # "all_data" stores the original data list
         # "data" stores the pseudo-labeled data list
         self.all_data = copy.deepcopy(self.data)
 
-        if (pseudo_labels is not None):
+        if pseudo_labels is not None:
             self.renew_labels(pseudo_labels)
 
     def __getitem__(self, indices):
@@ -207,21 +200,24 @@ class ImageDataset(Dataset):
             img = self.transform(img)
 
         return {
-                    'img': img,
-                    'path': img_path,
-                    'id': pid,
-                    'cid': camid,
-                    'ind': index,
-                }
+            "img": img,
+            "path": img_path,
+            "id": pid,
+            "cid": camid,
+            "ind": index,
+        }
 
     def renew_labels(self, pseudo_labels):
-        assert (isinstance(pseudo_labels, list))
-        assert (len(pseudo_labels)==len(self.all_data)), \
-            "the number of pseudo labels should be the same as that of data"
+        assert isinstance(pseudo_labels, list)
+        assert len(pseudo_labels) == len(
+            self.all_data
+        ), "the number of pseudo labels should be the same as that of data"
 
         data = []
-        for idx, (label, (img_path, _, camid)) in enumerate(zip(pseudo_labels, self.all_data)):
-            if (label != -1):
+        for idx, (label, (img_path, _, camid)) in enumerate(
+            zip(pseudo_labels, self.all_data)
+        ):
+            if label != -1:
                 data.append((img_path, label, camid))
         self.data = data
 
@@ -231,11 +227,17 @@ class ImageDataset(Dataset):
             self.show_summary()
 
     def show_summary(self):
-        print(bcolors.BOLD + '=> Loaded {} from {}'
-                .format(self.mode, self.__class__.__name__) + bcolors.ENDC)
-        print('  ----------------------------')
-        print('  # ids | # images | # cameras')
-        print('  ----------------------------')
-        print('  {:5d} | {:8d} | {:9d}'
-                .format(self.num_pids, len(self.data), self.num_cams))
-        print('  ----------------------------')
+        print(
+            bcolors.BOLD
+            + "=> Loaded {} from {}".format(self.mode, self.__class__.__name__)
+            + bcolors.ENDC
+        )
+        print("  ----------------------------")
+        print("  # ids | # images | # cameras")
+        print("  ----------------------------")
+        print(
+            "  {:5d} | {:8d} | {:9d}".format(
+                self.num_pids, len(self.data), self.num_cams
+            )
+        )
+        print("  ----------------------------")

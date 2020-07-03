@@ -9,16 +9,16 @@ from .veri import VeRi
 from .vehicleid import VehicleID
 from .vehiclex import VehicleX
 
-__all__ = ['build_dataset', 'names']
+__all__ = ["build_dataset", "names"]
 
 __factory = {
-    'market1501': Market1501,
-    'dukemtmcreid': DukeMTMCreID,
-    'msmt17': MSMT17,
-    'personx': PersonX,
-    'veri': VeRi,
-    'vehicleid': VehicleID,
-    'vehiclex': VehicleX,
+    "market1501": Market1501,
+    "dukemtmcreid": DukeMTMCreID,
+    "msmt17": MSMT17,
+    "personx": PersonX,
+    "veri": VeRi,
+    "vehicleid": VehicleID,
+    "vehiclex": VehicleX,
 }
 
 

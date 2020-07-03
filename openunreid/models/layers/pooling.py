@@ -4,10 +4,13 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 
-__all__ = ['GeneralizedMeanPoolingP',
-            'AdaptiveAvgMaxPool2d',
-            'FastGlobalAvgPool2d',
-            'avg_pooling', 'max_pooling']
+__all__ = [
+    "GeneralizedMeanPoolingP",
+    "AdaptiveAvgMaxPool2d",
+    "FastGlobalAvgPool2d",
+    "avg_pooling",
+    "max_pooling",
+]
 
 
 class GeneralizedMeanPooling(nn.Module):
@@ -24,12 +27,7 @@ class GeneralizedMeanPooling(nn.Module):
                      be the same as that of the input.
     """
 
-    def __init__(
-        self,
-        norm,
-        output_size=1,
-        eps=1e-6
-    ):
+    def __init__(self, norm, output_size=1, eps=1e-6):
         super(GeneralizedMeanPooling, self).__init__()
         assert norm > 0
         self.p = float(norm)
@@ -38,24 +36,27 @@ class GeneralizedMeanPooling(nn.Module):
 
     def forward(self, x):
         x = x.clamp(min=self.eps).pow(self.p)
-        return torch.nn.functional.adaptive_avg_pool2d(x, self.output_size).pow(1. / self.p)
+        return torch.nn.functional.adaptive_avg_pool2d(x, self.output_size).pow(
+            1.0 / self.p
+        )
 
     def __repr__(self):
-        return self.__class__.__name__ + '(' \
-               + str(self.p) + ', ' \
-               + 'output_size=' + str(self.output_size) + ')'
+        return (
+            self.__class__.__name__
+            + "("
+            + str(self.p)
+            + ", "
+            + "output_size="
+            + str(self.output_size)
+            + ")"
+        )
 
 
 class GeneralizedMeanPoolingP(GeneralizedMeanPooling):
     """ Same, but norm is trainable
     """
 
-    def __init__(
-        self,
-        norm=3,
-        output_size=1,
-        eps=1e-6
-    ):
+    def __init__(self, norm=3, output_size=1, eps=1e-6):
         super(GeneralizedMeanPoolingP, self).__init__(norm, output_size, eps)
         self.p = nn.Parameter(torch.ones(1) * norm)
 
@@ -71,6 +72,7 @@ class AdaptiveAvgMaxPool2d(nn.Module):
         x = x_max + x_avg
         return x
 
+
 class FastGlobalAvgPool2d(nn.Module):
     def __init__(self, flatten=False):
         super(FastGlobalAvgPool2d, self).__init__()
@@ -81,14 +83,21 @@ class FastGlobalAvgPool2d(nn.Module):
             in_size = x.size()
             return x.view((in_size[0], in_size[1], -1)).mean(dim=2)
         else:
-            return x.view(x.size(0), x.size(1), -1).mean(-1).view(x.size(0), x.size(1), 1, 1)
+            return (
+                x.view(x.size(0), x.size(1), -1)
+                .mean(-1)
+                .view(x.size(0), x.size(1), 1, 1)
+            )
+
 
 def avg_pooling():
     return nn.AdaptiveAvgPool2d(1)
     # return FastGlobalAvgPool2d()
 
+
 def max_pooling():
     return nn.AdaptiveMaxPool2d(1)
+
 
 class Flatten(nn.Module):
     def forward(self, input):

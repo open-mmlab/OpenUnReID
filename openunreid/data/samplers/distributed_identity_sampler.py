@@ -12,8 +12,7 @@ from torch.utils.data.sampler import Sampler
 
 from .distributed_sampler import DistributedTemplateSampler
 
-__all__ = ['DistributedIdentitySampler',
-            'DistributedJointIdentitySampler']
+__all__ = ["DistributedIdentitySampler", "DistributedJointIdentitySampler"]
 
 
 def No_index(a, b):
@@ -22,13 +21,7 @@ def No_index(a, b):
 
 
 class DistributedIdentitySampler(DistributedTemplateSampler):
-
-    def __init__(
-        self,
-        data_sources,
-        num_instances=4,
-        **kwargs
-    ):
+    def __init__(self, data_sources, num_instances=4, **kwargs):
 
         self.num_instances = num_instances
         super(DistributedIdentitySampler, self).__init__(data_sources, **kwargs)
@@ -37,10 +30,14 @@ class DistributedIdentitySampler(DistributedTemplateSampler):
 
     def _init_data(self):
 
-        self.index_pid, self.pid_cam, self.pid_index, \
-            self.pids, self.num_samples, self.total_size \
-                = self._init_data_single(self.data_sources)
-
+        (
+            self.index_pid,
+            self.pid_cam,
+            self.pid_index,
+            self.pids,
+            self.num_samples,
+            self.total_size,
+        ) = self._init_data_single(self.data_sources)
 
     def _init_data_single(self, data_source):
         # data statistics
@@ -57,19 +54,15 @@ class DistributedIdentitySampler(DistributedTemplateSampler):
         num_samples = int(math.ceil(len(pids) * 1.0 / self.num_replicas))
         total_size = num_samples * self.num_replicas
 
-        return index_pid, pid_cam, pid_index, \
-                pids, num_samples, total_size
-
+        return index_pid, pid_cam, pid_index, pids, num_samples, total_size
 
     def __len__(self):
         # num_samples: IDs in one chunk
         # num_instance: samples for each ID
         return self.num_samples * self.num_instances
 
-
     def __iter__(self):
         yield from self._generate_iter_list()
-
 
     def _generate_iter_list(self):
         # deterministically shuffle based on epoch
@@ -79,19 +72,21 @@ class DistributedIdentitySampler(DistributedTemplateSampler):
             indices = torch.arange(len(self.pids)).tolist()
 
         # add extra samples to make it evenly divisible
-        indices += indices[:(self.total_size - len(indices))]
+        indices += indices[: (self.total_size - len(indices))]
         assert len(indices) == self.total_size
 
         # subsample
-        indices = indices[self.rank:self.total_size:self.num_replicas]
+        indices = indices[self.rank : self.total_size : self.num_replicas]
         assert len(indices) == self.num_samples
 
         yield from self._sample_list(
-                        self.data_sources, indices, \
-                        self.index_pid, self.pid_cam, \
-                        self.pid_index, self.pids,
-                    )
-
+            self.data_sources,
+            indices,
+            self.index_pid,
+            self.pid_cam,
+            self.pid_index,
+            self.pids,
+        )
 
     def _sample_list(self, data_source, indices, index_pid, pid_cam, pid_index, pids):
         # return a sampled list of indexes
@@ -112,21 +107,29 @@ class DistributedIdentitySampler(DistributedTemplateSampler):
             if select_cams:
 
                 if len(select_cams) >= self.num_instances:
-                    cam_indexes = np.random.choice(select_cams, size=self.num_instances-1, replace=False)
+                    cam_indexes = np.random.choice(
+                        select_cams, size=self.num_instances - 1, replace=False
+                    )
                 else:
-                    cam_indexes = np.random.choice(select_cams, size=self.num_instances-1, replace=True)
+                    cam_indexes = np.random.choice(
+                        select_cams, size=self.num_instances - 1, replace=True
+                    )
 
                 for kk in cam_indexes:
                     ret.append(index[kk])
 
             else:
                 select_indexes = No_index(index, i)
-                if (not select_indexes):
+                if not select_indexes:
                     continue
                 elif len(select_indexes) >= self.num_instances:
-                    ind_indexes = np.random.choice(select_indexes, size=self.num_instances-1, replace=False)
+                    ind_indexes = np.random.choice(
+                        select_indexes, size=self.num_instances - 1, replace=False
+                    )
                 else:
-                    ind_indexes = np.random.choice(select_indexes, size=self.num_instances-1, replace=True)
+                    ind_indexes = np.random.choice(
+                        select_indexes, size=self.num_instances - 1, replace=True
+                    )
 
                 for kk in ind_indexes:
                     ret.append(index[kk])
@@ -135,17 +138,26 @@ class DistributedIdentitySampler(DistributedTemplateSampler):
 
 
 class DistributedJointIdentitySampler(DistributedIdentitySampler):
-
     def _init_data(self):
 
-        self.index_pid, self.pid_cam, self.pid_index, \
-            self.pids, self.num_samples, self.total_size \
-                = [], [], [], [], 0, 0
+        (
+            self.index_pid,
+            self.pid_cam,
+            self.pid_index,
+            self.pids,
+            self.num_samples,
+            self.total_size,
+        ) = ([], [], [], [], 0, 0)
 
         for data_source in self.data_sources:
-            index_pid, pid_cam, pid_index, \
-                pids, num_samples, total_size \
-                    = self._init_data_single(data_source)
+            (
+                index_pid,
+                pid_cam,
+                pid_index,
+                pids,
+                num_samples,
+                total_size,
+            ) = self._init_data_single(data_source)
 
             self.index_pid.append(index_pid)
             self.pid_cam.append(pid_cam)
@@ -153,7 +165,6 @@ class DistributedJointIdentitySampler(DistributedIdentitySampler):
             self.pids.append(pids)
             self.num_samples = max(self.num_samples, num_samples)
             self.total_size = max(self.total_size, total_size)
-
 
     def _generate_iter_list(self):
 
@@ -167,20 +178,23 @@ class DistributedJointIdentitySampler(DistributedIdentitySampler):
                 indices = torch.arange(len(self.pids[idx])).tolist()
 
             # add extra samples to make it evenly divisible
-            indices = indices * max(1, self.total_size//len(indices))
-            indices += indices[:(self.total_size - len(indices))]
+            indices = indices * max(1, self.total_size // len(indices))
+            indices += indices[: (self.total_size - len(indices))]
             assert len(indices) == self.total_size
 
             # subsample
-            indices = indices[self.rank:self.total_size:self.num_replicas]
+            indices = indices[self.rank : self.total_size : self.num_replicas]
             assert len(indices) == self.num_samples
 
             ret = self._sample_list(
-                            data_source, indices, \
-                            self.index_pid[idx], self.pid_cam[idx], \
-                            self.pid_index[idx], self.pids[idx],
-                        )
-            ret += ret[:(self.num_samples*self.num_instances - len(ret))]
+                data_source,
+                indices,
+                self.index_pid[idx],
+                self.pid_cam[idx],
+                self.pid_index[idx],
+                self.pids[idx],
+            )
+            ret += ret[: (self.num_samples * self.num_instances - len(ret))]
 
             rets.append(ret)
 

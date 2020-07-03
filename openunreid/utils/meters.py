@@ -3,11 +3,13 @@ import warnings
 
 from . import bcolors
 
-__all__ = ['AverageMeter', 'ProgressMeter', 'Meters']
+__all__ = ["AverageMeter", "ProgressMeter", "Meters"]
+
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""
-    def __init__(self, name, fmt=':f'):
+
+    def __init__(self, name, fmt=":f"):
         self.name = name
         self.fmt = fmt
         self.reset()
@@ -25,7 +27,7 @@ class AverageMeter(object):
         self.avg = self.sum / self.count
 
     def __str__(self):
-        fmtstr = '{name} {val' + self.fmt + '} ({avg' + self.fmt + '})'
+        fmtstr = "{name} {val" + self.fmt + "} ({avg" + self.fmt + "})"
         return fmtstr.format(**self.__dict__)
 
 
@@ -39,15 +41,16 @@ class ProgressMeter(object):
         self.prefix = prefix
 
     def display(self, batch):
-        entries = [bcolors.BOLD + self.prefix + \
-                self.batch_fmtstr.format(batch) + bcolors.ENDC]
+        entries = [
+            bcolors.BOLD + self.prefix + self.batch_fmtstr.format(batch) + bcolors.ENDC
+        ]
         entries += [str(meter) for meter in self.meters]
-        print('\t'.join(entries))
+        print("\t".join(entries))
 
     def _get_batch_fmtstr(self, num_batches):
         num_digits = len(str(num_batches // 1))
-        fmt = '{:' + str(num_digits) + 'd}'
-        return '[' + fmt + '/' + fmt.format(num_batches) + ']'
+        fmt = "{:" + str(num_digits) + "d}"
+        return "[" + fmt + "/" + fmt.format(num_batches) + "]"
 
 
 class Meters(object):
@@ -60,7 +63,7 @@ class Meters(object):
 
     def update(self, meter_values):
         for key in meter_values.keys():
-            if (key in self.meters.keys()):
+            if key in self.meters.keys():
                 self.meters[key].update(meter_values[key])
             else:
                 warnings.warn("{} is not stored".format(key))
@@ -71,5 +74,5 @@ class Meters(object):
     def reset(self, prefix=None):
         for meter in self.meters.values():
             meter.reset()
-        if (prefix is not None):
+        if prefix is not None:
             self.progress.reset(prefix)

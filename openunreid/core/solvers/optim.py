@@ -6,24 +6,24 @@ import torch
 import torch.nn as nn
 
 
-AVAI_OPTIMS = ['adam', 'amsgrad', 'sgd', 'rmsprop']
+AVAI_OPTIMS = ["adam", "amsgrad", "sgd", "rmsprop"]
 
 
 def build_optimizer(
-        models,
-        optim = 'adam',
-        lr = 0.00035,
-        weight_decay = 5e-4,
-        momentum = 0.9,
-        sgd_dampening = 0,
-        sgd_nesterov = False,
-        rmsprop_alpha = 0.99,
-        adam_beta1 = 0.9,
-        adam_beta2 = 0.999,
-        staged_lr = False,
-        new_layers = '',
-        base_lr_mult = 0.1
-    ):
+    models,
+    optim="adam",
+    lr=0.00035,
+    weight_decay=5e-4,
+    momentum=0.9,
+    sgd_dampening=0,
+    sgd_nesterov=False,
+    rmsprop_alpha=0.99,
+    adam_beta1=0.9,
+    adam_beta2=0.999,
+    staged_lr=False,
+    new_layers="",
+    base_lr_mult=0.1,
+):
     """A function wrapper for building an optimizer.
     Args:
         models (List[nn.Module]): models.
@@ -65,9 +65,7 @@ def build_optimizer(
 
     if optim not in AVAI_OPTIMS:
         raise ValueError(
-            'Unsupported optim: {}. Must be one of {}'.format(
-                optim, AVAI_OPTIMS
-            )
+            "Unsupported optim: {}. Must be one of {}".format(optim, AVAI_OPTIMS)
         )
 
     param_groups = []
@@ -75,14 +73,14 @@ def build_optimizer(
 
         if not isinstance(model, nn.Module):
             raise TypeError(
-                'model given to build_optimizer must be an instance of nn.Module'
+                "model given to build_optimizer must be an instance of nn.Module"
             )
 
         if staged_lr:
             if isinstance(new_layers, str):
                 if new_layers is None:
                     warnings.warn(
-                        'new_layers is empty, therefore, staged_lr is useless'
+                        "new_layers is empty, therefore, staged_lr is useless"
                     )
                 new_layers = [new_layers]
 
@@ -101,17 +99,16 @@ def build_optimizer(
                     base_layers.append(name)
 
             params = [
-                {
-                    'params': base_params,
-                    'lr': lr * base_lr_mult
-                },
-                {
-                    'params': new_params
-                },
+                {"params": base_params, "lr": lr * base_lr_mult},
+                {"params": new_params},
             ]
 
         else:
-            params = [{"params": [value]} for value in model.parameters() if value.requires_grad]
+            params = [
+                {"params": [value]}
+                for value in model.parameters()
+                if value.requires_grad
+            ]
 
         # debug
         # params_names = [key for key, value in model.named_parameters() if value.requires_grad]
@@ -120,7 +117,7 @@ def build_optimizer(
         param_groups.extend(params)
 
     # build optimizer
-    if optim == 'adam':
+    if optim == "adam":
         optimizer = torch.optim.Adam(
             param_groups,
             lr=lr,
@@ -128,7 +125,7 @@ def build_optimizer(
             betas=(adam_beta1, adam_beta2),
         )
 
-    elif optim == 'amsgrad':
+    elif optim == "amsgrad":
         optimizer = torch.optim.Adam(
             param_groups,
             lr=lr,
@@ -137,7 +134,7 @@ def build_optimizer(
             amsgrad=True,
         )
 
-    elif optim == 'sgd':
+    elif optim == "sgd":
         optimizer = torch.optim.SGD(
             param_groups,
             lr=lr,
@@ -147,7 +144,7 @@ def build_optimizer(
             nesterov=sgd_nesterov,
         )
 
-    elif optim == 'rmsprop':
+    elif optim == "rmsprop":
         optimizer = torch.optim.RMSprop(
             param_groups,
             lr=lr,

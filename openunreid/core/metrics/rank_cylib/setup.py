@@ -12,15 +12,6 @@ def numpy_include():
     return numpy_include
 
 
-ext_modules = [
-    Extension(
-        'rank_cy',
-        ['rank_cy.pyx'],
-        include_dirs=[numpy_include()],
-    )
-]
+ext_modules = [Extension("rank_cy", ["rank_cy.pyx"], include_dirs=[numpy_include()],)]
 
-setup(
-    name='Cython-based reid evaluation code',
-    ext_modules=cythonize(ext_modules)
-)
+setup(name="Cython-based reid evaluation code", ext_modules=cythonize(ext_modules))

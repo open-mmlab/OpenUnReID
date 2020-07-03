@@ -6,7 +6,7 @@ import random
 import math
 import numpy as np
 
-__all__ = ['RandomErasing']
+__all__ = ["RandomErasing"]
 
 
 class RandomErasing(object):
@@ -21,7 +21,9 @@ class RandomErasing(object):
          mean: Erasing value.
     """
 
-    def __init__(self, probability=0.5, sl=0.02, sh=0.4, r1=0.3, mean=(0.4914, 0.4822, 0.4465)):
+    def __init__(
+        self, probability=0.5, sl=0.02, sh=0.4, r1=0.3, mean=(0.4914, 0.4822, 0.4465)
+    ):
         self.probability = probability
         self.mean = mean
         self.sl = sl
@@ -46,11 +48,11 @@ class RandomErasing(object):
                 x1 = random.randint(0, img.size()[1] - h)
                 y1 = random.randint(0, img.size()[2] - w)
                 if img.size()[0] == 3:
-                    img[0, x1:x1 + h, y1:y1 + w] = self.mean[0]
-                    img[1, x1:x1 + h, y1:y1 + w] = self.mean[1]
-                    img[2, x1:x1 + h, y1:y1 + w] = self.mean[2]
+                    img[0, x1 : x1 + h, y1 : y1 + w] = self.mean[0]
+                    img[1, x1 : x1 + h, y1 : y1 + w] = self.mean[1]
+                    img[2, x1 : x1 + h, y1 : y1 + w] = self.mean[2]
                 else:
-                    img[0, x1:x1 + h, y1:y1 + w] = self.mean[0]
+                    img[0, x1 : x1 + h, y1 : y1 + w] = self.mean[0]
                 return img
 
         return img

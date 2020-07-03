@@ -15,90 +15,105 @@ from openunreid.apis import test_reid, BaseRunner, batch_processor, val_reid
 from openunreid.models import build_model
 from openunreid.models.losses import build_loss
 from openunreid.models.utils.extract import extract_features
-from openunreid.data import build_train_dataloader, build_test_dataloader, build_val_dataloader
+from openunreid.data import (
+    build_train_dataloader,
+    build_test_dataloader,
+    build_val_dataloader,
+)
 from openunreid.core.solvers import build_optimizer, build_lr_scheduler
 from openunreid.core.metrics.accuracy import accuracy
-from openunreid.utils.config import cfg, cfg_from_yaml_file, cfg_from_list, log_config_to_file
+from openunreid.utils.config import (
+    cfg,
+    cfg_from_yaml_file,
+    cfg_from_list,
+    log_config_to_file,
+)
 from openunreid.utils.dist_utils import init_dist, synchronize
 from openunreid.utils.logger import Logger
 from openunreid.utils.file_utils import mkdir_if_missing
 from openunreid.core.label_generators import LabelGenerator
-from openunreid.utils.torch_utils import copy_state_dict, load_checkpoint, save_checkpoint
+from openunreid.utils.torch_utils import (
+    copy_state_dict,
+    load_checkpoint,
+    save_checkpoint,
+)
 
 
 class SpCLRunner(BaseRunner):
-
     def update_labels(self):
-        print ("\n************************* Start updating pseudo labels on epoch {} *************************\n"
-                    .format(self._epoch))
+        print(
+            "\n************************* Start updating pseudo labels on epoch {} *************************\n".format(
+                self._epoch
+            )
+        )
 
         memory_features = []
         start_ind = 0
         for idx, dataset in enumerate(self.train_sets):
-            if (idx in self.cfg.TRAIN.unsup_dataset_indexes):
-                memory_features.append(self.criterions['hybrid_memory'].features[start_ind:start_ind+len(dataset)].clone().cpu())
+            if idx in self.cfg.TRAIN.unsup_dataset_indexes:
+                memory_features.append(
+                    self.criterions["hybrid_memory"]
+                    .features[start_ind : start_ind + len(dataset)]
+                    .clone()
+                    .cpu()
+                )
                 start_ind += len(dataset)
             else:
                 start_ind += dataset.num_pids
 
         # generate pseudo labels
         pseudo_labels, label_centers = self.label_generator(
-                                            self._epoch,
-                                            memory_features = memory_features,
-                                            print_freq=self.print_freq
-                                        )
+            self._epoch, memory_features=memory_features, print_freq=self.print_freq
+        )
 
         # update train loader
         self.train_loader, self.train_sets = build_train_dataloader(
-                                                    self.cfg,
-                                                    pseudo_labels,
-                                                    self.train_sets,
-                                                    self._epoch,
-                                                    joint = False
-                                                )
+            self.cfg, pseudo_labels, self.train_sets, self._epoch, joint=False
+        )
 
         # update memory labels
         memory_labels = []
         start_pid = 0
         for idx, dataset in enumerate(self.train_sets):
-            if (idx in self.cfg.TRAIN.unsup_dataset_indexes):
+            if idx in self.cfg.TRAIN.unsup_dataset_indexes:
                 labels = pseudo_labels[self.cfg.TRAIN.unsup_dataset_indexes.index(idx)]
-                memory_labels.append(torch.LongTensor(labels)+start_pid)
-                start_pid += max(labels)+1
+                memory_labels.append(torch.LongTensor(labels) + start_pid)
+                start_pid += max(labels) + 1
             else:
                 num_pids = dataset.num_pids
-                memory_labels.append(torch.arange(start_pid, start_pid+num_pids))
+                memory_labels.append(torch.arange(start_pid, start_pid + num_pids))
                 start_pid += num_pids
         memory_labels = torch.cat(memory_labels).view(-1)
-        self.criterions['hybrid_memory']._update_label(memory_labels)
+        self.criterions["hybrid_memory"]._update_label(memory_labels)
 
-        print ("\n****************************** Finished updating pseudo label ******************************\n")
-
+        print(
+            "\n****************************** Finished updating pseudo label ******************************\n"
+        )
 
     def train_step(self, iter, batch):
         start_ind, start_pid = 0, 0
         for idx, sub_batch in enumerate(batch):
-            if (idx in self.cfg.TRAIN.unsup_dataset_indexes):
-                sub_batch['ind'] += start_ind
+            if idx in self.cfg.TRAIN.unsup_dataset_indexes:
+                sub_batch["ind"] += start_ind
                 start_ind += len(self.train_sets[idx])
             else:
-                sub_batch['ind'] = sub_batch['id']+start_ind
+                sub_batch["ind"] = sub_batch["id"] + start_ind
                 start_ind += self.train_sets[idx].num_pids
 
-            sub_batch['id'] += start_pid
+            sub_batch["id"] += start_pid
             start_pid += self.train_sets[idx].num_pids
         data = batch_processor(batch, self.cfg.MODEL.dsbn)
 
-        inputs = data['img'][0].cuda()
-        targets = data['id'].cuda()
-        indexes = data['ind'].cuda()
+        inputs = data["img"][0].cuda()
+        targets = data["id"].cuda()
+        indexes = data["ind"].cuda()
 
         results = self.model(inputs)
 
         total_loss = 0
         meters = {}
         for key in self.criterions.keys():
-            if (key=='hybrid_memory'):
+            if key == "hybrid_memory":
                 loss = self.criterions[key](results, indexes)
             else:
                 loss = self.criterions[key](results, targets)
@@ -111,21 +126,31 @@ class SpCLRunner(BaseRunner):
 
 
 def parge_config():
-    parser = argparse.ArgumentParser(description='SpCL training')
-    parser.add_argument('config', help='train config file path')
-    parser.add_argument('--work-dir', help='the dir to save logs and models', default='')
-    parser.add_argument('--resume-from', help='the checkpoint file to resume from')
-    parser.add_argument('--launcher', type=str,
-                        choices=['none', 'pytorch', 'slurm'],
-                        default='none', help='job launcher')
-    parser.add_argument('--tcp-port', type=str, default='5017')
-    parser.add_argument('--set', dest='set_cfgs', default=None,
-                        nargs=argparse.REMAINDER,
-                        help='set extra config keys if needed')
+    parser = argparse.ArgumentParser(description="SpCL training")
+    parser.add_argument("config", help="train config file path")
+    parser.add_argument(
+        "--work-dir", help="the dir to save logs and models", default=""
+    )
+    parser.add_argument("--resume-from", help="the checkpoint file to resume from")
+    parser.add_argument(
+        "--launcher",
+        type=str,
+        choices=["none", "pytorch", "slurm"],
+        default="none",
+        help="job launcher",
+    )
+    parser.add_argument("--tcp-port", type=str, default="5017")
+    parser.add_argument(
+        "--set",
+        dest="set_cfgs",
+        default=None,
+        nargs=argparse.REMAINDER,
+        help="set extra config keys if needed",
+    )
     args = parser.parse_args()
 
     cfg_from_yaml_file(args.config, cfg)
-    assert (cfg.TRAIN.PSEUDO_LABELS.use_outliers)
+    assert cfg.TRAIN.PSEUDO_LABELS.use_outliers
     cfg.launcher = args.launcher
     cfg.tcp_port = args.tcp_port
     if not args.work_dir:
@@ -135,7 +160,7 @@ def parge_config():
     if args.set_cfgs is not None:
         cfg_from_list(args.set_cfgs, cfg)
 
-    shutil.copy(args.config, cfg.work_dir / 'config.yaml')
+    shutil.copy(args.config, cfg.work_dir / "config.yaml")
 
     return args, cfg
 
@@ -149,7 +174,7 @@ def main():
     synchronize()
 
     # init logging file
-    logger = Logger(cfg.work_dir / 'log.txt', debug=False)
+    logger = Logger(cfg.work_dir / "log.txt", debug=False)
     sys.stdout = logger
     print("==========\nArgs:{}\n==========".format(args))
     log_config_to_file(cfg)
@@ -161,9 +186,13 @@ def main():
     model = build_model(cfg, 0, init=cfg.MODEL.source_pretrained)
     model.cuda()
     if dist:
-        ddp_cfg = {'device_ids': [cfg.gpu], 'output_device': cfg.gpu, 'find_unused_parameters': True}
+        ddp_cfg = {
+            "device_ids": [cfg.gpu],
+            "output_device": cfg.gpu,
+            "find_unused_parameters": True,
+        }
         model = torch.nn.parallel.DistributedDataParallel(model, **ddp_cfg)
-    elif (cfg.total_gpus>1):
+    elif cfg.total_gpus > 1:
         model = torch.nn.DataParallel(model)
 
     # build optimizer
@@ -178,28 +207,31 @@ def main():
     # build loss functions
     num_memory = 0
     for idx, set in enumerate(train_sets):
-        if (idx in cfg.TRAIN.unsup_dataset_indexes):
+        if idx in cfg.TRAIN.unsup_dataset_indexes:
             # instance-level memory for unlabeled data
             num_memory += len(set)
         else:
             # class-level memory for labeled data
             num_memory += set.num_pids
 
-    criterions = build_loss(cfg.TRAIN.LOSS, num_features=model.module.num_features, num_memory=num_memory, cuda=True)
+    criterions = build_loss(
+        cfg.TRAIN.LOSS,
+        num_features=model.module.num_features,
+        num_memory=num_memory,
+        cuda=True,
+    )
 
     # init memory
-    loaders, datasets = build_val_dataloader(cfg, for_clustering=True, all_datasets=True)
+    loaders, datasets = build_val_dataloader(
+        cfg, for_clustering=True, all_datasets=True
+    )
     memory_features = []
     for idx, (loader, dataset) in enumerate(zip(loaders, datasets)):
         features = extract_features(
-                        model,
-                        loader,
-                        dataset,
-                        with_path = False,
-                        prefix = 'Extract: ',
-                    )
-        assert (features.size(0)==len(dataset))
-        if (idx in cfg.TRAIN.unsup_dataset_indexes):
+            model, loader, dataset, with_path=False, prefix="Extract: ",
+        )
+        assert features.size(0) == len(dataset)
+        if idx in cfg.TRAIN.unsup_dataset_indexes:
             # init memory for unlabeled data with instance features
             memory_features.append(features)
         else:
@@ -207,25 +239,28 @@ def main():
             centers_dict = collections.defaultdict(list)
             for i, (_, pid, _) in enumerate(dataset):
                 centers_dict[pid].append(features[i].unsqueeze(0))
-            centers = [torch.cat(centers_dict[pid],0).mean(0) for pid in sorted(centers_dict.keys())]
+            centers = [
+                torch.cat(centers_dict[pid], 0).mean(0)
+                for pid in sorted(centers_dict.keys())
+            ]
             memory_features.append(torch.stack(centers, 0))
     del loaders, datasets
 
     memory_features = torch.cat(memory_features)
-    criterions['hybrid_memory']._update_feature(memory_features)
+    criterions["hybrid_memory"]._update_feature(memory_features)
 
     # build runner
     runner = SpCLRunner(
-                cfg,
-                model,
-                optimizer,
-                criterions,
-                train_loader,
-                train_sets = train_sets,
-                lr_scheduler = lr_scheduler,
-                meter_formats = {'Time': ':.3f',},
-                reset_optim = False,
-            )
+        cfg,
+        model,
+        optimizer,
+        criterions,
+        train_loader,
+        train_sets=train_sets,
+        lr_scheduler=lr_scheduler,
+        meter_formats={"Time": ":.3f",},
+        reset_optim=False,
+    )
 
     # resume
     if args.resume_from:
@@ -235,25 +270,19 @@ def main():
     runner.run()
 
     # load the best model
-    runner.resume(cfg.work_dir / 'model_best.pth')
+    runner.resume(cfg.work_dir / "model_best.pth")
 
     # final testing
     test_loaders, queries, galleries = build_test_dataloader(cfg)
     for i, (loader, query, gallery) in enumerate(zip(test_loaders, queries, galleries)):
         cmc, mAP = test_reid(
-                        cfg,
-                        model,
-                        loader,
-                        query,
-                        gallery,
-                        dataset_name = cfg.TEST.datasets[i]
-                    )
+            cfg, model, loader, query, gallery, dataset_name=cfg.TEST.datasets[i]
+        )
 
     # print time
     end_time = time.monotonic()
-    print('Total running time: ',
-        timedelta(seconds=end_time - start_time))
+    print("Total running time: ", timedelta(seconds=end_time - start_time))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

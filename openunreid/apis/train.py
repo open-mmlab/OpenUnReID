@@ -31,17 +31,16 @@ def set_random_seed(seed, deterministic=False):
         torch.backends.cudnn.benchmark = False
 
 
-def batch_processor(
-        data, # list of dict
-        is_dsbn = True
-    ):
-    assert isinstance(data, (list, dict)), \
-        "the data for batch processor should be within a List or Dict"
+def batch_processor(data, is_dsbn=True):  # list of dict
+    assert isinstance(
+        data, (list, dict)
+    ), "the data for batch processor should be within a List or Dict"
 
-    if isinstance(data, dict): data = [data]
+    if isinstance(data, dict):
+        data = [data]
     _, _, dist = get_dist_info()
 
-    if (dist or not is_dsbn):
+    if dist or not is_dsbn:
         return batch_processor_dist(data)
     else:
         return batch_processor_nondist(data)
@@ -55,17 +54,17 @@ def batch_processor_dist(data):
 
     for sub_data in data:
 
-        if isinstance(sub_data['img'], list):
-            for i, img in enumerate(sub_data['img']):
+        if isinstance(sub_data["img"], list):
+            for i, img in enumerate(sub_data["img"]):
                 imgs[i].append(img)
 
         else:
-            imgs[0].append(sub_data['img'])
+            imgs[0].append(sub_data["img"])
 
-        paths.extend(sub_data['path'])
-        ids.append(sub_data['id'])
-        cids.append(sub_data['cid'])
-        inds.append(sub_data['ind'])
+        paths.extend(sub_data["path"])
+        ids.append(sub_data["id"])
+        cids.append(sub_data["cid"])
+        inds.append(sub_data["ind"])
 
     ids = torch.cat(ids, dim=0)
     cids = torch.cat(cids, dim=0)
@@ -76,12 +75,12 @@ def batch_processor_dist(data):
         imgs_list.append(torch.cat(imgs[key], dim=0))
 
     return {
-                'img': imgs_list,
-                'path': paths,
-                'id': ids,
-                'cid': cids,
-                'ind': inds,
-            }
+        "img": imgs_list,
+        "path": paths,
+        "id": ids,
+        "cid": cids,
+        "ind": inds,
+    }
 
 
 def batch_processor_nondist(data):
@@ -91,43 +90,43 @@ def batch_processor_nondist(data):
     try:
         device_num = torch.cuda.device_count()
     except:
-        device_num = 1 # cpu
+        device_num = 1  # cpu
 
-    if ((domain_num == 1) or (device_num == 1)):
+    if (domain_num == 1) or (device_num == 1):
         return batch_processor_dist(data)
 
     def reshape(x):
         if isinstance(x, torch.Tensor):
             bs = x.size(0)
-            assert (bs % device_num == 0)
-            split_x = torch.split(x, int(bs//device_num), 0)
+            assert bs % device_num == 0
+            split_x = torch.split(x, int(bs // device_num), 0)
             return torch.stack(split_x, dim=0).contiguous()
         elif isinstance(x, list):
             bs = len(x)
-            assert (bs % device_num == 0)
+            assert bs % device_num == 0
             new_x = []
-            for i in range(0, len(x), int(bs//device_num)):
-                new_x.extend(x[i:i + int(bs//device_num)])
+            for i in range(0, len(x), int(bs // device_num)):
+                new_x.extend(x[i : i + int(bs // device_num)])
             return new_x
         else:
-            assert("Unknown type for reshape")
+            assert "Unknown type for reshape"
 
     imgs = collections.defaultdict(list)
     paths, ids, cids, inds = [], [], [], []
 
     for sub_data in data:
 
-        if isinstance(sub_data['img'], list):
-            for i, img in enumerate(sub_data['img']):
+        if isinstance(sub_data["img"], list):
+            for i, img in enumerate(sub_data["img"]):
                 imgs[i].append(reshape(img))
 
         else:
-            imgs[0].append(reshape(sub_data['img']))
+            imgs[0].append(reshape(sub_data["img"]))
 
-        paths.extend(reshape(sub_data['path']))
-        ids.append(reshape(sub_data['id']))
-        cids.append(reshape(sub_data['cid']))
-        inds.append(reshape(sub_data['ind']))
+        paths.extend(reshape(sub_data["path"]))
+        ids.append(reshape(sub_data["id"]))
+        cids.append(reshape(sub_data["cid"]))
+        inds.append(reshape(sub_data["ind"]))
 
     ids = torch.cat(ids, dim=1).view(-1)
     cids = torch.cat(cids, dim=1).view(-1)
@@ -139,9 +138,9 @@ def batch_processor_nondist(data):
         imgs_list.append(torch.cat(imgs[key], dim=1).view(-1, C, H, W))
 
     return {
-                'img': imgs_list,
-                'path': paths,
-                'id': ids,
-                'cid': cids,
-                'ind': inds,
-            }
+        "img": imgs_list,
+        "path": paths,
+        "id": ids,
+        "cid": cids,
+        "ind": inds,
+    }

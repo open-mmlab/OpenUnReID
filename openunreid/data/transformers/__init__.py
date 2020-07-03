@@ -9,8 +9,8 @@ from .gaussian_blur import *
 from .mutual_transformer import *
 from .random_erasing import *
 
-__all__ = ['build_train_transformer',
-            'build_test_transformer']
+__all__ = ["build_train_transformer", "build_test_transformer"]
+
 
 def build_train_transformer(cfg):
 
@@ -22,8 +22,7 @@ def build_train_transformer(cfg):
         res.append(ImageNetPolicy(total_iters))
 
     # resize
-    res.append(T.Resize((cfg.DATA.height, cfg.DATA.width),
-                        interpolation=3))
+    res.append(T.Resize((cfg.DATA.height, cfg.DATA.width), interpolation=3))
 
     # horizontal filp
     if cfg.DATA.TRAIN.is_flip:
@@ -31,25 +30,32 @@ def build_train_transformer(cfg):
 
     # padding
     if cfg.DATA.TRAIN.is_pad:
-        res.extend([T.Pad(cfg.DATA.TRAIN.pad_size),
-                    T.RandomCrop((cfg.DATA.height, cfg.DATA.width))])
+        res.extend(
+            [
+                T.Pad(cfg.DATA.TRAIN.pad_size),
+                T.RandomCrop((cfg.DATA.height, cfg.DATA.width)),
+            ]
+        )
 
     # gaussian blur
     if cfg.DATA.TRAIN.is_blur:
-        res.append(T.RandomApply([GaussianBlur([.1, 2.])],
-                                p=cfg.DATA.TRAIN.blur_prob))
+        res.append(
+            T.RandomApply([GaussianBlur([0.1, 2.0])], p=cfg.DATA.TRAIN.blur_prob)
+        )
 
     # totensor
     res.append(T.ToTensor())
 
     # normalize
-    res.append(T.Normalize(mean=cfg.DATA.norm_mean,
-                            std=cfg.DATA.norm_std))
+    res.append(T.Normalize(mean=cfg.DATA.norm_mean, std=cfg.DATA.norm_std))
 
     # random erasing
     if cfg.DATA.TRAIN.is_erase:
-        res.append(RandomErasing(probability=cfg.DATA.TRAIN.erase_prob,
-                                    mean=cfg.DATA.norm_mean))
+        res.append(
+            RandomErasing(
+                probability=cfg.DATA.TRAIN.erase_prob, mean=cfg.DATA.norm_mean
+            )
+        )
 
     # mutual transform (for MMT)
     if cfg.DATA.TRAIN.is_mutual_transform:
@@ -62,14 +68,12 @@ def build_test_transformer(cfg):
     res = []
 
     # resize
-    res.append(T.Resize((cfg.DATA.height, cfg.DATA.width),
-                        interpolation=3))
+    res.append(T.Resize((cfg.DATA.height, cfg.DATA.width), interpolation=3))
 
     # totensor
     res.append(T.ToTensor())
 
     # normalize
-    res.append(T.Normalize(mean=cfg.DATA.norm_mean,
-                            std=cfg.DATA.norm_std))
+    res.append(T.Normalize(mean=cfg.DATA.norm_mean, std=cfg.DATA.norm_std))
 
     return T.Compose(res)

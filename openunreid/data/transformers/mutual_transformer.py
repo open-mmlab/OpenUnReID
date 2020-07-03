@@ -5,16 +5,13 @@ import numpy as np
 import random
 import copy
 
-__all__ = ['MutualTransform']
+__all__ = ["MutualTransform"]
+
 
 class MutualTransform:
     """Apply the transformer more times on a same raw image."""
 
-    def __init__(
-            self,
-            transformer,
-            times = 2
-        ):
+    def __init__(self, transformer, times=2):
         self.transformer = transformer
         self.times = times
 

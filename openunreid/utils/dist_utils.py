@@ -9,32 +9,35 @@ import torch.distributed as dist
 import torch.utils.data.distributed
 import torch.multiprocessing as mp
 
-def init_dist(args, backend='nccl'):
+
+def init_dist(args, backend="nccl"):
     if mp.get_start_method(allow_none=True) is None:
-        mp.set_start_method('spawn')
+        mp.set_start_method("spawn")
 
     if not dist.is_available():
-        agrs.launcher = 'none'
+        agrs.launcher = "none"
 
-    if args.launcher == 'pytorch':
+    if args.launcher == "pytorch":
         # DDP
         init_dist_pytorch(args, backend)
         return True
 
-    elif args.launcher == 'slurm':
+    elif args.launcher == "slurm":
         # DDP
         init_dist_slurm(args, backend)
         return True
 
-    elif args.launcher == 'none':
+    elif args.launcher == "none":
         # DataParallel or single GPU
         args.total_gpus = torch.cuda.device_count()
-        if (args.total_gpus>1):
-            warnings.warn("It is highly recommended to use DistributedDataParallel by setting args.launcher as 'slurm' or 'pytorch'.")
+        if args.total_gpus > 1:
+            warnings.warn(
+                "It is highly recommended to use DistributedDataParallel by setting args.launcher as 'slurm' or 'pytorch'."
+            )
         return False
 
     else:
-        raise ValueError('Invalid launcher type: {}'.format(launcher))
+        raise ValueError("Invalid launcher type: {}".format(launcher))
 
 
 def get_dist_info():
@@ -46,7 +49,7 @@ def get_dist_info():
 
 
 def init_dist_pytorch(args, backend="nccl"):
-    args.rank = int(os.environ['LOCAL_RANK'])
+    args.rank = int(os.environ["LOCAL_RANK"])
     args.ngpus_per_node = torch.cuda.device_count()
     args.gpu = args.rank
     args.world_size = args.ngpus_per_node
@@ -56,18 +59,20 @@ def init_dist_pytorch(args, backend="nccl"):
 
 
 def init_dist_slurm(args, backend="nccl"):
-    args.rank = int(os.environ['SLURM_PROCID'])
-    args.world_size = int(os.environ['SLURM_NTASKS'])
-    node_list = os.environ['SLURM_NODELIST']
+    args.rank = int(os.environ["SLURM_PROCID"])
+    args.world_size = int(os.environ["SLURM_NTASKS"])
+    node_list = os.environ["SLURM_NODELIST"]
     args.ngpus_per_node = torch.cuda.device_count()
     # args.ngpus_per_node = len(os.environ['CUDA_VISIBLE_DEVICES'])
     args.gpu = args.rank % args.ngpus_per_node
     torch.cuda.set_device(args.gpu)
-    addr = subprocess.getoutput('scontrol show hostname {} | head -n1'.format(node_list))
-    os.environ['MASTER_PORT'] = str(args.tcp_port)
-    os.environ['MASTER_ADDR'] = addr
-    os.environ['WORLD_SIZE'] = str(args.world_size)
-    os.environ['RANK'] = str(args.rank)
+    addr = subprocess.getoutput(
+        "scontrol show hostname {} | head -n1".format(node_list)
+    )
+    os.environ["MASTER_PORT"] = str(args.tcp_port)
+    os.environ["MASTER_ADDR"] = addr
+    os.environ["WORLD_SIZE"] = str(args.world_size)
+    os.environ["RANK"] = str(args.rank)
     dist.init_process_group(backend=backend)
     args.total_gpus = dist.get_world_size()
 
@@ -79,8 +84,12 @@ def simple_group_split(world_size, rank, num_groups):
     for i in range(num_groups):
         groups.append(dist.new_group(rank_list[i]))
     group_size = world_size // num_groups
-    print ("Rank no.{} start sync BN on the process group of {}".format(rank, rank_list[rank//group_size]))
-    return groups[rank//group_size]
+    print(
+        "Rank no.{} start sync BN on the process group of {}".format(
+            rank, rank_list[rank // group_size]
+        )
+    )
+    return groups[rank // group_size]
 
 
 def convert_sync_bn(model, process_group=None):
@@ -117,7 +126,7 @@ def broadcast_tensor(x, src, gpu=None):
         return x
 
     container = torch.empty_like(x).cuda(gpu)
-    if (rank == src):
+    if rank == src:
         container.data.copy_(x)
     dist.broadcast(container, src)
     return container.cpu()
@@ -129,8 +138,8 @@ def broadcast_value(x, src, gpu=None):
     if not is_dist:
         return x
 
-    container = torch.Tensor([0.]).cuda(gpu)
-    if (rank == src):
+    container = torch.Tensor([0.0]).cuda(gpu)
+    if rank == src:
         tensor_x = torch.Tensor([x])
         container.data.copy_(tensor_x)
     dist.broadcast(container, src)
@@ -158,7 +167,7 @@ def all_gather_tensor(x, gpu=None, save_memory=False):
         x_gather = []
         for k in range(world_size):
             container.data.copy_(x)
-            print ("gathering features from rank no.{}".format(k))
+            print("gathering features from rank no.{}".format(k))
             dist.broadcast(container, k)
             x_gather.append(container.cpu())
         x_gather = torch.cat(x_gather, dim=0)
