@@ -57,7 +57,7 @@ def get_hash():
         sha = get_git_hash()[:7]
     elif os.path.exists(version_file):
         try:
-            from openselfsup.version import __version__
+            from openunreid.version import __version__  # noqa
 
             sha = __version__.split("+")[-1]
         except ImportError:
@@ -120,7 +120,7 @@ if __name__ == "__main__":
         long_description=readme(),
         author="OpenMMLab",
         author_email="geyixiao831@gmail.com",
-        keywords="computer vision, unsupervised learning, domain adaptation, object re-ID",
+        keywords="computer vision, unsupervised learning, domain adaptation, object re-ID",  # noqa
         url="https://github.com/open-mmlab/OpenUnReID",
         packages=find_packages(),
         license="Apache License 2.0",

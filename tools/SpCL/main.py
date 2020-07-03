@@ -1,8 +1,5 @@
 import argparse
 import collections
-import copy
-import os
-import os.path as osp
 import shutil
 import sys
 import time
@@ -10,11 +7,8 @@ from datetime import timedelta
 from pathlib import Path
 
 import torch
-import torch.nn.functional as F
 
-from openunreid.apis import BaseRunner, batch_processor, test_reid, val_reid
-from openunreid.core.label_generators import LabelGenerator
-from openunreid.core.metrics.accuracy import accuracy
+from openunreid.apis import BaseRunner, batch_processor, test_reid
 from openunreid.core.solvers import build_lr_scheduler, build_optimizer
 from openunreid.data import (
     build_test_dataloader,
@@ -33,20 +27,12 @@ from openunreid.utils.config import (
 from openunreid.utils.dist_utils import init_dist, synchronize
 from openunreid.utils.file_utils import mkdir_if_missing
 from openunreid.utils.logger import Logger
-from openunreid.utils.torch_utils import (
-    copy_state_dict,
-    load_checkpoint,
-    save_checkpoint,
-)
 
 
 class SpCLRunner(BaseRunner):
     def update_labels(self):
-        print(
-            "\n************************* Start updating pseudo labels on epoch {} *************************\n".format(
-                self._epoch
-            )
-        )
+        sep = "*************************"
+        print(f"\n{sep} Start updating pseudo labels on epoch {self._epoch} {sep}\n")
 
         memory_features = []
         start_ind = 0
@@ -87,9 +73,7 @@ class SpCLRunner(BaseRunner):
         memory_labels = torch.cat(memory_labels).view(-1)
         self.criterions["hybrid_memory"]._update_label(memory_labels)
 
-        print(
-            "\n****************************** Finished updating pseudo label ******************************\n"
-        )
+        print(f"\n{sep} Finished updating pseudo label {sep}\n")
 
     def train_step(self, iter, batch):
         start_ind, start_pid = 0, 0

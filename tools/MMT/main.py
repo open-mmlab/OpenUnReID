@@ -1,7 +1,4 @@
 import argparse
-import copy
-import os
-import os.path as osp
 import shutil
 import sys
 import time
@@ -10,8 +7,7 @@ from pathlib import Path
 
 import torch
 
-from openunreid.apis import BaseRunner, batch_processor, test_reid, val_reid
-from openunreid.core.label_generators import LabelGenerator
+from openunreid.apis import BaseRunner, batch_processor, test_reid
 from openunreid.core.metrics.accuracy import accuracy
 from openunreid.core.solvers import build_lr_scheduler, build_optimizer
 from openunreid.data import build_test_dataloader, build_train_dataloader
@@ -26,11 +22,6 @@ from openunreid.utils.config import (
 from openunreid.utils.dist_utils import init_dist, synchronize
 from openunreid.utils.file_utils import mkdir_if_missing
 from openunreid.utils.logger import Logger
-from openunreid.utils.torch_utils import (
-    copy_state_dict,
-    load_checkpoint,
-    save_checkpoint,
-)
 
 
 class MMTRunner(BaseRunner):
