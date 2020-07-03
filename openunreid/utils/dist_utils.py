@@ -15,7 +15,7 @@ def init_dist(args, backend="nccl"):
         mp.set_start_method("spawn")
 
     if not dist.is_available():
-        agrs.launcher = "none"
+        args.launcher = "none"
 
     if args.launcher == "pytorch":
         # DDP
@@ -32,19 +32,20 @@ def init_dist(args, backend="nccl"):
         args.total_gpus = torch.cuda.device_count()
         if args.total_gpus > 1:
             warnings.warn(
-                "It is highly recommended to use DistributedDataParallel by setting args.launcher as 'slurm' or 'pytorch'."
+                "It is highly recommended to use DistributedDataParallel by setting "
+                "args.launcher as 'slurm' or 'pytorch'."
             )
         return False
 
     else:
-        raise ValueError("Invalid launcher type: {}".format(launcher))
+        raise ValueError("Invalid launcher type: {}".format(args.launcher))
 
 
 def get_dist_info():
     try:
         # data distributed parallel
         return dist.get_rank(), dist.get_world_size(), True
-    except:
+    except Exception:
         return 0, 1, False
 
 

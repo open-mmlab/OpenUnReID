@@ -1,4 +1,4 @@
-# Credit to https://github.com/open-mmlab/OpenLidarPerceptron/blob/master/pcdet/config.py
+# Credit to https://github.com/open-mmlab/OpenLidarPerceptron/blob/master/pcdet/config.py  # noqa
 
 from pathlib import Path
 
@@ -31,23 +31,23 @@ def cfg_from_list(cfg_list, config):
         assert subkey in d, "NotFoundKey: %s" % subkey
         try:
             value = literal_eval(v)
-        except:
+        except Exception:
             value = v
 
-        if type(value) != type(d[subkey]) and isinstance(d[subkey], EasyDict):
+        if (not isinstance(value, type(d[subkey]))) and isinstance(d[subkey], EasyDict):
             key_val_list = value.split(",")
             for src in key_val_list:
                 cur_key, cur_val = src.split(":")
                 val_type = type(d[subkey][cur_key])
                 cur_val = val_type(cur_val)
                 d[subkey][cur_key] = cur_val
-        elif type(value) != type(d[subkey]) and isinstance(d[subkey], list):
+        elif (not isinstance(value, type(d[subkey]))) and isinstance(d[subkey], list):
             val_list = value.split(",")
             for k, x in enumerate(val_list):
                 val_list[k] = type(d[subkey][0])(x)
             d[subkey] = val_list
         else:
-            assert type(value) == type(
+            assert isinstance(value, type(
                 d[subkey]
             ), "type {} does not match original type {}".format(
                 type(value), type(d[subkey])

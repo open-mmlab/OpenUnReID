@@ -1,7 +1,6 @@
 import os
 import sys
 
-from . import bcolors
 from .dist_utils import get_dist_info, synchronize
 from .file_utils import mkdir_if_missing
 

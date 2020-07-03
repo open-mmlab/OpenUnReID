@@ -2,18 +2,10 @@ import errno
 import json
 import os
 import os.path as osp
-import random
-import shutil
 import sys
 import time
-import warnings
 
-import numpy as np
 import requests
-import torch
-from torch.nn import Parameter
-
-from .dist_utils import get_dist_info, synchronize
 
 
 def mkdir_if_missing(dir_path):
@@ -66,7 +58,7 @@ def download_url(url, dst):
     try:
         urllib.request.urlretrieve(url, dst, _reporthook)
         sys.stdout.write("\n")
-    except:
+    except Exception:
         raise RuntimeError(
             "Please download the dataset manually from {} " "to {}".format(url, dst)
         )

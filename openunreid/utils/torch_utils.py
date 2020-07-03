@@ -1,20 +1,10 @@
-import errno
-import json
-import os
 import os.path as osp
-import random
 import shutil
-import sys
-import time
 import warnings
 
-import numpy as np
-import requests
 import torch
 from torch.nn import Parameter
 
-from . import bcolors
-from .dist_utils import get_dist_info, synchronize
 from .file_utils import mkdir_if_missing
 
 

@@ -1,4 +1,3 @@
-import os
 import warnings
 
 from . import bcolors
