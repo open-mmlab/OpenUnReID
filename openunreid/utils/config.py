@@ -3,7 +3,6 @@
 from pathlib import Path
 
 import yaml
-
 from easydict import EasyDict
 
 
@@ -47,8 +46,8 @@ def cfg_from_list(cfg_list, config):
                 val_list[k] = type(d[subkey][0])(x)
             d[subkey] = val_list
         else:
-            assert isinstance(value, type(
-                d[subkey]
+            assert isinstance(
+                value, type(d[subkey])
             ), "type {} does not match original type {}".format(
                 type(value), type(d[subkey])
             )
@@ -59,7 +58,7 @@ def cfg_from_yaml_file(cfg_file, config):
     with open(cfg_file, "r") as f:
         try:
             new_config = yaml.load(f, Loader=yaml.FullLoader)
-        except:
+        except Exception:
             new_config = yaml.load(f)
         config.update(EasyDict(new_config))
 
