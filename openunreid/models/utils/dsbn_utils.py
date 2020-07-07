@@ -69,7 +69,8 @@ def convert_bn(model, target_bn_idx=-1):
         if isinstance(child, DSBN):
             # DSBN 1d/2d -> BN 1d/2d
             m = child.batchnorm_layer(child.num_features, 
-                    eps=child.eps, momentum=child.momentum)
+                    eps=child.dsbn[target_bn_idx].eps, 
+                    momentum=child.dsbn[target_bn_idx].momentum)
             m.weight.requires_grad_(child.weight_requires_grad)
             m.bias.requires_grad_(child.bias_requires_grad)
             m.to(next(child.parameters()).device)
