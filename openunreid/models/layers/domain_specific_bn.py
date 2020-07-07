@@ -10,6 +10,8 @@ class DSBN(nn.Module):
         num_features,
         num_domains,
         batchnorm_layer=nn.BatchNorm2d,
+        eps=1e-5,
+        momentum=0.1,
         target_bn_idx=-1,
         weight_requires_grad=True,
         bias_requires_grad=True,
@@ -20,7 +22,8 @@ class DSBN(nn.Module):
         self.target_bn_idx = target_bn_idx
         self.batchnorm_layer = batchnorm_layer
 
-        dsbn = [batchnorm_layer(num_features) for _ in range(num_domains)]
+        dsbn = [batchnorm_layer(num_features, eps=eps, momentum=momentum) 
+                    for _ in range(num_domains)]
         for idx in range(num_domains):
             dsbn[idx].weight.requires_grad_(weight_requires_grad)
             dsbn[idx].bias.requires_grad_(bias_requires_grad)

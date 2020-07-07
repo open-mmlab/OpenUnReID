@@ -20,6 +20,8 @@ def convert_dsbn(model, num_domains=2, target_bn_idx=-1):
                 child.num_features,
                 num_domains,
                 nn.BatchNorm2d,
+                child.eps,
+                child.momentum,
                 target_bn_idx,
                 child.weight.requires_grad,
                 child.bias.requires_grad,
@@ -37,6 +39,8 @@ def convert_dsbn(model, num_domains=2, target_bn_idx=-1):
                 child.num_features,
                 num_domains,
                 nn.BatchNorm1d,
+                child.eps,
+                child.momentum,
                 target_bn_idx,
                 child.weight.requires_grad,
                 child.bias.requires_grad,
@@ -64,7 +68,8 @@ def convert_bn(model, target_bn_idx=-1):
 
         if isinstance(child, DSBN):
             # DSBN 1d/2d -> BN 1d/2d
-            m = child.batchnorm_layer(child.num_features)
+            m = child.batchnorm_layer(child.num_features, 
+                    eps=child.eps, momentum=child.momentum)
             m.weight.requires_grad_(child.weight_requires_grad)
             m.bias.requires_grad_(child.bias_requires_grad)
             m.to(next(child.parameters()).device)
