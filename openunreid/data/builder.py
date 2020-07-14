@@ -108,10 +108,10 @@ def build_train_dataloader(
     # build data loader
     if dist:
         batch_size = cfg.TRAIN.LOADER.samples_per_gpu
-        num_workers = cfg.TRAIN.LOADER.samples_per_gpu
+        num_workers = cfg.TRAIN.LOADER.workers_per_gpu
     else:
         batch_size = cfg.TRAIN.LOADER.samples_per_gpu * cfg.total_gpus
-        num_workers = cfg.TRAIN.LOADER.samples_per_gpu * cfg.total_gpus
+        num_workers = cfg.TRAIN.LOADER.workers_per_gpu * cfg.total_gpus
 
     if joint:
         # a joint data loader
@@ -207,10 +207,10 @@ def build_val_dataloader(
     # build data loader
     if dist:
         batch_size = cfg.TEST.LOADER.samples_per_gpu
-        num_workers = cfg.TEST.LOADER.samples_per_gpu
+        num_workers = cfg.TEST.LOADER.workers_per_gpu
     else:
         batch_size = cfg.TEST.LOADER.samples_per_gpu * cfg.total_gpus
-        num_workers = cfg.TEST.LOADER.samples_per_gpu * cfg.total_gpus
+        num_workers = cfg.TEST.LOADER.workers_per_gpu * cfg.total_gpus
 
     # several individual data loaders
     data_loaders = []
@@ -265,10 +265,10 @@ def build_test_dataloader(cfg, one_gpu=False, **kwargs):
     # build data loader
     if dist:
         batch_size = cfg.TEST.LOADER.samples_per_gpu
-        num_workers = cfg.TEST.LOADER.samples_per_gpu
+        num_workers = cfg.TEST.LOADER.workers_per_gpu
     else:
         batch_size = cfg.TEST.LOADER.samples_per_gpu * cfg.total_gpus
-        num_workers = cfg.TEST.LOADER.samples_per_gpu * cfg.total_gpus
+        num_workers = cfg.TEST.LOADER.workers_per_gpu * cfg.total_gpus
 
     # several individual data loaders
     data_loaders = []
