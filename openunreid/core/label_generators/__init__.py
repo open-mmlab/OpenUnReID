@@ -70,9 +70,11 @@ class LabelGenerator(object):
             # clustering
             try:
                 indep_thres = self.indep_thres[idx]
-                num_classes = self.num_classes[idx]
             except Exception:
                 indep_thres = None
+            try:
+                num_classes = self.num_classes[idx]
+            except Exception:
                 num_classes = None
 
             if memory_features is None:
@@ -146,9 +148,11 @@ class LabelGenerator(object):
 
             try:
                 self.indep_thres[idx] = indep_thres
-                self.num_classes[idx] = num_classes
             except Exception:
                 self.indep_thres.append(indep_thres)
+            try:
+                self.num_classes[idx] = num_classes
+            except Exception:
                 self.num_classes.append(num_classes)
 
             all_labels.append(labels.tolist())
