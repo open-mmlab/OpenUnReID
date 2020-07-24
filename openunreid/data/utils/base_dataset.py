@@ -47,23 +47,7 @@ class Dataset(object):
         return len(self.data)
 
     def __add__(self, other):
-        """
-        work for combining query and gallery into the test data loader
-        """
-        # data = copy.deepcopy(self.data)
-        # for img_path, pid, camid in other.data:
-        #     pid += self.num_pids
-        #     camid += self.num_cams
-        #     data.append((img_path, pid, camid))
-
-        return ImageDataset(
-            self.data + other.data,
-            self.mode + "+" + other.mode,
-            pseudo_labels=None,
-            transform=self.transform,
-            verbose=False,
-            sort=False,
-        )
+        raise NotImplementedError
 
     def parse_data(self, data):
         """Parses data list and returns the number of person IDs
@@ -200,6 +184,19 @@ class ImageDataset(Dataset):
             "cid": camid,
             "ind": index,
         }
+
+    def __add__(self, other):
+        """
+        work for combining query and gallery into the test data loader
+        """
+        return ImageDataset(
+            self.data + other.data,
+            self.mode + "+" + other.mode,
+            pseudo_labels=None,
+            transform=self.transform,
+            verbose=False,
+            sort=False,
+        )
 
     def renew_labels(self, pseudo_labels):
         assert isinstance(pseudo_labels, list)
