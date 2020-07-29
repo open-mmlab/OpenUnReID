@@ -31,4 +31,4 @@ srun --mpi=pmi2 -p ${PARTITION} \
     --kill-on-bad-exit=1 \
     ${SRUN_ARGS} \
     python -u $METHOD/main.py $METHOD/config.yaml --work-dir=${WORK_DIR} \
-          --launcher="slurm" --tcp-port=${PORT} --amp --set ${PY_ARGS}
+          --launcher="slurm" --tcp-port=${PORT} --set ${PY_ARGS}

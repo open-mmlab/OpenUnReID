@@ -7,13 +7,6 @@ from pathlib import Path
 import warnings
 
 import torch
-try:
-    # PyTorch >= 1.6 supports mixed precision training
-    from torch.cuda.amp import GradScaler
-    amp_support = True
-except:
-    amp_support = False
-    pass
 
 from openunreid.apis import BaseRunner, test_reid, set_random_seed
 from openunreid.core.solvers import build_lr_scheduler, build_optimizer
@@ -48,7 +41,6 @@ def parge_config():
         help="job launcher",
     )
     parser.add_argument("--tcp-port", type=str, default="5017")
-    parser.add_argument("--amp", action="store_true", help="mixed precision training")
     parser.add_argument(
         "--set",
         dest="set_cfgs",
@@ -103,8 +95,6 @@ def main():
             find_unused_parameters=True,
         )
     elif cfg.total_gpus > 1:
-        assert not args.amp, \
-            "We do not support mixed precision training with DataParallel currently"
         model = torch.nn.DataParallel(model)
 
     # build optimizer
@@ -121,20 +111,9 @@ def main():
         cfg.TRAIN.LOSS, num_classes=train_loader.loader.dataset.num_pids, cuda=True
     )
 
-    # build mixed precision scaler
-    global amp_support
-    if args.amp and amp_support:
-        scaler = GradScaler()
-    else:
-        if args.amp:
-            warnings.warn(
-                "Please update the PyTorch version (>=1.6) to support mixed precision training"
-            )
-        scaler = None
-
     # build runner
     runner = BaseRunner(
-        cfg, model, optimizer, criterions, train_loader, lr_scheduler=lr_scheduler, scaler=scaler
+        cfg, model, optimizer, criterions, train_loader, lr_scheduler=lr_scheduler
     )
 
     # resume

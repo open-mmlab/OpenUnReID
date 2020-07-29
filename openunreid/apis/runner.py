@@ -10,7 +10,7 @@ import torch.nn as nn
 from torch.nn.parallel import DataParallel, DistributedDataParallel
 try:
     # PyTorch >= 1.6 supports mixed precision training
-    from torch.cuda.amp import autocast
+    from torch.cuda.amp import GradScaler, autocast
     amp_support = True
 except:
     amp_support = False
@@ -49,7 +49,6 @@ class BaseRunner(object):
         print_freq=10,
         reset_optim=True,
         label_generator=None,
-        scaler=None,
     ):
         super(BaseRunner, self).__init__()
         # set_random_seed(cfg.TRAIN.seed, cfg.TRAIN.deterministic)
@@ -65,7 +64,6 @@ class BaseRunner(object):
         self.print_freq = print_freq
         self.reset_optim = reset_optim
         self.label_generator = label_generator
-        self.scaler = scaler
 
         self.is_pseudo = (
             "PSEUDO_LABELS" in self.cfg.TRAIN
@@ -90,6 +88,22 @@ class BaseRunner(object):
         self.train_progress = Meters(
             meter_formats, self.cfg.TRAIN.iters, prefix="Train: "
         )
+
+        # build mixed precision scaler
+        if "amp" in cfg.TRAIN:
+            global amp_support
+            if cfg.TRAIN.amp and amp_support:
+                assert not isinstance(model, DataParallel), \
+                    "We do not support mixed precision training with DataParallel currently"
+                self.scaler = GradScaler()
+            else:
+                if cfg.amp:
+                    warnings.warn(
+                        "Please update the PyTorch version (>=1.6) to support mixed precision training"
+                    )
+                self.scaler = None
+        else:
+            self.scaler = None
 
     def run(self):
         # the whole process for training
