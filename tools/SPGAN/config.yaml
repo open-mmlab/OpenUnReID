@@ -49,7 +49,7 @@ TRAIN:
   unsup_dataset_indexes: [1,]
 
   epochs: 20
-  iters: 200
+  iters: 400
 
   LOSS:
     losses: {'gan_G': 1., 'recon': 10., 'ide': 5., 'gan_D': 1., 'sia_G': 2., 'sia_M': 1.}
