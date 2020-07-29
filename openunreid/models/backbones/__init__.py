@@ -1,5 +1,8 @@
 from .resnet import resnet18, resnet34, resnet50, resnet101, resnet152
 from .resnet_ibn_a import resnet50_ibn_a, resnet101_ibn_a
+from .generator import *
+from .discriminator import *
+from .spgan import *
 
 __all__ = ["build_bakcbone", "names"]
 
@@ -11,6 +14,10 @@ __factory = {
     "resnet152": resnet152,
     "resnet50_ibn_a": resnet50_ibn_a,
     "resnet101_ibn_a": resnet101_ibn_a,
+    "resnet_6blocks": resnet_6blocks,
+    "resnet_9blocks": resnet_9blocks,
+    "patchgan_3layers": patchgan_3layers,
+    "metricnet": metricnet
 }
 
 

@@ -18,6 +18,9 @@ def build_lr_scheduler(
     warmup_factor=0.01,
     warmup_steps=10,
     max_epoch=1,
+    n_epochs_init=50,
+    n_epochs_decay=50,
+
 ):
     """A function wrapper for building a learning rate scheduler.
     Args:
@@ -89,6 +92,14 @@ def build_lr_scheduler(
     elif lr_scheduler == "cosine":
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
             optimizer, float(max_epoch)
+        )
+
+    elif lr_scheduler == "linear":
+        def lambda_rule(epoch):
+            lr_l = 1.0 - max(0, epoch - n_epochs_init) / float(n_epochs_decay + 1)
+            return lr_l
+        scheduler = torch.optim.lr_scheduler.LambdaLR(
+            optimizer, lr_lambda=lambda_rule
         )
 
     return scheduler

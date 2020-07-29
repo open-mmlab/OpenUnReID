@@ -98,9 +98,13 @@ def simple_group_split(world_size, rank, num_groups):
 def convert_sync_bn(model, process_group=None):
     for _, (child_name, child) in enumerate(model.named_children()):
         if isinstance(child, nn.modules.batchnorm._BatchNorm):
+            if isinstance(child, nn.modules.instancenorm._InstanceNorm):
+                continue
             m = nn.SyncBatchNorm.convert_sync_batchnorm(child, process_group)
-            m.weight.requires_grad_(child.weight.requires_grad)
-            m.bias.requires_grad_(child.bias.requires_grad)
+            if child.weight:
+                m.weight.requires_grad_(child.weight.requires_grad)
+            if child.bias:
+                m.bias.requires_grad_(child.bias.requires_grad)
             m.to(next(child.parameters()).device)
             setattr(model, child_name, m)
         else:

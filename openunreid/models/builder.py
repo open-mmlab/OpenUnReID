@@ -13,7 +13,8 @@ from .backbones import build_bakcbone
 from .layers import build_embedding_layer, build_pooling_layer
 from .utils.dsbn_utils import convert_dsbn
 
-__all__ = ["ReIDBaseModel", "TeacherStudentNetwork", "build_model"]
+__all__ = ["ReIDBaseModel", "TeacherStudentNetwork",
+            "build_model", "build_gan_model"]
 
 
 class ReIDBaseModel(nn.Module):
@@ -190,8 +191,8 @@ def build_model(
     # load source-domain pretrain (optional)
     if init is not None:
         state_dict = load_checkpoint(init)
-        if "state_dict_1" in state_dict.keys():
-            state_dict = state_dict["state_dict_1"]
+        if "state_dict" in state_dict.keys():
+            state_dict = state_dict["state_dict"]
         copy_state_dict(state_dict, model, strip="module.")
 
     # convert to domain-specific bn (optional)
@@ -241,6 +242,67 @@ def build_model(
                     f"total_batch_size ({total_batch_size})."
                 )
             convert_sync_bn(model, dist_groups)
+
+        else:
+            warnings.warn(
+                f"Sync BN is switched off, since samples ({cfg.MODEL.samples_per_bn, })"
+                f" per BN are fewer than or same as samples "
+                f"({cfg.TRAIN.LOADER.samples_per_gpu}) per GPU."
+            )
+            cfg.MODEL.sync_bn = False
+
+    else:
+        if cfg.MODEL.sync_bn and not dist:
+            warnings.warn(
+                "Sync BN is switched off, since the program is running without DDP"
+            )
+        cfg.MODEL.sync_bn = False
+
+    return model
+
+
+def build_gan_model(
+    cfg,
+):
+    """
+    Build a domain-translation model
+    """
+    model = {}
+    
+    # construct generators
+    model['G_A'] = build_bakcbone(cfg.MODEL.generator)
+    model['G_B'] = build_bakcbone(cfg.MODEL.generator)
+
+    # construct discriminators
+    model['D_A'] = build_bakcbone(cfg.MODEL.discriminator)
+    model['D_B'] = build_bakcbone(cfg.MODEL.discriminator)
+
+    # construct a metric net for spgan
+    if cfg.MODEL.spgan:
+        model['Metric'] = build_bakcbone('metricnet')
+
+    # convert to sync bn (optional)
+    rank, world_size, dist = get_dist_info()
+    if cfg.MODEL.sync_bn and dist:
+        if cfg.TRAIN.LOADER.samples_per_gpu < cfg.MODEL.samples_per_bn:
+
+            total_batch_size = cfg.TRAIN.LOADER.samples_per_gpu * world_size
+            if total_batch_size > cfg.MODEL.samples_per_bn:
+                assert (
+                    total_batch_size % cfg.MODEL.samples_per_bn == 0
+                ), "Samples for sync_bn cannot be evenly divided."
+                group_num = int(total_batch_size // cfg.MODEL.samples_per_bn)
+                dist_groups = simple_group_split(world_size, rank, group_num)
+            else:
+                dist_groups = None
+                warnings.warn(
+                    f"'Dist_group' is switched off, since samples_per_bn "
+                    f"({cfg.MODEL.samples_per_bn,}) is larger than or equal to "
+                    f"total_batch_size ({total_batch_size})."
+                )
+
+            for net in model.values():
+                convert_sync_bn(net, dist_groups)
 
         else:
             warnings.warn(

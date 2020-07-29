@@ -75,3 +75,11 @@ class Meters(object):
             meter.reset()
         if prefix is not None:
             self.progress.reset(prefix)
+
+    def remove(self, key):
+        self.meters.pop(key, None)
+
+    def add(self, key, format):
+        if key in self.meters.keys():
+            return
+        self.meters[key] = AverageMeter(key, format)

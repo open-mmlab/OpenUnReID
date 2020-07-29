@@ -1,9 +1,12 @@
 # Written by Yixiao Ge
 
+import torch.nn as nn
 
 from .classification import CrossEntropyLoss, SoftEntropyLoss
 from .memory import HybridMemory
 from .triplet import SoftmaxTripletLoss, SoftSoftmaxTripletLoss, TripletLoss
+from .gan_loss import GANLoss
+from .sia_loss import SiaLoss
 
 
 def build_loss(
@@ -20,27 +23,27 @@ def build_loss(
 
         if loss_name == "cross_entropy":
             assert num_classes is not None
-            criterions["cross_entropy"] = CrossEntropyLoss(num_classes)
+            criterion = CrossEntropyLoss(num_classes)
 
         elif loss_name == "soft_entropy":
-            criterions["soft_entropy"] = SoftEntropyLoss()
+            criterion = SoftEntropyLoss()
 
         elif loss_name == "triplet":
             if "margin" not in cfg:
                 cfg.margin = 0.3
-            criterions["triplet"] = TripletLoss(
+            criterion = TripletLoss(
                 margin=cfg.margin, triplet_key=triplet_key
             )
 
         elif loss_name == "softmax_triplet":
             if "margin" not in cfg:
                 cfg.margin = 0.0
-            criterions["softmax_triplet"] = SoftmaxTripletLoss(
+            criterion = SoftmaxTripletLoss(
                 margin=cfg.margin, triplet_key=triplet_key
             )
 
         elif loss_name == "soft_softmax_triplet":
-            criterions["soft_softmax_triplet"] = SoftSoftmaxTripletLoss(
+            criterion = SoftSoftmaxTripletLoss(
                 triplet_key=triplet_key
             )
 
@@ -50,12 +53,26 @@ def build_loss(
                 cfg.temp = 0.05
             if "momentum" not in cfg:
                 cfg.momentum = 0.2
-            criterions["hybrid_memory"] = HybridMemory(
+            criterion = HybridMemory(
                 num_features, num_memory, temp=cfg.temp, momentum=cfg.momentum
             )
 
+        elif (loss_name.startswith('gan')):
+            criterion = GANLoss('lsgan')
+
+        elif (loss_name == 'recon'):
+            criterion = nn.L1Loss()
+
+        elif (loss_name == 'ide'):
+            criterion = nn.L1Loss()
+
+        elif (loss_name.startswith('sia')):
+            criterion = SiaLoss(margin=2.0)
+
         else:
             raise KeyError("Unknown loss:", loss_name)
+
+        criterions[loss_name] = criterion
 
     if cuda:
         for loss in criterions.values():

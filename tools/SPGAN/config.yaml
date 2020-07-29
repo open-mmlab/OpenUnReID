@@ -1,0 +1,89 @@
+DATA_ROOT: '../datasets/'
+LOGS_ROOT: '../logs/'
+
+
+MODEL:
+  # architecture
+  generator: 'resnet_9blocks'
+  discriminator: 'patchgan_3layers'
+  spgan: True
+
+  sync_bn: False
+  samples_per_bn: 64
+
+
+DATA:
+
+  height: 256
+  width: 128
+  norm_mean: [0.5, 0.5, 0.5]
+  norm_std: [0.5, 0.5, 0.5]
+
+  TRAIN:
+    # augmentation
+    is_autoaug: False
+
+    is_flip: True
+    flip_prob: 0.5
+
+    is_pad: False
+    pad_size: 10
+
+    is_blur: False
+    blur_prob: 0.5
+
+    is_erase: False
+    erase_prob: 0.5
+
+    # dual augmentation for MMT
+    is_mutual_transform: False
+    mutual_times: 2
+
+
+TRAIN:
+  seed: 1
+  deterministic: True
+
+  # datasets
+  datasets: {'market1501': 'trainval', 'dukemtmcreid': 'trainval'}
+  unsup_dataset_indexes: [1,]
+
+  epochs: 20
+  iters: 200
+
+  LOSS:
+    losses: {'gan_G': 1., 'recon': 10., 'ide': 5., 'gan_D': 1., 'sia_G': 2., 'sia_M': 1.}
+
+  # validate
+  val_freq: 1
+
+  # sampler
+  SAMPLER:
+    num_instances: 0
+    is_shuffle: True
+
+  # data loader
+  LOADER:
+    samples_per_gpu: 4
+    workers_per_gpu: 2
+
+  # optim
+  OPTIM:
+    optim: 'adam'
+    lr: 0.0002
+    adam_beta1: 0.5
+    weight_decay: 0
+
+  SCHEDULER:
+    lr_scheduler: null
+  #   lr_scheduler: 'linear'
+  #   n_epochs_init: 50
+  #   n_epochs_decay: 50
+
+
+TEST:
+
+  # data loader
+  LOADER:
+    samples_per_gpu: 8
+    workers_per_gpu: 4

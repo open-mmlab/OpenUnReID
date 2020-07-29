@@ -23,3 +23,19 @@ def read_image(path):
                 f"Will redo. Don't worry. Just chill."
             )
     return img
+
+def save_image(image_numpy, path, aspect_ratio=1.0):
+    """Save a numpy image to the disk
+    Parameters:
+        image_numpy (numpy array) -- input numpy array
+        path (str)          -- the path of the image
+    """
+
+    image_pil = Image.fromarray(image_numpy)
+    h, w, _ = image_numpy.shape
+
+    if aspect_ratio > 1.0:
+        image_pil = image_pil.resize((h, int(w * aspect_ratio)), Image.BICUBIC)
+    if aspect_ratio < 1.0:
+        image_pil = image_pil.resize((int(h / aspect_ratio), w), Image.BICUBIC)
+    image_pil.save(path)

@@ -7,7 +7,7 @@ from pathlib import Path
 
 import torch
 
-from openunreid.apis import BaseRunner, test_reid
+from openunreid.apis import BaseRunner, test_reid, set_random_seed
 from openunreid.core.solvers import build_lr_scheduler, build_optimizer
 from openunreid.data import build_test_dataloader, build_train_dataloader
 from openunreid.models import build_model
@@ -70,6 +70,7 @@ def main():
     # init distributed training
     args, cfg = parge_config()
     dist = init_dist(cfg)
+    set_random_seed(cfg.TRAIN.seed, cfg.TRAIN.deterministic)
     synchronize()
 
     # init logging file

@@ -6,22 +6,27 @@ import time
 import warnings
 
 import torch
+import torch.nn as nn
 from torch.nn.parallel import DataParallel, DistributedDataParallel
 
 from ..core.label_generators import LabelGenerator
 from ..core.metrics.accuracy import accuracy
 from ..data import build_train_dataloader, build_val_dataloader
+from ..data.utils.data_utils import save_image
 from ..utils import bcolors
 from ..utils.dist_utils import get_dist_info, synchronize
 from ..utils.meters import Meters
+from ..utils.image_pool import ImagePool
 from ..utils.torch_utils import copy_state_dict, load_checkpoint, save_checkpoint
+from ..utils.file_utils import mkdir_if_missing
+from ..utils.torch_utils import tensor2im
 from .test import val_reid
 from .train import batch_processor, set_random_seed
 
 
 class BaseRunner(object):
     """
-    Base Runner
+    Re-ID Base Runner
     """
 
     def __init__(
@@ -39,7 +44,7 @@ class BaseRunner(object):
         label_generator=None,
     ):
         super(BaseRunner, self).__init__()
-        set_random_seed(cfg.TRAIN.seed, cfg.TRAIN.deterministic)
+        # set_random_seed(cfg.TRAIN.seed, cfg.TRAIN.deterministic)
 
         if meter_formats is None:
             meter_formats = {"Time": ":.3f", "Acc@1": ":.2%"}
@@ -67,7 +72,8 @@ class BaseRunner(object):
 
         # build data loaders
         self.train_loader, self.train_sets = train_loader, train_sets
-        self.val_loader, self.val_set = build_val_dataloader(cfg)
+        if "val_dataset" in self.cfg.TRAIN:
+            self.val_loader, self.val_set = build_val_dataloader(cfg)
 
         # save training variables
         for key in criterions.keys():
@@ -98,12 +104,22 @@ class BaseRunner(object):
             if (ep + 1) % self.cfg.TRAIN.val_freq == 0 or (
                 ep + 1
             ) == self.cfg.TRAIN.epochs:
-                mAP = self.val()
-                self.save(mAP)
+                if "val_dataset" in self.cfg.TRAIN:
+                    mAP = self.val()
+                    self.save(mAP)
+                else:
+                    self.save()
 
             # update learning rate
             if self.lr_scheduler is not None:
-                self.lr_scheduler.step()
+                if isinstance(self.lr_scheduler, list):
+                    for scheduler in self.lr_scheduler:
+                        scheduler.step()
+                elif isinstance(self.lr_scheduler, dict):
+                    for scheduler in self.lr_scheduler.values():
+                        scheduler.step()
+                else:
+                    self.lr_scheduler.step()
 
             # synchronize distributed processes
             synchronize()
@@ -159,6 +175,9 @@ class BaseRunner(object):
         if isinstance(self.model, list):
             for model in self.model:
                 model.train()
+        elif isinstance(self.model, dict):
+            for model in self.model.values():
+                model.train()
         else:
             self.model.train()
 
@@ -181,9 +200,10 @@ class BaseRunner(object):
 
             loss = self.train_step(iter, batch)
 
-            self.optimizer.zero_grad()
-            loss.backward()
-            self.optimizer.step()
+            if (loss > 0):
+                self.optimizer.zero_grad()
+                loss.backward()
+                self.optimizer.step()
 
             self.train_progress.update({"Time": time.time() - end})
             end = time.time()
@@ -252,50 +272,81 @@ class BaseRunner(object):
 
         return better_mAP
 
-    def save(self, mAP):
-        is_best = mAP > self._best_mAP
-        self._best_mAP = max(self._best_mAP, mAP)
-        print(
-            bcolors.OKGREEN
-            + "\n * Finished epoch {:3d}  mAP: {:5.1%}  best: {:5.1%}{}\n".format(
-                self._epoch, mAP, self._best_mAP, " *" if is_best else ""
+    def save(self, mAP=None):
+        if mAP is not None:
+            is_best = mAP > self._best_mAP
+            self._best_mAP = max(self._best_mAP, mAP)
+            print(
+                bcolors.OKGREEN
+                + "\n * Finished epoch {:3d}  mAP: {:5.1%}  best: {:5.1%}{}\n".format(
+                    self._epoch, mAP, self._best_mAP, " *" if is_best else ""
+                )
+                + bcolors.ENDC
             )
-            + bcolors.ENDC
-        )
+        else:
+            is_best = True
+            print(
+                bcolors.OKGREEN
+                + "\n * Finished epoch {:3d} \n".format(self._epoch)
+                + bcolors.ENDC
+            )
 
-        fpath = osp.join(self.cfg.work_dir, "checkpoint.pth")
         if self._rank == 0:
             # only on cuda:0
-            self.save_model(is_best, fpath)
+            self.save_model(is_best, self.cfg.work_dir)
 
     def save_model(self, is_best, fpath):
-        if not isinstance(self.model, list):
-            model_list = [self.model]
+        if isinstance(self.model, list):
+            state_dict = {}
+            state_dict["epoch"] = self._epoch + 1
+            state_dict["best_mAP"] = self._best_mAP
+            for idx, model in enumerate(self.model):
+                state_dict["state_dict_" + str(idx + 1)] = model.state_dict()
+                save_checkpoint(state_dict, is_best,
+                        fpath=osp.join(fpath, "checkpoint.pth"))
+
+        elif isinstance(self.model, dict):
+            state_dict = {}
+            state_dict["epoch"] = self._epoch + 1
+            state_dict["best_mAP"] = self._best_mAP
+            for key, model in self.model.items():
+                state_dict["state_dict"] = model.state_dict()
+                save_checkpoint(state_dict, is_best,
+                        fpath=osp.join(fpath, "checkpoint_"+key+".pth"))
+
+        elif isinstance(self.model, nn.Module):
+            state_dict = {}
+            state_dict["epoch"] = self._epoch + 1
+            state_dict["best_mAP"] = self._best_mAP
+            state_dict["state_dict"] = self.model.state_dict()
+            save_checkpoint(state_dict, is_best,
+                        fpath=osp.join(fpath, "checkpoint.pth"))
+
         else:
-            model_list = self.model
-
-        state_dict = {}
-        for idx, model in enumerate(model_list):
-            state_dict["state_dict_" + str(idx + 1)] = model.state_dict()
-        state_dict["epoch"] = self._epoch + 1
-        state_dict["best_mAP"] = self._best_mAP
-
-        save_checkpoint(state_dict, is_best, fpath=fpath)
+            assert "Unknown type of model for save_model()"
 
     def resume(self, path):
         # resume from a training checkpoint (not source pretrain)
-        state_dict = load_checkpoint(path)
-        self.load_model(state_dict)
+        self.load_model(path)
         synchronize()
 
-    def load_model(self, state_dict):
-        if not isinstance(self.model, list):
-            model_list = [self.model]
-        else:
-            model_list = self.model
+    def load_model(self, path):
+        if isinstance(self.model, list):
+            assert osp.isfile(path)
+            state_dict = load_checkpoint(path)
+            for idx, model in enumerate(self.model):
+                copy_state_dict(state_dict["state_dict_" + str(idx + 1)], model)
 
-        for idx, model in enumerate(model_list):
-            copy_state_dict(state_dict["state_dict_" + str(idx + 1)], model)
+        elif isinstance(self.model, dict):
+            assert osp.isdir(path)
+            for key, model in self.model.items():
+                state_dict = load_checkpoint(osp.join(path, "checkpoint_"+key+".pth"))
+                copy_state_dict(state_dict["state_dict"], model)
+
+        elif isinstance(self.model, nn.Module):
+            assert osp.isfile(path)
+            state_dict = load_checkpoint(path)
+            copy_state_dict(state_dict["state_dict"], model)
 
         self._start_epoch = state_dict["epoch"]
         self._best_mAP = state_dict["best_mAP"]
@@ -315,3 +366,126 @@ class BaseRunner(object):
         """int: Number of processes participating in the job.
         (distributed training)"""
         return self._world_size
+
+
+class GANBaseRunner(BaseRunner):
+    """
+    Domain-translation Base Runner
+    Re-implementation of CycleGAN
+    """
+
+    def __init__(
+        self,
+        cfg,
+        model,
+        optimizer,
+        criterions,
+        train_loader,
+        **kwargs
+    ):
+        super(GANBaseRunner, self).__init__(
+            cfg, model, optimizer, criterions, train_loader, **kwargs
+        )
+
+        self.save_dir = osp.join(self.cfg.work_dir, 'images')
+        if self._rank == 0:
+            mkdir_if_missing(self.save_dir)
+
+        self.fake_A_pool = ImagePool()
+        self.fake_B_pool = ImagePool()
+
+    def train_step(self, iter, batch):
+        data_src, data_tgt = batch[0], batch[1]
+
+        self.real_A = data_src['img'].cuda()
+        self.real_B = data_tgt['img'].cuda()
+
+        # Forward
+        self.fake_B = self.model['G_A'](self.real_A)     # G_A(A)
+        self.fake_A = self.model['G_B'](self.real_B)     # G_B(B)
+        self.rec_A = self.model['G_B'](self.fake_B)    # G_B(G_A(A))
+        self.rec_B = self.model['G_A'](self.fake_A)    # G_A(G_B(B))
+
+        # G_A and G_B
+        self.set_requires_grad([self.model['D_A'], self.model['D_B']], False) # save memory
+        self.optimizer['G'].zero_grad()
+        self.backward_G()
+        self.optimizer['G'].step()
+
+        # D_A and D_B
+        self.set_requires_grad([self.model['D_A'], self.model['D_B']], True)
+        self.optimizer['D'].zero_grad()
+        self.backward_D()
+        self.optimizer['D'].step()
+
+        # save translated images
+        if self._rank == 0:
+            self.save_imgs(['real_A', 'real_B', 'fake_A', 'fake_B', 'rec_A', 'rec_B'])
+
+        return 0
+
+    def backward_G(self):
+        """Calculate the loss for generators G_A and G_B"""
+        # Adversarial loss D_A(G_A(B))
+        loss_G_A = self.criterions['gan_G'](self.model['D_A'](self.fake_A), True)
+        # Adversarial loss D_B(G_B(A))
+        loss_G_B = self.criterions['gan_G'](self.model['D_B'](self.fake_B), True)
+        loss_G = loss_G_A + loss_G_B
+
+        # Forward cycle loss || G_A(G_B(A)) - A||
+        loss_recon_A = self.criterions['recon'](self.rec_A, self.real_A)
+        # Backward cycle loss || G_B(G_A(B)) - B||
+        loss_recon_B = self.criterions['recon'](self.rec_B, self.real_B)
+        loss_recon = loss_recon_A + loss_recon_B
+
+        # G_A should be identity if real_B is fed: ||G_B(B) - B||
+        idt_A = self.model['G_A'](self.real_B)
+        loss_idt_A = self.criterions['ide'](idt_A, self.real_B)
+        # G_B should be identity if real_A is fed: ||G_A(A) - A||
+        idt_B = self.model['G_B'](self.real_A)
+        loss_idt_B = self.criterions['ide'](idt_B, self.real_A)
+        loss_idt = loss_idt_A + loss_idt_B
+
+        # combined loss and calculate gradients
+        loss = loss_G * self.cfg.TRAIN.LOSS.losses['gan_G'] + \
+                loss_recon * self.cfg.TRAIN.LOSS.losses['recon'] + \
+                loss_idt * self.cfg.TRAIN.LOSS.losses['ide']
+        loss.backward()
+
+        meters = {'gan_G': loss_G.item(),
+                  'recon': loss_recon.item(),
+                  'ide': loss_idt.item()}
+        self.train_progress.update(meters)
+
+    def backward_D_basic(self, netD, real, fake, fake_pool):
+        # Real
+        pred_real = netD(real)
+        loss_D_real = self.criterions['gan_D'](pred_real, True)
+        # Fake
+        pred_fake = netD(fake_pool.query(fake))
+        loss_D_fake = self.criterions['gan_D'](pred_fake, False)
+        # Combined loss and calculate gradients
+        loss_D = (loss_D_real + loss_D_fake) * 0.5
+        loss = loss_D * self.cfg.TRAIN.LOSS.losses['gan_D']
+        loss.backward()
+        return loss_D.item()
+
+    def backward_D(self):
+        loss_D_A = self.backward_D_basic(self.model['D_A'], self.real_A, self.fake_A, self.fake_A_pool)
+        loss_D_B = self.backward_D_basic(self.model['D_B'], self.real_B, self.fake_B, self.fake_B_pool)
+        meters = {'gan_D': loss_D_A + loss_D_B}
+        self.train_progress.update(meters)
+
+    def set_requires_grad(self, nets, requires_grad=False):
+        if not isinstance(nets, list):
+            nets = [nets]
+        for net in nets:
+            if net is not None:
+                for param in net.parameters():
+                    param.requires_grad = requires_grad
+
+    def save_imgs(self, names):
+        for name in names:
+            img = getattr(self, name)[0]
+            img_np = tensor2im(img, mean=self.cfg.DATA.norm_mean, std=self.cfg.DATA.norm_std)
+            save_image(img_np, osp.join(self.save_dir, 'epoch_{}_{}.jpg'.format(self._epoch, name)))

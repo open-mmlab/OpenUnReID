@@ -1,17 +1,24 @@
 # Written by Yixiao Ge
 
+import os
+import os.path as osp
 import time
 import warnings
 from datetime import timedelta
 
 import numpy as np
 import torch
+import torchvision
 
 from ..core.metrics.rank import evaluate_rank
 from ..core.utils.compute_dist import build_dist
 from ..models.utils.dsbn_utils import switch_target_bn
 from ..models.utils.extract import extract_features
-from ..utils.dist_utils import get_dist_info
+from ..data.utils.data_utils import save_image
+from ..utils.dist_utils import get_dist_info, synchronize
+from ..utils.file_utils import mkdir_if_missing
+from ..utils.torch_utils import tensor2im
+from ..utils.meters import Meters
 
 # # Deprecated
 # from ..core.utils.rerank import re_ranking_cpu
@@ -144,3 +151,58 @@ def val_reid(
     print(f"\n{sep} Finished validating {sep}\n")
 
     return cmc, map
+
+
+@torch.no_grad()
+def infer_gan(
+        cfg, model, data_loader, dataset_name=None, rank=None,
+        cuda=True, print_freq=10, prefix="Translate: ", **kwargs
+    ):
+
+    start_time = time.monotonic()
+
+    if dataset_name is not None:
+        print(f"\n{sep} Start translating {dataset_name} {sep}\n")
+
+    if rank is None:
+        rank, _, _ = get_dist_info()
+
+    progress = Meters({"Time": ":.3f", "Data": ":.3f"}, len(data_loader), prefix=prefix)
+    if rank == 0:
+        mkdir_if_missing(osp.join(cfg.work_dir, dataset_name+'_translated'))
+
+    model.eval()
+    data_iter = iter(data_loader)
+
+    end = time.time()
+    for i in range(len(data_loader)):
+        data = next(data_iter)
+        progress.update({"Data": time.time() - end})
+
+        images = data['img']
+        if cuda:
+            images = images.cuda()
+
+        outputs = model(images)
+
+        for idx in range(outputs.size(0)):
+            save_path = os.path.join(cfg.work_dir, dataset_name+'_translated', osp.basename(data['path'][idx]))
+            if (osp.isfile(save_path)):
+                continue
+            img_np = tensor2im(outputs[idx], mean=cfg.DATA.norm_mean, std=cfg.DATA.norm_std)
+            save_image(img_np, save_path)
+
+        # measure elapsed time
+        progress.update({"Time": time.time() - end})
+        end = time.time()
+
+        if i % print_freq == 0:
+            progress.display(i)
+
+    synchronize()
+
+    end_time = time.monotonic()
+    print('Translating time: ', timedelta(seconds=end_time - start_time))
+    print(f"\n{sep} Finished translating {sep}\n")
+
+    return

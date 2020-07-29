@@ -69,8 +69,13 @@ def build_optimizer(
             "Unsupported optim: {}. Must be one of {}".format(optim, AVAI_OPTIMS)
         )
 
+    if isinstance(models, nn.Module):
+        model_list = [models]
+    else:
+        model_list = models
+
     param_groups = []
-    for model in models:
+    for model in model_list:
 
         if not isinstance(model, nn.Module):
             raise TypeError(
