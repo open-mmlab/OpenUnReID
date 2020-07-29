@@ -303,8 +303,8 @@ def build_gan_model(
                     f"total_batch_size ({total_batch_size})."
                 )
 
-            for net in model.values():
-                convert_sync_bn(net, dist_groups)
+            for key in model.keys():
+                convert_sync_bn(model[key], dist_groups)
 
         else:
             warnings.warn(

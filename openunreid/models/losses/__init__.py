@@ -75,7 +75,7 @@ def build_loss(
         criterions[loss_name] = criterion
 
     if cuda:
-        for loss in criterions.values():
-            loss.cuda()
+        for key in criterions.keys():
+            criterions[key].cuda()
 
     return criterions

@@ -8,6 +8,13 @@ import warnings
 import torch
 import torch.nn as nn
 from torch.nn.parallel import DataParallel, DistributedDataParallel
+try:
+    # PyTorch >= 1.6 supports mixed precision training
+    from torch.cuda.amp import autocast
+    amp_support = True
+except:
+    amp_support = False
+    pass
 
 from ..core.label_generators import LabelGenerator
 from ..core.metrics.accuracy import accuracy
@@ -42,6 +49,7 @@ class BaseRunner(object):
         print_freq=10,
         reset_optim=True,
         label_generator=None,
+        scaler=None,
     ):
         super(BaseRunner, self).__init__()
         # set_random_seed(cfg.TRAIN.seed, cfg.TRAIN.deterministic)
@@ -57,6 +65,7 @@ class BaseRunner(object):
         self.print_freq = print_freq
         self.reset_optim = reset_optim
         self.label_generator = label_generator
+        self.scaler = scaler
 
         self.is_pseudo = (
             "PSEUDO_LABELS" in self.cfg.TRAIN
@@ -116,8 +125,8 @@ class BaseRunner(object):
                     for scheduler in self.lr_scheduler:
                         scheduler.step()
                 elif isinstance(self.lr_scheduler, dict):
-                    for scheduler in self.lr_scheduler.values():
-                        scheduler.step()
+                    for key in self.lr_scheduler.keys():
+                        self.lr_scheduler[key].step()
                 else:
                     self.lr_scheduler.step()
 
@@ -176,8 +185,8 @@ class BaseRunner(object):
             for model in self.model:
                 model.train()
         elif isinstance(self.model, dict):
-            for model in self.model.values():
-                model.train()
+            for key in self.model.keys():
+                self.model[key].train()
         else:
             self.model.train()
 
@@ -198,12 +207,21 @@ class BaseRunner(object):
                 batch = self.train_loader.next()
             # self.train_progress.update({'Data': time.time()-end})
 
-            loss = self.train_step(iter, batch)
+            if self.scaler is None:
+                loss = self.train_step(iter, batch)
+                if (loss > 0):
+                    self.optimizer.zero_grad()
+                    loss.backward()
+                    self.optimizer.step()
 
-            if (loss > 0):
-                self.optimizer.zero_grad()
-                loss.backward()
-                self.optimizer.step()
+            else:
+                with autocast():
+                    loss = self.train_step(iter, batch)
+                if (loss > 0):
+                    self.optimizer.zero_grad()
+                    self.scaler.scale(loss).backward()
+                    self.scaler.step(self.optimizer)
+                    self.scaler.update()
 
             self.train_progress.update({"Time": time.time() - end})
             end = time.time()

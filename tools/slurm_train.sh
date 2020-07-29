@@ -8,8 +8,8 @@ METHOD=$3
 WORK_DIR=$4
 PY_ARGS=${@:5}
 
-GPUS=${GPUS:-4}
-GPUS_PER_NODE=${GPUS_PER_NODE:-4}
+GPUS=${GPUS:-3}
+GPUS_PER_NODE=${GPUS_PER_NODE:-3}
 CPUS_PER_TASK=${CPUS_PER_TASK:-5}
 SRUN_ARGS=${SRUN_ARGS:-""}
 
@@ -31,4 +31,4 @@ srun --mpi=pmi2 -p ${PARTITION} \
     --kill-on-bad-exit=1 \
     ${SRUN_ARGS} \
     python -u $METHOD/main.py $METHOD/config.yaml --work-dir=${WORK_DIR} \
-          --launcher="slurm" --tcp-port=${PORT} --set ${PY_ARGS}
+          --launcher="slurm" --tcp-port=${PORT} --amp --set ${PY_ARGS}

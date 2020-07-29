@@ -29,8 +29,8 @@ def init_dist(args, backend="nccl"):
 
     elif args.launcher == "none":
         # DataParallel or single GPU
-        if ("CUDA_VISIBLE_DEVICES" in os.environ):
-            args.total_gpus = len(os.environ["CUDA_VISIBLE_DEVICES"])
+        if 'CUDA_VISIBLE_DEVICES' in os.environ.keys():
+            args.total_gpus = len(os.environ['CUDA_VISIBLE_DEVICES'].split(','))
         else:
             args.total_gpus = torch.cuda.device_count()
         if args.total_gpus > 1:
@@ -54,7 +54,10 @@ def get_dist_info():
 
 def init_dist_pytorch(args, backend="nccl"):
     args.rank = int(os.environ["LOCAL_RANK"])
-    args.ngpus_per_node = torch.cuda.device_count()
+    if 'CUDA_VISIBLE_DEVICES' in os.environ.keys():
+        args.ngpus_per_node = len(os.environ['CUDA_VISIBLE_DEVICES'].split(','))
+    else:
+        args.ngpus_per_node = torch.cuda.device_count()
     args.gpu = args.rank
     torch.cuda.set_device(args.gpu)
     dist.init_process_group(backend=backend)
@@ -65,8 +68,11 @@ def init_dist_slurm(args, backend="nccl"):
     args.rank = int(os.environ["SLURM_PROCID"])
     args.world_size = int(os.environ["SLURM_NTASKS"])
     node_list = os.environ["SLURM_NODELIST"]
-    args.ngpus_per_node = torch.cuda.device_count()
-    # args.ngpus_per_node = len(os.environ['CUDA_VISIBLE_DEVICES'])
+    if 'CUDA_VISIBLE_DEVICES' in os.environ.keys():
+        args.ngpus_per_node = len(os.environ['CUDA_VISIBLE_DEVICES'].split(','))
+    else:
+        args.ngpus_per_node = torch.cuda.device_count()
+    assert args.ngpus_per_node>0, "CUDA is not supported"
     args.gpu = args.rank % args.ngpus_per_node
     torch.cuda.set_device(args.gpu)
     addr = subprocess.getoutput(

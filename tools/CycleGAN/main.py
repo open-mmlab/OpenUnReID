@@ -111,8 +111,8 @@ def main():
 
     # build lr_scheduler
     if cfg.TRAIN.SCHEDULER.lr_scheduler is not None:
-        lr_scheduler = [build_lr_scheduler(opt, **cfg.TRAIN.SCHEDULER) \
-                        for opt in optimizer.values()]
+        lr_scheduler = [build_lr_scheduler(optimizer[key], **cfg.TRAIN.SCHEDULER) \
+                        for key in optimizer.keys()]
     else:
         lr_scheduler = None
 
