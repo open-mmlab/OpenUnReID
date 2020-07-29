@@ -47,26 +47,53 @@ class SPGANRunner(GANBaseRunner):
         # G_A and G_B
         if iter % 2 == 0:
             self.set_requires_grad([self.model['D_A'], self.model['D_B'], self.model['Metric']], False) # save memory
-            self.optimizer['G'].zero_grad()
+            if self.scaler is None:
+                self.optimizer['G'].zero_grad()
+            else:
+                with autocast(enabled=False):
+                    self.optimizer['G'].zero_grad()
             if self._epoch > 1:
                 self.backward_G(retain_graph=True)
                 self.backward_GM()
             else:
                 self.backward_G()
-            self.optimizer['G'].step()
+            if self.scaler is None:
+                self.optimizer['G'].step()
+            else:
+                with autocast(enabled=False):
+                    self.scaler.step(self.optimizer['G'])
 
         # SiaNet for SPGAN
         if self._epoch > 0:
             self.set_requires_grad([self.model['Metric']], True)
-            self.optimizer['Metric'].zero_grad()
+            if self.scaler is None:
+                self.optimizer['Metric'].zero_grad()
+            else:
+                with autocast(enabled=False):
+                    self.optimizer['Metric'].zero_grad()
             self.backward_M()
-            self.optimizer['Metric'].step()
+            if self.scaler is None:
+                self.optimizer['Metric'].step()
+            else:
+                with autocast(enabled=False):
+                    self.scaler.step(self.optimizer['Metric'])
 
         # D_A and D_B
         self.set_requires_grad([self.model['D_A'], self.model['D_B']], True)
-        self.optimizer['D'].zero_grad()
+        # self.optimizer['D'].zero_grad()
+        # self.backward_D()
+        # self.optimizer['D'].step()
+        if self.scaler is None:
+            self.optimizer['D'].zero_grad()
+        else:
+            with autocast(enabled=False):
+                self.optimizer['D'].zero_grad()
         self.backward_D()
-        self.optimizer['D'].step()
+        if self.scaler is None:
+            self.optimizer['D'].step()
+        else:
+            with autocast(enabled=False):
+                self.scaler.step(self.optimizer['D'])
 
         # save translated images
         if self._rank == 0:
@@ -90,7 +117,11 @@ class SPGANRunner(GANBaseRunner):
         loss_M = (loss_pos + 0.5 * loss_neg) / 4.0
 
         loss = loss_M * self.cfg.TRAIN.LOSS.losses['sia_G']
-        loss.backward()
+        if self.scaler is None:
+            loss.backward()
+        else:
+            with autocast(enabled=False):
+                self.scaler.scale(loss).backward()
 
         meters = {'sia_G': loss_M.item()}
         self.train_progress.update(meters)
@@ -110,7 +141,11 @@ class SPGANRunner(GANBaseRunner):
         loss_M = (loss_pos + 2 * loss_neg) / 3.0
 
         loss = loss_M * self.cfg.TRAIN.LOSS.losses['sia_M']
-        loss.backward()
+        if self.scaler is None:
+            loss.backward()
+        else:
+            with autocast(enabled=False):
+                self.scaler.scale(loss).backward()
 
         meters = {'sia_M': loss_M.item()}
         self.train_progress.update(meters)

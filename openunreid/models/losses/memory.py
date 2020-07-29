@@ -4,23 +4,21 @@
 import torch
 import torch.nn.functional as F
 from torch import autograd, nn
+from torch.cuda.amp import custom_fwd, custom_bwd
 
 from ...utils.dist_utils import all_gather_tensor
 
 
 class HM(autograd.Function):
     @staticmethod
-    @custom_fwd
+    @custom_fwd(cast_inputs=torch.float32)
     def forward(ctx, inputs, indexes, features, momentum):
         ctx.features = features
         ctx.momentum = momentum
         outputs = inputs.mm(ctx.features.t())
-
-        # ctx.save_for_backward(inputs, indexes)
         all_inputs = all_gather_tensor(inputs)
         all_indexes = all_gather_tensor(indexes)
         ctx.save_for_backward(all_inputs, all_indexes)
-
         return outputs
 
     @staticmethod

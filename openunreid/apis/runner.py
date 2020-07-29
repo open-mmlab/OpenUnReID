@@ -235,7 +235,9 @@ class BaseRunner(object):
                     self.optimizer.zero_grad()
                     self.scaler.scale(loss).backward()
                     self.scaler.step(self.optimizer)
-                    self.scaler.update()
+
+            if self.scaler is not None:
+                self.scaler.update()
 
             self.train_progress.update({"Time": time.time() - end})
             end = time.time()
@@ -440,15 +442,31 @@ class GANBaseRunner(BaseRunner):
 
         # G_A and G_B
         self.set_requires_grad([self.model['D_A'], self.model['D_B']], False) # save memory
-        self.optimizer['G'].zero_grad()
+        if self.scaler is None:
+            self.optimizer['G'].zero_grad()
+        else:
+            with autocast(enabled=False):
+                self.optimizer['G'].zero_grad()
         self.backward_G()
-        self.optimizer['G'].step()
+        if self.scaler is None:
+            self.optimizer['G'].step()
+        else:
+            with autocast(enabled=False):
+                self.scaler.step(self.optimizer['G'])
 
         # D_A and D_B
         self.set_requires_grad([self.model['D_A'], self.model['D_B']], True)
-        self.optimizer['D'].zero_grad()
+        if self.scaler is None:
+            self.optimizer['D'].zero_grad()
+        else:
+            with autocast(enabled=False):
+                self.optimizer['D'].zero_grad()
         self.backward_D()
-        self.optimizer['D'].step()
+        if self.scaler is None:
+            self.optimizer['D'].step()
+        else:
+            with autocast(enabled=False):
+                self.scaler.step(self.optimizer['D'])
 
         # save translated images
         if self._rank == 0:
@@ -482,7 +500,11 @@ class GANBaseRunner(BaseRunner):
         loss = loss_G * self.cfg.TRAIN.LOSS.losses['gan_G'] + \
                 loss_recon * self.cfg.TRAIN.LOSS.losses['recon'] + \
                 loss_idt * self.cfg.TRAIN.LOSS.losses['ide']
-        loss.backward(retain_graph=retain_graph)
+        if self.scaler is None:
+            loss.backward(retain_graph=retain_graph)
+        else:
+            with autocast(enabled=False):
+                self.scaler.scale(loss).backward(retain_graph=retain_graph)
 
         meters = {'gan_G': loss_G.item(),
                   'recon': loss_recon.item(),
@@ -499,7 +521,11 @@ class GANBaseRunner(BaseRunner):
         # Combined loss and calculate gradients
         loss_D = (loss_D_real + loss_D_fake) * 0.5
         loss = loss_D * self.cfg.TRAIN.LOSS.losses['gan_D']
-        loss.backward()
+        if self.scaler is None:
+            loss.backward()
+        else:
+            with autocast(enabled=False):
+                self.scaler.scale(loss).backward()
         return loss_D.item()
 
     def backward_D(self):
