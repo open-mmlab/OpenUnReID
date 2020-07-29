@@ -147,7 +147,7 @@ def compute_jaccard_distance(
             torch.pow(x, 2).sum(dim=1, keepdim=True).expand(m, n)
             + torch.pow(y, 2).sum(dim=1, keepdim=True).expand(n, m).t()
         )
-        dist.addmm_(1, -2, x, y.t())
+        dist.addmm_(x, y.t(), beta=1, alpha=-2)
 
         if fp16:
             V[i, k_reciprocal_expansion_index] = (

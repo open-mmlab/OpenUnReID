@@ -10,6 +10,7 @@ from ...utils.dist_utils import all_gather_tensor
 
 class HM(autograd.Function):
     @staticmethod
+    @custom_fwd
     def forward(ctx, inputs, indexes, features, momentum):
         ctx.features = features
         ctx.momentum = momentum
@@ -23,6 +24,7 @@ class HM(autograd.Function):
         return outputs
 
     @staticmethod
+    @custom_bwd
     def backward(ctx, grad_outputs):
         inputs, indexes = ctx.saved_tensors
         grad_inputs = None

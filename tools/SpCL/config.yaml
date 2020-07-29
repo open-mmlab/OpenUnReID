@@ -53,6 +53,8 @@ DATA:
 TRAIN:
   seed: 1
   deterministic: True
+  # mixed precision training for PyTorch>=1.6
+  amp: True
 
   # datasets
   datasets: {'market1501': 'trainval',}
@@ -61,7 +63,7 @@ TRAIN:
 
   epochs: 50
   iters: 400
-  
+
   LOSS:
     losses: {'hybrid_memory': 1.,}
     temp: 0.05
