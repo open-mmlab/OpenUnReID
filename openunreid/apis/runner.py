@@ -309,8 +309,8 @@ class BaseRunner(object):
             state_dict = {}
             state_dict["epoch"] = self._epoch + 1
             state_dict["best_mAP"] = self._best_mAP
-            for key, model in self.model.items():
-                state_dict["state_dict"] = model.state_dict()
+            for key in self.model.keys():
+                state_dict["state_dict"] = self.model[key].state_dict()
                 save_checkpoint(state_dict, False,
                         fpath=osp.join(fpath, "checkpoint_"+key+".pth"))
 
@@ -339,9 +339,9 @@ class BaseRunner(object):
 
         elif isinstance(self.model, dict):
             assert osp.isdir(path)
-            for key, model in self.model.items():
+            for key in self.model.keys():
                 state_dict = load_checkpoint(osp.join(path, "checkpoint_"+key+".pth"))
-                copy_state_dict(state_dict["state_dict"], model)
+                copy_state_dict(state_dict["state_dict"], self.model[key])
 
         elif isinstance(self.model, nn.Module):
             assert osp.isfile(path)

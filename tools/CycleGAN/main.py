@@ -89,8 +89,8 @@ def main():
 
     # build model
     model = build_gan_model(cfg)
-    for _, net in model.items():
-        net.cuda()
+    for key in model.keys():
+        model[key].cuda()
 
     if dist:
         ddp_cfg = {
@@ -98,11 +98,11 @@ def main():
             "output_device": cfg.gpu,
             "find_unused_parameters": True,
         }
-        for _, net in model.items():
-            net = torch.nn.parallel.DistributedDataParallel(net, **ddp_cfg)
+        for key in model.keys():
+            model[key] = torch.nn.parallel.DistributedDataParallel(model[key], **ddp_cfg)
     elif cfg.total_gpus > 1:
-        for _, net in model.items():
-            net = torch.nn.DataParallel(net)
+        for key in model.keys():
+            model[key] = torch.nn.DataParallel(model[key])
 
     # build optimizer
     optimizer = {}

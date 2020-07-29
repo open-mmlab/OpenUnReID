@@ -160,7 +160,7 @@ def infer_gan(
     ):
 
     start_time = time.monotonic()
-    
+
     sep = "*******************************"
     if dataset_name is not None:
         print(f"\n{sep} Start translating {dataset_name} {sep}\n")
