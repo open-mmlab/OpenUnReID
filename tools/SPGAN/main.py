@@ -8,6 +8,13 @@ from pathlib import Path
 
 import torch
 from torch.nn.parallel import DataParallel, DistributedDataParallel
+try:
+    # PyTorch >= 1.6 supports mixed precision training
+    from torch.cuda.amp import GradScaler, autocast
+    amp_support = True
+except:
+    amp_support = False
+    pass
 
 from openunreid.apis import GANBaseRunner, set_random_seed, infer_gan
 from openunreid.core.solvers import build_lr_scheduler, build_optimizer
