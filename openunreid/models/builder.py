@@ -167,7 +167,7 @@ class TeacherStudentNetwork(nn.Module):
     @torch.no_grad()
     def _update_mean_net(self):
         for param, param_m in zip(self.net.parameters(), self.mean_net.parameters()):
-            param_m.data.mul_(self.alpha).add_(1 - self.alpha, param.data)
+            param_m.data.mul_(self.alpha).add_(param.data, alpha=1-self.alpha)
 
 
 def build_model(
