@@ -6,7 +6,7 @@ MODEL:
   # architecture
   generator: 'resnet_9blocks'
   discriminator: 'patchgan_3layers'
-  spgan: True
+  spgan: False
 
   sync_bn: False
   samples_per_bn: 64
@@ -52,7 +52,7 @@ TRAIN:
   iters: 400
 
   LOSS:
-    losses: {'gan_G': 1., 'recon': 10., 'ide': 5., 'gan_D': 1., 'sia_G': 2., 'sia_M': 1.}
+    losses: {'gan_G': 1., 'recon': 10., 'ide': 0.5, 'gan_D': 1.}
 
   # validate
   val_freq: 1
@@ -75,7 +75,9 @@ TRAIN:
     weight_decay: 0
 
   SCHEDULER:
-    lr_scheduler: null
+    lr_scheduler: 'linear'
+    n_epochs_init: 25
+    n_epochs_decay: 25
 
 
 TEST:

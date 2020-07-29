@@ -22,7 +22,7 @@ Please refer to [MODEL_ZOO.md](docs/MODEL_ZOO.md) for trained models and downloa
 | Method | Reference | USL | UDA |
 | ------ | :---: | :-----: | :-----: |
 | [UDA_TP](tools/UDA_TP) | [PR'20 (arXiv'18)](https://arxiv.org/abs/1807.11334) | ✓ | ✓ |
-| SPGAN  | [CVPR'18](https://arxiv.org/abs/1711.07027) | n/a  |  ongoing |  
+| [SPGAN](tools/SPGAN)  | [CVPR'18](https://arxiv.org/abs/1711.07027) | n/a  |  ✓ |  
 | SSG | [ICCV'19](https://arxiv.org/abs/1811.10144) | ongoing  | ongoing  |  
 | [strong_baseline](tools/strong_baseline) | Sec. 3.1 in [ICLR'20](https://openreview.net/pdf?id=rJlnOhVYPS) | ✓ | ✓ |
 | [MMT](tools/MMT/) | [ICLR'20](https://openreview.net/pdf?id=rJlnOhVYPS) | ✓  | ✓  |  

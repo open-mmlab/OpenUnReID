@@ -7,7 +7,7 @@ from typing import List
 import torch
 from torch.optim.lr_scheduler import _LRScheduler
 
-AVAI_SCH = ["single_step", "multi_step", "warmup_multi_step", "cosine"]
+AVAI_SCH = ["single_step", "multi_step", "warmup_multi_step", "cosine", "linear"]
 
 
 def build_lr_scheduler(

@@ -302,8 +302,8 @@ class BaseRunner(object):
             state_dict["best_mAP"] = self._best_mAP
             for idx, model in enumerate(self.model):
                 state_dict["state_dict_" + str(idx + 1)] = model.state_dict()
-                save_checkpoint(state_dict, is_best,
-                        fpath=osp.join(fpath, "checkpoint.pth"))
+            save_checkpoint(state_dict, is_best,
+                    fpath=osp.join(fpath, "checkpoint.pth"))
 
         elif isinstance(self.model, dict):
             state_dict = {}
@@ -311,7 +311,7 @@ class BaseRunner(object):
             state_dict["best_mAP"] = self._best_mAP
             for key, model in self.model.items():
                 state_dict["state_dict"] = model.state_dict()
-                save_checkpoint(state_dict, is_best,
+                save_checkpoint(state_dict, False,
                         fpath=osp.join(fpath, "checkpoint_"+key+".pth"))
 
         elif isinstance(self.model, nn.Module):

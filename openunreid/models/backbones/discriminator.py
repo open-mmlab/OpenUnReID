@@ -38,9 +38,9 @@ class NLayerDiscriminator(nn.Module):
 
         nf_mult_prev = nf_mult
         nf_mult = min(2 ** n_layers, 8)
-        layers += [conv_norm_lrelu(dim * nf_mult_prev, dim * nf_mult, 4, 1, 1)] # padding: (1,2) for original spgan
+        layers += [conv_norm_lrelu(dim * nf_mult_prev, dim * nf_mult, 4, 1, 1)]
 
-        layers += [nn.Conv2d(dim * nf_mult, 1, 4, 1, 1)] # padding: (2,1) for original spgan
+        layers += [nn.Conv2d(dim * nf_mult, 1, 4, 1, 1)] 
 
         self.D = nn.Sequential(*layers)
 

@@ -101,10 +101,8 @@ def convert_sync_bn(model, process_group=None):
             if isinstance(child, nn.modules.instancenorm._InstanceNorm):
                 continue
             m = nn.SyncBatchNorm.convert_sync_batchnorm(child, process_group)
-            if child.weight:
-                m.weight.requires_grad_(child.weight.requires_grad)
-            if child.bias:
-                m.bias.requires_grad_(child.bias.requires_grad)
+            m.weight.requires_grad_(child.weight.requires_grad)
+            m.bias.requires_grad_(child.bias.requires_grad)
             m.to(next(child.parameters()).device)
             setattr(model, child_name, m)
         else:
