@@ -263,23 +263,25 @@ def build_model(
 
 def build_gan_model(
     cfg,
+    only_generator = False,
 ):
     """
     Build a domain-translation model
     """
     model = {}
-    
-    # construct generators
-    model['G_A'] = build_bakcbone(cfg.MODEL.generator)
-    model['G_B'] = build_bakcbone(cfg.MODEL.generator)
 
-    # construct discriminators
-    model['D_A'] = build_bakcbone(cfg.MODEL.discriminator)
-    model['D_B'] = build_bakcbone(cfg.MODEL.discriminator)
-
-    # construct a metric net for spgan
-    if cfg.MODEL.spgan:
-        model['Metric'] = build_bakcbone('metricnet')
+    if only_generator:
+        model['G'] = build_bakcbone(cfg.MODEL.generator)
+    else:
+        # construct generators
+        model['G_A'] = build_bakcbone(cfg.MODEL.generator)
+        model['G_B'] = build_bakcbone(cfg.MODEL.generator)
+        # construct discriminators
+        model['D_A'] = build_bakcbone(cfg.MODEL.discriminator)
+        model['D_B'] = build_bakcbone(cfg.MODEL.discriminator)
+        # construct a metric net for spgan
+        if cfg.MODEL.spgan:
+            model['Metric'] = build_bakcbone('metricnet')
 
     # convert to sync bn (optional)
     rank, world_size, dist = get_dist_info()
