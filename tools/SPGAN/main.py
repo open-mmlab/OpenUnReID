@@ -48,9 +48,11 @@ class SPGANRunner(GANBaseRunner):
         if iter % 2 == 0:
             self.set_requires_grad([self.model['D_A'], self.model['D_B'], self.model['Metric']], False) # save memory
             self.optimizer['G'].zero_grad()
-            self.backward_G()
             if self._epoch > 1:
+                self.backward_G(retain_graph=True)
                 self.backward_GM()
+            else:
+                self.backward_G()
             self.optimizer['G'].step()
 
         # SiaNet for SPGAN
@@ -233,7 +235,7 @@ def main():
                     )
     infer_gan(
         cfg,
-        runner.model['G_A'],
+        model['G_A'],
         test_loader[0], # source dataset
         dataset_name=list(cfg.TRAIN.datasets.values())[0]
     )

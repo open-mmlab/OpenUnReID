@@ -424,7 +424,7 @@ class GANBaseRunner(BaseRunner):
 
         return 0
 
-    def backward_G(self):
+    def backward_G(self, retain_graph=False):
         """Calculate the loss for generators G_A and G_B"""
         # Adversarial loss D_A(G_A(B))
         loss_G_A = self.criterions['gan_G'](self.model['D_A'](self.fake_A), True)
@@ -450,7 +450,7 @@ class GANBaseRunner(BaseRunner):
         loss = loss_G * self.cfg.TRAIN.LOSS.losses['gan_G'] + \
                 loss_recon * self.cfg.TRAIN.LOSS.losses['recon'] + \
                 loss_idt * self.cfg.TRAIN.LOSS.losses['ide']
-        loss.backward()
+        loss.backward(retain_graph=retain_graph)
 
         meters = {'gan_G': loss_G.item(),
                   'recon': loss_recon.item(),
