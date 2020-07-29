@@ -10,7 +10,7 @@ import torch
 from torch.nn.parallel import DataParallel, DistributedDataParallel
 try:
     # PyTorch >= 1.6 supports mixed precision training
-    from torch.cuda.amp import GradScaler, autocast
+    from torch.cuda.amp import autocast
     amp_support = True
 except:
     amp_support = False

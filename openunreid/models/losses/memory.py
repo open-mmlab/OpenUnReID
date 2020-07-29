@@ -4,12 +4,20 @@
 import torch
 import torch.nn.functional as F
 from torch import autograd, nn
-from torch.cuda.amp import custom_fwd, custom_bwd
+
+try:
+    # PyTorch >= 1.6 supports mixed precision training
+    from torch.cuda.amp import custom_fwd, custom_bwd
+    amp_support = True
+except:
+    amp_support = False
+    pass
 
 from ...utils.dist_utils import all_gather_tensor
 
 
-class HM(autograd.Function):
+class HM_AMP(autograd.Function):
+
     @staticmethod
     @custom_fwd(cast_inputs=torch.float32)
     def forward(ctx, inputs, indexes, features, momentum):
@@ -37,11 +45,43 @@ class HM(autograd.Function):
         return grad_inputs, None, None, None
 
 
-def hm(inputs, indexes, features, momentum=0.5):
-    return HM.apply(
-        inputs, indexes, features, torch.Tensor([momentum]).to(inputs.device)
-    )
+class HM(autograd.Function):
 
+    @staticmethod
+    def forward(ctx, inputs, indexes, features, momentum):
+        ctx.features = features
+        ctx.momentum = momentum
+        outputs = inputs.mm(ctx.features.t())
+        all_inputs = all_gather_tensor(inputs)
+        all_indexes = all_gather_tensor(indexes)
+        ctx.save_for_backward(all_inputs, all_indexes)
+        return outputs
+
+    @staticmethod
+    def backward(ctx, grad_outputs):
+        inputs, indexes = ctx.saved_tensors
+        grad_inputs = None
+        if ctx.needs_input_grad[0]:
+            grad_inputs = grad_outputs.mm(ctx.features)
+
+        # momentum update
+        for x, y in zip(inputs, indexes):
+            ctx.features[y] = ctx.momentum * ctx.features[y] + (1.0 - ctx.momentum) * x
+            ctx.features[y] /= ctx.features[y].norm()
+
+        return grad_inputs, None, None, None
+
+
+def hm(inputs, indexes, features, momentum=0.5):
+    global amp_support
+    if amp_support:
+        return HM_AMP.apply(
+            inputs, indexes, features, torch.Tensor([momentum]).to(inputs.device)
+        )
+    else:
+        return HM.apply(
+            inputs, indexes, features, torch.Tensor([momentum]).to(inputs.device)
+        )
 
 class HybridMemory(nn.Module):
     def __init__(self, num_features, num_memory, temp=0.05, momentum=0.2):

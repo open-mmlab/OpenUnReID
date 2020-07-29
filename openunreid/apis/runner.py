@@ -97,7 +97,7 @@ class BaseRunner(object):
                     "We do not support mixed precision training with DataParallel currently"
                 self.scaler = GradScaler()
             else:
-                if cfg.amp:
+                if cfg.TRAIN.amp:
                     warnings.warn(
                         "Please update the PyTorch version (>=1.6) to support mixed precision training"
                     )
