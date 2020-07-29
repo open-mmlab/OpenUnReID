@@ -7,7 +7,7 @@ from pathlib import Path
 import torch
 
 from openunreid.apis import infer_gan
-from openunreid.data import build_test_dataloader
+from openunreid.data import build_val_dataloader
 from openunreid.models import build_gan_model
 from openunreid.utils.config import (
     cfg,
