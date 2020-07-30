@@ -7,6 +7,8 @@
 
 We are actively updating this repo, and more methods will be supported soon. Contributions are welcome.
 
+<img src="docs/openunreid.png" align="center" width="60%">
+
 ### Major features
 - [x] Distributed training & testing with multiple GPUs and multiple machines.
 - [x] High flexibility on various combinations of datasets, backbones, losses, etc.
