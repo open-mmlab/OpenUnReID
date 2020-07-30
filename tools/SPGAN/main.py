@@ -182,6 +182,8 @@ def parge_config():
     args = parser.parse_args()
 
     cfg_from_yaml_file(args.config, cfg)
+    assert len(list(cfg.TRAIN.datasets.keys()))==2, \
+            "the number of datasets for domain-translation training should be two"
     cfg.launcher = args.launcher
     cfg.tcp_port = args.tcp_port
     if not args.work_dir:
@@ -268,17 +270,25 @@ def main():
     # load the latest model
     # runner.resume(cfg.work_dir)
 
-    # final testing
+    # final inference
     test_loader, _ = build_val_dataloader(
                         cfg,
                         for_clustering=True,
                         all_datasets=True
                     )
+    # source to target
     infer_gan(
         cfg,
         model['G_A'],
-        test_loader[0], # source dataset
-        dataset_name=list(cfg.TRAIN.datasets.values())[0]
+        test_loader[0],
+        dataset_name=list(cfg.TRAIN.datasets.keys())[0]
+    )
+    # target to source
+    infer_gan(
+        cfg,
+        model['G_B'],
+        test_loader[1],
+        dataset_name=list(cfg.TRAIN.datasets.keys())[1]
     )
 
     # print time
