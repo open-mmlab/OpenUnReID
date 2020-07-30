@@ -44,14 +44,14 @@ TRAIN:
   seed: 1
   deterministic: True
   # mixed precision training for PyTorch>=1.6
-  amp: True
+  amp: False
 
   # datasets
   datasets: {'market1501': 'trainval', 'dukemtmcreid': 'trainval'}
   unsup_dataset_indexes: [1,]
 
   epochs: 50
-  iters: 400
+  iters: 200
 
   LOSS:
     losses: {'gan_G': 1., 'recon': 10., 'ide': 5., 'gan_D': 1., 'sia_G': 2., 'sia_M': 1.}
@@ -66,7 +66,7 @@ TRAIN:
 
   # data loader
   LOADER:
-    samples_per_gpu: 4
+    samples_per_gpu: 8
     workers_per_gpu: 2
 
   # optim
@@ -84,5 +84,5 @@ TEST:
 
   # data loader
   LOADER:
-    samples_per_gpu: 8
+    samples_per_gpu: 32
     workers_per_gpu: 4

@@ -53,7 +53,7 @@ TRAIN:
   seed: 1
   deterministic: True
   # mixed precision training for PyTorch>=1.6
-  amp: True
+  amp: False
 
   # datasets
   datasets: {'market1501': 'trainval',}

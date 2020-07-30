@@ -14,7 +14,6 @@ try:
     amp_support = True
 except:
     amp_support = False
-    pass
 
 from ..core.label_generators import LabelGenerator
 from ..core.metrics.accuracy import accuracy
