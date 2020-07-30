@@ -11,7 +11,7 @@ We have tested the following versions of OS and softwares:
 
 + OS: Ubuntu 16.04
 + Python: 3.6/3.7
-+ PyTorch: 1.1/1.5
++ PyTorch: 1.1/1.5/1.6
 + CUDA: 9.0/11.0
 
 ### Install OpenUnReID

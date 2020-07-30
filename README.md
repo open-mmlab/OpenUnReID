@@ -16,6 +16,7 @@ We are actively updating this repo, and more methods will be supported soon. Con
 - [x] High flexibility on various combinations of datasets, backbones, losses, etc.
 - [x] GPU-based pseudo-label generation and k-reciprocal re-ranking with quite high speed.
 - [x] Plug-and-play domain-specific BatchNorms for any backbones, sync BN is also supported.
+- [x] Mixed precision training is supported, achieving higher efficiency.
 - [x] A strong cluster baseline, providing high extensibility on designing new methods.
 - [x] State-of-the-art methods and performances for both USL and UDA problems on object re-ID.
 
