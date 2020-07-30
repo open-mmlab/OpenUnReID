@@ -7,7 +7,9 @@
 
 We are actively updating this repo, and more methods will be supported soon. Contributions are welcome.
 
-<img src="docs/openunreid.png" align="center" width="60%">
+<p align="center">
+    <img src="docs/openunreid.png" width="60%">
+</p>
 
 ### Major features
 - [x] Distributed training & testing with multiple GPUs and multiple machines.
@@ -34,7 +36,11 @@ Please refer to [MODEL_ZOO.md](docs/MODEL_ZOO.md) for trained models and downloa
 
 ## Updates
 
-+ [2020-07-01] `OpenUnReID` v0.1.0 is released.
+[2020-07-xx] `OpenUnReID` v0.1.1 is released:
++ Support domain-translation-based frameworks, [CycleGAN](tools/CycleGAN) and [SPGAN](tools/SPGAN).
++ Support mixed precision training (`torch.cuda.amp` in PyTorch>=1.6).
+
+[2020-07-01] `OpenUnReID` v0.1.0 is released.
 
 ## Installation
 

@@ -5,10 +5,11 @@ TODO document
 
 ### Citation
 ```
-@inproceedings{CycleGAN2017,
-  title={Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks},
+@inproceedings{zhu2017unpaired,
+  title={Unpaired image-to-image translation using cycle-consistent adversarial networks},
   author={Zhu, Jun-Yan and Park, Taesung and Isola, Phillip and Efros, Alexei A},
-  booktitle={Computer Vision (ICCV), 2017 IEEE International Conference on},
+  booktitle={Proceedings of the IEEE international conference on computer vision},
+  pages={2223--2232},
   year={2017}
 }
 ```
