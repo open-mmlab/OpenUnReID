@@ -36,9 +36,9 @@ Please refer to [MODEL_ZOO.md](docs/MODEL_ZOO.md) for trained models and downloa
 
 ## Updates
 
-[2020-07-xx] `OpenUnReID` v0.1.1 is released:
+[2020-07-30] `OpenUnReID` v0.1.1 is released:
 + Support domain-translation-based frameworks, [CycleGAN](tools/CycleGAN) and [SPGAN](tools/SPGAN).
-+ Support mixed precision training (`torch.cuda.amp` in PyTorch>=1.6).
++ Support mixed precision training (`torch.cuda.amp` in PyTorch>=1.6), use it by adding `TRAIN.amp True` at the end of training commands.
 
 [2020-07-01] `OpenUnReID` v0.1.0 is released.
 

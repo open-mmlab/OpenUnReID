@@ -99,7 +99,7 @@ def main():
         cfg,
         model,
         test_loader[0], # source dataset
-        dataset_name=list(cfg.TRAIN.datasets.values())[0]
+        dataset_name=list(cfg.TRAIN.datasets.keys())[0]
     )
 
     # print time

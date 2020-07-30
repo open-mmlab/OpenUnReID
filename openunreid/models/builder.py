@@ -271,6 +271,7 @@ def build_gan_model(
     model = {}
 
     if only_generator:
+        # for inference
         model['G'] = build_bakcbone(cfg.MODEL.generator)
     else:
         # construct generators
