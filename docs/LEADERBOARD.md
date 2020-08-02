@@ -103,4 +103,24 @@ A curated list of unsupervised and domain adaptive re-ID papers, as well as thei
 
 #### Market-1501 -> MSMT17
 
+| Method | Venue | Code | mAP(%) | R@1(%) | R@5(%) | R@10(%) | Reference |
+| ------ | :------: | :----: | :------: | :------: | :-------: | :------: | :------ |
+| SpCL | arXiv'20 | [PyTorch](https://github.com/yxgeee/SpCL) | 25.4 | 51.6 | 64.3 | 69.7 | [Self-paced Contrastive Learning with Hybrid Memory for Domain Adaptive Object Re-ID](https://arxiv.org/pdf/2006.02713.pdf) |
+| MMT | ICLR'20 | [PyTorch](https://github.com/yxgeee/MMT) | 22.9 | 49.2 | 63.1 | 68.8 | [Mutual Mean-Teaching: Pseudo Label Refinery for Unsupervised Domain Adaptation on Person Re-identification](https://openreview.net/pdf?id=rJlnOhVYPS) |
+| MMCL | CVPR'20 | [PyTorch](https://github.com/kennethwdk/MLCReID) | 15.1 | 40.8 | 51.8 | 56.7 | [Unsupervised Person Re-Identification via Multi-Label Classification](https://openaccess.thecvf.com/content_CVPR_2020/papers/Wang_Unsupervised_Person_Re-Identification_via_Multi-Label_Classification_CVPR_2020_paper.pdf) |
+| ECN++ | TPAMI'20 | - | 15.2 | 40.4 | 53.1 | 58.7 | [Learning to Adapt Invariance in Memory for Person Re-identification](https://ieeexplore.ieee.org/abstract/document/9018132) |
+| SSG | ICCV'19 | [PyTorch](https://github.com/SHI-Labs/Self-Similarity-Grouping) | 13.2 | 31.6 | - | 49.6 | [Self-similarity Grouping: A Simple Unsupervised Cross Domain Adaptation Approach for Person Re-identification](https://openaccess.thecvf.com/content_ICCV_2019/papers/Fu_Self-Similarity_Grouping_A_Simple_Unsupervised_Cross_Domain_Adaptation_Approach_for_ICCV_2019_paper.pdf) |
+| ECN | CVPR'19 | [PyTorch](https://github.com/zhunzhong07/ECN) | 8.5 | 25.3 | 36.3 | 42.1 | [Invariance Matters: Exemplar Memory for Domain Adaptive Person Re-identification](https://arxiv.org/pdf/1904.01990.pdf) |
+| PTGAN | CVPR'18 | - | 2.9 | 10.2 | - | 24.4 | [Person Transfer GAN to Bridge Domain Gap for Person Re-Identification](https://openaccess.thecvf.com/content_cvpr_2018/papers/Wei_Person_Transfer_GAN_CVPR_2018_paper.pdf) |
+
 #### DukeMTMC-reID -> MSMT17
+
+| Method | Venue | Code | mAP(%) | R@1(%) | R@5(%) | R@10(%) | Reference |
+| ------ | :------: | :----: | :------: | :------: | :-------: | :------: | :------ |
+| SpCL | arXiv'20 | [PyTorch](https://github.com/yxgeee/SpCL) | 26.5 | 53.1 | 65.8 | 70.5 | [Self-paced Contrastive Learning with Hybrid Memory for Domain Adaptive Object Re-ID](https://arxiv.org/pdf/2006.02713.pdf) |
+| MMT | ICLR'20 | [PyTorch](https://github.com/yxgeee/MMT) | 23.3 | 50.1 | 63.9 | 69.8 | [Mutual Mean-Teaching: Pseudo Label Refinery for Unsupervised Domain Adaptation on Person Re-identification](https://openreview.net/pdf?id=rJlnOhVYPS) |
+| MMCL | CVPR'20 | [PyTorch](https://github.com/kennethwdk/MLCReID) | 16.2 | 43.6 | 54.3 | 58.9 | [Unsupervised Person Re-Identification via Multi-Label Classification](https://openaccess.thecvf.com/content_CVPR_2020/papers/Wang_Unsupervised_Person_Re-Identification_via_Multi-Label_Classification_CVPR_2020_paper.pdf) |
+| ECN++ | TPAMI'20 | - | 16.0 | 42.5 | 55.9 | 61.5 | [Learning to Adapt Invariance in Memory for Person Re-identification](https://ieeexplore.ieee.org/abstract/document/9018132) |
+| SSG | ICCV'19 | [PyTorch](https://github.com/SHI-Labs/Self-Similarity-Grouping) | 13.3 | 32.2 | - | 51.2 | [Self-similarity Grouping: A Simple Unsupervised Cross Domain Adaptation Approach for Person Re-identification](https://openaccess.thecvf.com/content_ICCV_2019/papers/Fu_Self-Similarity_Grouping_A_Simple_Unsupervised_Cross_Domain_Adaptation_Approach_for_ICCV_2019_paper.pdf) |
+| ECN | CVPR'19 | [PyTorch](https://github.com/zhunzhong07/ECN) | 10.2 | 30.2 | 41.5 | 46.8 | [Invariance Matters: Exemplar Memory for Domain Adaptive Person Re-identification](https://arxiv.org/pdf/1904.01990.pdf) |
+| PTGAN | CVPR'18 | - | 3.3 | 11.8 | - | 27.4 | [Person Transfer GAN to Bridge Domain Gap for Person Re-Identification](https://openaccess.thecvf.com/content_cvpr_2018/papers/Wei_Person_Transfer_GAN_CVPR_2018_paper.pdf) |
