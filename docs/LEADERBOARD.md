@@ -9,10 +9,10 @@ A curated list of unsupervised and domain adaptive re-ID papers, as well as thei
   + [DukeMTMC-reID](#dukemtmc-reid)
   + [MSMT17](#msmt17)
 + [Unsupervised domain adaptation (UDA) on object re-ID](#unsupervised-domain-adaptation-on-object-re-id)
-  + [Market-1501 -> DukeMTMC-reID](#market-1501-->-dukemtmc-reid)
-  + [DukeMTMC-reID -> Market-1501](#dukemtmc-reid-->-market-1501)
-  + [Market-1501 -> MSMT17](#market-1501-->-msmt17)
-  + [DukeMTMC-reID -> MSMT17](#dukemtmc-reid-->-msmt17)
+  + [Market-1501 -> DukeMTMC-reID](#market-1501---dukemtmc-reid)
+  + [DukeMTMC-reID -> Market-1501](#dukemtmc-reid---market-1501)
+  + [Market-1501 -> MSMT17](#market-1501---msmt17)
+  + [DukeMTMC-reID -> MSMT17](#dukemtmc-reid---msmt17)
 
 
 ### Unsupervised learning on object re-ID
@@ -20,7 +20,7 @@ A curated list of unsupervised and domain adaptive re-ID papers, as well as thei
 #### Market-1501
 
 | Method | Venue | Code | mAP(%) | R@1(%) | R@5(%) | R@10(%) | Reference |
-| :-----: | :------: | :----: | :------: | :------: | :-------: | :------: | :------ |
+| ------ | :------: | :----: | :------: | :------: | :-------: | :------: | :------ |
 | SpCL+ | arXiv'20 | [OpenUnReID](../tools/SpCL) | 76.0 | 89.5 | 96.2 | 97.5 | [Self-paced Contrastive Learning with Hybrid Memory for Domain Adaptive Object Re-ID](https://arxiv.org/pdf/2006.02713.pdf) |
 | MMT+ | ICLR'20 | [OpenUnReID](../tools/MMT) | 74.3 | 88.1 | 96.0 | 97.5 | [Mutual Mean-Teaching: Pseudo Label Refinery for Unsupervised Domain Adaptation on Person Re-identification](https://openreview.net/pdf?id=rJlnOhVYPS) |
 | SpCL | arXiv'20 | [PyTorch](https://github.com/yxgeee/SpCL) | 72.6 | 87.7 | 95.2 | 96.9 | [Self-paced Contrastive Learning with Hybrid Memory for Domain Adaptive Object Re-ID](https://arxiv.org/pdf/2006.02713.pdf) |
@@ -32,7 +32,7 @@ A curated list of unsupervised and domain adaptive re-ID papers, as well as thei
 #### DukeMTMC-reID
 
 | Method | Venue | Code | mAP(%) | R@1(%) | R@5(%) | R@10(%) | Reference |
-| :-----: | :------: | :----: | :------: | :------: | :-------: | :------: | :------ |
+| ------ | :------: | :----: | :------: | :------: | :-------: | :------: | :------ |
 | SpCL+ | arXiv'20 | [OpenUnReID](../tools/SpCL) | 67.1 | 82.4 | 90.8 | 93.0 | [Self-paced Contrastive Learning with Hybrid Memory for Domain Adaptive Object Re-ID](https://arxiv.org/pdf/2006.02713.pdf) |
 | MMT+ | ICLR'20 | [OpenUnReID](../tools/MMT) | 60.3 | 75.6 | 86.0 | 89.2 | [Mutual Mean-Teaching: Pseudo Label Refinery for Unsupervised Domain Adaptation on Person Re-identification](https://openreview.net/pdf?id=rJlnOhVYPS) |
 | SpCL | arXiv'20 | [PyTorch](https://github.com/yxgeee/SpCL) | 65.3 | 81.2 | 90.3 | 92.2 | [Self-paced Contrastive Learning with Hybrid Memory for Domain Adaptive Object Re-ID](https://arxiv.org/pdf/2006.02713.pdf) |
@@ -44,7 +44,7 @@ A curated list of unsupervised and domain adaptive re-ID papers, as well as thei
 #### MSMT17
 
 | Method | Venue | Code | mAP(%) | R@1(%) | R@5(%) | R@10(%) | Reference |
-| :-----: | :------: | :----: | :------: | :------: | :-------: | :------: | :------ |
+| ------ | :------: | :----: | :------: | :------: | :-------: | :------: | :------ |
 | MMCL | CVPR'20 | [PyTorch](https://github.com/kennethwdk/MLCReID) | 11.2 | 35.4 | 44.8 | 49.8 | [Unsupervised Person Re-Identification via Multi-Label Classification](https://openaccess.thecvf.com/content_CVPR_2020/papers/Wang_Unsupervised_Person_Re-Identification_via_Multi-Label_Classification_CVPR_2020_paper.pdf) |
 
 ### Unsupervised domain adaptation on object re-ID
@@ -52,7 +52,7 @@ A curated list of unsupervised and domain adaptive re-ID papers, as well as thei
 #### Market-1501 -> DukeMTMC-reID
 
 | Method | Venue | Code | mAP(%) | R@1(%) | R@5(%) | R@10(%) | Reference |
-| :-----: | :------: | :----: | :------: | :------: | :-------: | :------: | :------ |
+| ------ | :------: | :----: | :------: | :------: | :-------: | :------: | :------ |
 | SpCL+ | arXiv'20 | [OpenUnReID](../tools/SpCL) | 70.4 | 83.8 | 91.2 | 93.4 | [Self-paced Contrastive Learning with Hybrid Memory for Domain Adaptive Object Re-ID](https://arxiv.org/pdf/2006.02713.pdf) |
 | MMT+ | ICLR'20 | [OpenUnReID](../tools/MMT) | 67.7 | 80.3 | 89.9 | 92.9 | [Mutual Mean-Teaching: Pseudo Label Refinery for Unsupervised Domain Adaptation on Person Re-identification](https://openreview.net/pdf?id=rJlnOhVYPS) |
 | SpCL | arXiv'20 | [PyTorch](https://github.com/yxgeee/SpCL) | 68.8 | 82.9 | 90.1 | 92.5 | [Self-paced Contrastive Learning with Hybrid Memory for Domain Adaptive Object Re-ID](https://arxiv.org/pdf/2006.02713.pdf) |
