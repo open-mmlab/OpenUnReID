@@ -22,7 +22,7 @@ We are actively updating this repo, and more methods will be supported soon. Con
 
 ### Supported methods
 
-Please refer to [MODEL_ZOO.md](docs/MODEL_ZOO.md) for trained models and download links.
+Please refer to [MODEL_ZOO.md](docs/MODEL_ZOO.md) for trained models and download links, and please refer to [LEADERBOARD.md](docs/LEADERBOARD.md) for the leaderboard on public benchmarks.
 
 | Method | Reference | USL | UDA |
 | ------ | :---: | :-----: | :-----: |
@@ -36,6 +36,8 @@ Please refer to [MODEL_ZOO.md](docs/MODEL_ZOO.md) for trained models and downloa
 
 
 ## Updates
+
+[2020-08-02] Add the leaderboard for public benchmarks: [LEADERBOARD.md](docs/LEADERBOARD.md)
 
 [2020-07-30] `OpenUnReID` v0.1.1 is released:
 + Support domain-translation-based frameworks, [CycleGAN](tools/CycleGAN) and [SPGAN](tools/SPGAN).

@@ -1,5 +1,7 @@
 ## Model Zoo
 
+For the leaderboard on public benchmarks, please refer to [LEADERBOARD.md](docs/LEADERBOARD.md).
+
 **Note:** all the models are selected by the performance on validation sets.
 
 ### Unsupervised learning (USL) on object re-ID

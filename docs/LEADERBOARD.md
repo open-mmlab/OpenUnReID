@@ -1,6 +1,6 @@
 ## Leaderboard
 
-A curated list of unsupervised and domain adaptive re-ID papers, as well as their results. To add some papers not included, you could create an issue or a pull request. **Note:** the following results are copied from their original papers.
+Unsupervised and domain adaptive re-ID methods on public benchmarks. To add some papers not included, you could create an issue or a pull request. **Note:** the following results are copied from their original papers.
 
 ### Contents
 
