@@ -15,7 +15,7 @@ A curated list of unsupervised and domain adaptive re-ID papers, as well as thei
 #### Market-1501
 
 | Method | Venue | Code | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Reference |
-| ----- | :------: | :----: | :------: | :------: | :-------: | :------: | :------ |
+| :-----: | :------: | :----: | :------: | :------: | :-------: | :------: | :------ |
 | SpCL | arXiv'20 | [PyTorch](https://github.com/yxgeee/SpCL) | 72.6 | 87.7 | 95.2 | 96.9 | [Self-paced Contrastive Learning with Hybrid Memory for Domain Adaptive Object Re-ID](https://arxiv.org/pdf/2006.02713.pdf) |
 | HCT | CVPR'20 | [Empty](https://github.com/zengkaiwei/HCT) | 56.4 | 80.0 | 91.6 | 95.2 | [Hierarchical Clustering with Hard-batch Triplet Loss for Person Re-identification](https://openaccess.thecvf.com/content_CVPR_2020/papers/Zeng_Hierarchical_Clustering_With_Hard-Batch_Triplet_Loss_for_Person_Re-Identification_CVPR_2020_paper.pdf) |
 | MMCL | CVPR'20 | [PyTorch](https://github.com/kennethwdk/MLCReID) | 45.5 | 80.3 | 89.4 | 92.3 | [Unsupervised Person Re-Identification via Multi-Label Classification](https://openaccess.thecvf.com/content_CVPR_2020/papers/Wang_Unsupervised_Person_Re-Identification_via_Multi-Label_Classification_CVPR_2020_paper.pdf) |
@@ -25,7 +25,7 @@ A curated list of unsupervised and domain adaptive re-ID papers, as well as thei
 #### DukeMTMC-reID
 
 | Method | Venue | Code | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Reference |
-| ----- | :------: | :----: | :------: | :------: | :-------: | :------: | :------ |
+| :-----: | :------: | :----: | :------: | :------: | :-------: | :------: | :------ |
 | SpCL | arXiv'20 | [PyTorch](https://github.com/yxgeee/SpCL) | 65.3 | 81.2 | 90.3 | 92.2 | [Self-paced Contrastive Learning with Hybrid Memory for Domain Adaptive Object Re-ID](https://arxiv.org/pdf/2006.02713.pdf) |
 | HCT | CVPR'20 | [Empty](https://github.com/zengkaiwei/HCT) | 50.7 | 69.6 | 83.4 | 87.4 | [Hierarchical Clustering with Hard-batch Triplet Loss for Person Re-identification](https://openaccess.thecvf.com/content_CVPR_2020/papers/Zeng_Hierarchical_Clustering_With_Hard-Batch_Triplet_Loss_for_Person_Re-Identification_CVPR_2020_paper.pdf) |
 | MMCL | CVPR'20 | [PyTorch](https://github.com/kennethwdk/MLCReID) | 40.2 | 65.2 | 75.9 | 80.0 | [Unsupervised Person Re-Identification via Multi-Label Classification](https://openaccess.thecvf.com/content_CVPR_2020/papers/Wang_Unsupervised_Person_Re-Identification_via_Multi-Label_Classification_CVPR_2020_paper.pdf) |
