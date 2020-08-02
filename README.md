@@ -37,7 +37,7 @@ Please refer to [MODEL_ZOO.md](docs/MODEL_ZOO.md) for trained models and downloa
 
 ## Updates
 
-[2020-08-02] Add the leaderboard for public benchmarks: [LEADERBOARD.md](docs/LEADERBOARD.md)
+[2020-08-02] Add the leaderboard on public benchmarks: [LEADERBOARD.md](docs/LEADERBOARD.md)
 
 [2020-07-30] `OpenUnReID` v0.1.1 is released:
 + Support domain-translation-based frameworks, [CycleGAN](tools/CycleGAN) and [SPGAN](tools/SPGAN).
