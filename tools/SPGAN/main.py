@@ -86,9 +86,6 @@ class SPGANRunner(GANBaseRunner):
 
         # D_A and D_B
         self.set_requires_grad([self.model['D_A'], self.model['D_B']], True)
-        # self.optimizer['D'].zero_grad()
-        # self.backward_D()
-        # self.optimizer['D'].step()
         if self.scaler is None:
             self.optimizer['D'].zero_grad()
         else:
