@@ -16,7 +16,12 @@ sh dist_test.sh ${RESUME} ${CONFIG} [optional arguments]
 ```shell
 sh slurm_test.sh ${PARTITION} ${RESUME} ${CONFIG} [optional arguments]
 ```
-+ Non-distributed testing with a single GPU:
++ Testing with a single GPU:
+1. (Recommended) Option \#1:
+```shell
+GPUS=1 sh dist_test.sh ${RESUME} ${CONFIG} [optional arguments]
+```
+2. Option \#2:
 ```shell
 python test_reid.py ${RESUME} --config ${CONFIG} --launcher "none" --set [optional arguments]
 ```
@@ -59,7 +64,14 @@ sh dist_train.sh ${METHOD} ${WORK_DIR} [optional arguments]
 ```shell
 sh slurm_train.sh ${PARTITION} ${JOB_NAME} ${METHOD} ${WORK_DIR} [optional arguments]
 ```
-+ Non-distributed training with a single GPU:
++ Training with a single GPU:
+> Please add `TRAIN.LOADER.samples_per_gpu 64` in `[optional arguments]`.
+
+1. (Recommended) Option \#1:
+```shell
+GPUS=1 sh dist_train.sh ${METHOD} ${WORK_DIR} [optional arguments]
+```
+2. Option \#2:
 ```shell
 python ${METHOD}/main.py ${METHOD}/config.yaml --work-dir ${WORK_DIR} --launcher "none" --set [optional arguments]
 ```
@@ -138,5 +150,10 @@ TRAIN:
   PSEUDO_LABELS:
     search_type: 3 # only for dbscan, use CPU for searching top-k, default: 0 (1/2 is also for GPU)
     dist_cuda: False # only for kmeans, use CPU for computing distances, default: True
+```
++ Mixed precision training
+```
+TRAIN:
+  amp: True # mixed precision training for PyTorch>=1.6
 ```
 + ... (TBD)
