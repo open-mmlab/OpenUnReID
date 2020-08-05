@@ -2,6 +2,8 @@
 
 Unsupervised and domain adaptive re-ID methods on public benchmarks. To add some papers not included, you could create an issue or a pull request. **Note:** the following results are copied from their original papers.
 
+For trained models by `OpenUnReID`, please refer to [MODEL_ZOO.md](MODEL_ZOO.md).
+
 ### Contents
 
 + [Unsupervised learning (USL) on object re-ID](#unsupervised-learning-on-object-re-id)
