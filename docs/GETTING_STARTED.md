@@ -17,6 +17,7 @@ sh dist_test.sh ${RESUME} ${CONFIG} [optional arguments]
 sh slurm_test.sh ${PARTITION} ${RESUME} ${CONFIG} [optional arguments]
 ```
 + Testing with a single GPU:
+
 Option \#1 (**Recommended**):
 ```shell
 GPUS=1 sh dist_test.sh ${RESUME} ${CONFIG} [optional arguments]
