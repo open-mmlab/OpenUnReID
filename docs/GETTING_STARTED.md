@@ -17,7 +17,7 @@ sh dist_test.sh ${RESUME} ${CONFIG} [optional arguments]
 sh slurm_test.sh ${PARTITION} ${RESUME} ${CONFIG} [optional arguments]
 ```
 + Testing with a single GPU:
-1. (Recommended) Option \#1:
+1. (**Recommended**) Option \#1:
 ```shell
 GPUS=1 sh dist_test.sh ${RESUME} ${CONFIG} [optional arguments]
 ```
@@ -67,7 +67,7 @@ sh slurm_train.sh ${PARTITION} ${JOB_NAME} ${METHOD} ${WORK_DIR} [optional argum
 + Training with a single GPU:
 > Please add `TRAIN.LOADER.samples_per_gpu 64` in `[optional arguments]`.
 
-1. (Recommended) Option \#1:
+1. (**Recommended**) Option \#1:
 ```shell
 GPUS=1 sh dist_train.sh ${METHOD} ${WORK_DIR} [optional arguments]
 ```
@@ -152,7 +152,7 @@ TRAIN:
     dist_cuda: False # only for kmeans, use CPU for computing distances, default: True
 ```
 + Mixed precision training
-```
+```shell
 TRAIN:
   amp: True # mixed precision training for PyTorch>=1.6
 ```
