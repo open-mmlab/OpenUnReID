@@ -17,14 +17,8 @@ bash dist_test.sh ${RESUME} ${CONFIG} [optional arguments]
 bash slurm_test.sh ${PARTITION} ${RESUME} ${CONFIG} [optional arguments]
 ```
 + Testing with a single GPU:
-
-Option \#1 (**Recommended**):
 ```shell
 GPUS=1 bash dist_test.sh ${RESUME} ${CONFIG} [optional arguments]
-```
-Option \#2:
-```shell
-python test_reid.py ${RESUME} --config ${CONFIG} --launcher "none" --set [optional arguments]
 ```
 
 #### Arguments
@@ -68,13 +62,8 @@ bash slurm_train.sh ${PARTITION} ${JOB_NAME} ${METHOD} ${WORK_DIR} [optional arg
 + Training with a single GPU:
 > Please add `TRAIN.LOADER.samples_per_gpu 64` in `[optional arguments]`.
 
-Option \#1 (**Recommended**):
 ```shell
 GPUS=1 bash dist_train.sh ${METHOD} ${WORK_DIR} [optional arguments]
-```
-Option \#2:
-```shell
-python ${METHOD}/main.py ${METHOD}/config.yaml --work-dir ${WORK_DIR} --launcher "none" --set [optional arguments]
 ```
 
 #### Arguments
