@@ -69,13 +69,11 @@ If you use this toolbox or models in your research, please consider cite:
   url={https://openreview.net/forum?id=rJlnOhVYPS}
 }
 
-@misc{ge2020selfpaced,
+@inproceedings{ge2020selfpaced,
     title={Self-paced Contrastive Learning with Hybrid Memory for Domain Adaptive Object Re-ID},
-    author={Yixiao Ge and Dapeng Chen and Feng Zhu and Rui Zhao and Hongsheng Li},
-    year={2020},
-    eprint={2006.02713},
-    archivePrefix={arXiv},
-    primaryClass={cs.CV}
+    author={Yixiao Ge and Feng Zhu and Dapeng Chen and Rui Zhao and Hongsheng Li},
+    booktitle={Advances in Neural Information Processing Systems},
+    year={2020}
 }
 ```
 <!-- @misc{ge2020structured,
