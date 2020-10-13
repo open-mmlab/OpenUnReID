@@ -31,7 +31,7 @@ Please refer to [MODEL_ZOO.md](docs/MODEL_ZOO.md) for trained models and downloa
 | SSG | [ICCV'19](https://arxiv.org/abs/1811.10144) | ongoing  | ongoing  |  
 | [strong_baseline](tools/strong_baseline) | Sec. 3.1 in [ICLR'20](https://openreview.net/pdf?id=rJlnOhVYPS) | ✓ | ✓ |
 | [MMT](tools/MMT/) | [ICLR'20](https://openreview.net/pdf?id=rJlnOhVYPS) | ✓  | ✓  |  
-| [SpCL](tools/SpCL/) | [arXiv'20](https://arxiv.org/abs/2006.02713) | ✓ |  ✓  |  
+| [SpCL](tools/SpCL/) | [NeurIPS'20](https://arxiv.org/abs/2006.02713) | ✓ |  ✓  |  
 | SDA  | [arXiv'20](https://arxiv.org/abs/2003.06650) | n/a  |  ongoing |  
 
 
