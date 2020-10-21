@@ -25,7 +25,7 @@ For trained models by `OpenUnReID`, please refer to [MODEL_ZOO.md](MODEL_ZOO.md)
 | ------ | :------: | :----: | :------: | :------: | :-------: | :------: | :------ |
 | SpCL+ | NeurIPS'20 | [PyTorch (OpenUnReID)](../tools/SpCL) | 76.0 | 89.5 | 96.2 | 97.5 | [Self-paced Contrastive Learning with Hybrid Memory for Domain Adaptive Object Re-ID](https://arxiv.org/pdf/2006.02713.pdf) |
 | MMT+ | ICLR'20 | [PyTorch (OpenUnReID)](../tools/MMT) | 74.3 | 88.1 | 96.0 | 97.5 | [Mutual Mean-Teaching: Pseudo Label Refinery for Unsupervised Domain Adaptation on Person Re-identification](https://openreview.net/pdf?id=rJlnOhVYPS) |
-| SpCL | NeurIPS'20 | [PyTorch](https://github.com/yxgeee/SpCL) | 72.6 | 87.7 | 95.2 | 96.9 | [Self-paced Contrastive Learning with Hybrid Memory for Domain Adaptive Object Re-ID](https://arxiv.org/pdf/2006.02713.pdf) |
+| SpCL | NeurIPS'20 | [PyTorch](https://github.com/yxgeee/SpCL) | 73.1 | 88.1 | 95.1 | 97.0 | [Self-paced Contrastive Learning with Hybrid Memory for Domain Adaptive Object Re-ID](https://arxiv.org/pdf/2006.02713.pdf) |
 | HCT | CVPR'20 | [Empty](https://github.com/zengkaiwei/HCT) | 56.4 | 80.0 | 91.6 | 95.2 | [Hierarchical Clustering with Hard-batch Triplet Loss for Person Re-identification](https://openaccess.thecvf.com/content_CVPR_2020/papers/Zeng_Hierarchical_Clustering_With_Hard-Batch_Triplet_Loss_for_Person_Re-Identification_CVPR_2020_paper.pdf) |
 | MMCL | CVPR'20 | [PyTorch](https://github.com/kennethwdk/MLCReID) | 45.5 | 80.3 | 89.4 | 92.3 | [Unsupervised Person Re-Identification via Multi-Label Classification](https://openaccess.thecvf.com/content_CVPR_2020/papers/Wang_Unsupervised_Person_Re-Identification_via_Multi-Label_Classification_CVPR_2020_paper.pdf) |
 | SSL | CVPR'20 | [PyTorch (Unofficial)](https://github.com/ryanaleksander/softened-similarity-learning) | 37.8 | 71.7 | 83.8 | 87.4 | [Unsupervised Person Re-identification via Softened Similarity Learning](https://openaccess.thecvf.com/content_CVPR_2020/papers/Lin_Unsupervised_Person_Re-Identification_via_Softened_Similarity_Learning_CVPR_2020_paper.pdf) |
@@ -47,6 +47,7 @@ For trained models by `OpenUnReID`, please refer to [MODEL_ZOO.md](MODEL_ZOO.md)
 
 | Method | Venue | Code | mAP(%) | R@1(%) | R@5(%) | R@10(%) | Reference |
 | ------ | :------: | :----: | :------: | :------: | :-------: | :------: | :------ |
+| SpCL | NeurIPS'20 | [PyTorch](https://github.com/yxgeee/SpCL) | 19.1 | 42.3 | 55.6 | 61.2 | [Self-paced Contrastive Learning with Hybrid Memory for Domain Adaptive Object Re-ID](https://arxiv.org/pdf/2006.02713.pdf) |
 | MMCL | CVPR'20 | [PyTorch](https://github.com/kennethwdk/MLCReID) | 11.2 | 35.4 | 44.8 | 49.8 | [Unsupervised Person Re-Identification via Multi-Label Classification](https://openaccess.thecvf.com/content_CVPR_2020/papers/Wang_Unsupervised_Person_Re-Identification_via_Multi-Label_Classification_CVPR_2020_paper.pdf) |
 
 ### Unsupervised domain adaptation on object re-ID
@@ -107,7 +108,7 @@ For trained models by `OpenUnReID`, please refer to [MODEL_ZOO.md](MODEL_ZOO.md)
 
 | Method | Venue | Code | mAP(%) | R@1(%) | R@5(%) | R@10(%) | Reference |
 | ------ | :------: | :----: | :------: | :------: | :-------: | :------: | :------ |
-| SpCL | NeurIPS'20 | [PyTorch](https://github.com/yxgeee/SpCL) | 25.4 | 51.6 | 64.3 | 69.7 | [Self-paced Contrastive Learning with Hybrid Memory for Domain Adaptive Object Re-ID](https://arxiv.org/pdf/2006.02713.pdf) |
+| SpCL | NeurIPS'20 | [PyTorch](https://github.com/yxgeee/SpCL) | 26.8 | 53.7 | 65.0 | 69.8 | [Self-paced Contrastive Learning with Hybrid Memory for Domain Adaptive Object Re-ID](https://arxiv.org/pdf/2006.02713.pdf) |
 | MMT | ICLR'20 | [PyTorch](https://github.com/yxgeee/MMT) | 22.9 | 49.2 | 63.1 | 68.8 | [Mutual Mean-Teaching: Pseudo Label Refinery for Unsupervised Domain Adaptation on Person Re-identification](https://openreview.net/pdf?id=rJlnOhVYPS) |
 | MMCL | CVPR'20 | [PyTorch](https://github.com/kennethwdk/MLCReID) | 15.1 | 40.8 | 51.8 | 56.7 | [Unsupervised Person Re-Identification via Multi-Label Classification](https://openaccess.thecvf.com/content_CVPR_2020/papers/Wang_Unsupervised_Person_Re-Identification_via_Multi-Label_Classification_CVPR_2020_paper.pdf) |
 | ECN++ | TPAMI'20 | - | 15.2 | 40.4 | 53.1 | 58.7 | [Learning to Adapt Invariance in Memory for Person Re-identification](https://ieeexplore.ieee.org/abstract/document/9018132) |
