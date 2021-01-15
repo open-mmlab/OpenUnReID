@@ -43,18 +43,6 @@ pip install -r requirements.txt
 python setup.py develop
 ```
 
-**f.** Support [AutoAugment](https://arxiv.org/abs/1805.09501). (optional)
-
-You may meet the following error when using `DATA.TRAIN.is_autoaug=True` in config files,
->AttributeError: Can't pickle local object 'SubPolicy.__init__.<locals>.<lambda>'
-
-To solve it, you need to replace `multiprocessing` with `multiprocess` in `torch.multiprocessing` (generally found in `$CONDA/envs/open-mmlab/lib/python3.7/site-packages/torch/multiprocessing/`), e.g.
-```shell
-# refer to https://github.com/DeepVoltaire/AutoAugment/issues/16
-import multiprocess as multiprocessing
-from multiprocess import *
-```
-
 
 ### Prepare datasets
 
