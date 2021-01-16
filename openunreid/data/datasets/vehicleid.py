@@ -40,7 +40,7 @@ class VehicleID(ImageDataset):
         ), "the percentage of val_set should be within (0.0,1.0)"
 
         # allow alternative directory structure
-        dataset_dir = osp.join(self.dataset_dir, "VehicleID")
+        dataset_dir = osp.join(self.dataset_dir, "VehicleID_V1.0")
         if osp.isdir(dataset_dir):
             self.dataset_dir = dataset_dir
         else:
