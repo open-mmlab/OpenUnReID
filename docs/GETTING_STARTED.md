@@ -4,6 +4,8 @@ This page provides basic tutorials about the usage of `OpenUnReID`. The training
 
 We use 4 GPUs for training and testing, which is considered as a default setting in the scripts. You can adjust it (e.g. `${GPUS}`, `${GPUS_PER_NODE}`) based on your own needs.
 
+**Note:** When use VehicleID_V1.0 dataset, you should set "use_metric_vehicleid=True" in [[rank.py]](https://github.com/open-mmlab/OpenUnReID/blob/master/openunreid/core/metrics/rank.py#L226)
+
 ### Test
 
 #### Testing commands
