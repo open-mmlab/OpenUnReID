@@ -30,10 +30,11 @@ class VehicleID(ImageDataset):
     dataset_url = None
 
     def __init__(
-        self, root, mode, val_split=0.3, test_size=800, shuffle_test=False, **kwargs
+        self, root, mode, val_split=0.2, test_size=800, del_labels=False, **kwargs
     ):
         self.root = osp.abspath(osp.expanduser(root))
         self.dataset_dir = osp.join(self.root, self.dataset_dir)
+        self.del_labels = del_labels
         self.download_dataset(self.dataset_dir, self.dataset_url)
         assert (val_split > 0.0) and (
             val_split < 1.0
@@ -47,105 +48,98 @@ class VehicleID(ImageDataset):
             warnings.warn(
                 "The current data structure is deprecated. Please "
                 'put data folders such as "image" under '
-                '"VehicleID".'
+                '"VehicleID_V1.0".'
             )
 
         self.img_dir = osp.join(self.dataset_dir, "image")
         self.split_dir = osp.join(self.dataset_dir, "train_test_split")
         self.test_size = test_size
-
         self.train_list = osp.join(self.split_dir, "train_list.txt")
-        self.trainval_list = osp.join(self.dataset_dir, "trainval_list.txt")
-        if not osp.exists(self.trainval_list):
-            shutil.copy(self.train_list, self.trainval_list)
-        if (mode == "train" or mode == "val") and (
-            not osp.exists(osp.join(self.dataset_dir, "train_list.txt"))
-        ):
-            self.get_train_val(self.train_list, val_split)
-
-        self.temp_list = osp.join(
-            self.dataset_dir, "query_list_" + str(test_size) + ".txt"
-        )
         self.test_list = osp.join(
             self.split_dir, "test_list_" + str(self.test_size) + ".txt"
         )
-        if mode == "query" or mode == "gallery":
-            if not osp.exists(self.temp_list):
-                self.get_query_gallery(self.test_list, self.test_size)
-            if (osp.exists(self.temp_list)) and shuffle_test:
-                self.get_query_gallery(self.test_list, self.test_size)
 
-        if mode == "train" or mode == "val" or mode == "trainval":
-            relabel = True
-            list_path = osp.join(self.dataset_dir, mode + "_list" + ".txt")
-        else:
-            relabel = False
-            list_path = osp.join(
-                self.dataset_dir, mode + "_list_" + str(self.test_size) + ".txt"
+        self.get_query_gallery(self.test_list, self.test_size)
+
+        subsets_cfgs = {
+            "train": (
+                self.train_list,
+                [0.0, 1.0 - val_split],
+                True,
+            ),
+            "val": (
+                self.train_list,
+                [1.0 - val_split, 1.0],
+                False,
+            ),
+            "trainval": (
+                    self.train_list,
+                    [0.0, 1.0],
+                    True,
+            ),
+            "query": (
+                self.query_list,
+                [0.0, 1.0],
+                False,
+            ),
+            "gallery": (
+                self.gallery_list,
+                [0.0, 1.0],
+                False,
+            ),
+        }
+        try:
+            cfgs = subsets_cfgs[mode]
+        except KeyError:
+            raise ValueError(
+                "Invalid mode. Got {}, but expected to be "
+                "one of [train | val | trainval | query | gallery]".format(self.mode)
             )
+        required_files = [self.dataset_dir, cfgs[0]]
+        self.check_before_run(required_files)
 
-        data = self.process_split(list_path, relabel)
+        data = self.process_split(*cfgs)
         super(VehicleID, self).__init__(data, mode, **kwargs)
 
-    def process_split(self, list_path, relabel=False):
-        pid_dict = defaultdict(list)
+
+    def process_split(self, list_path, data_range, relabel=False):
+        pid_container = set()
         with open(list_path) as f:
             list_data = f.readlines()
             for data in list_data:
                 name, pid = data.strip().split(" ")
-                pid = int(pid)
-                pid_dict[pid].append([name, pid])
-        list_pids = list(pid_dict.keys())
+                # pid = int(pid)
+                if pid == -1:
+                    continue  # junk images are just ignored
+                pid_container.add(pid)
+        pid_container = sorted(pid_container)
 
-        list_data = []
-        for pid in list_pids:
-            imginfo = pid_dict[pid]
-            list_data.extend(imginfo)
+        # select a range of identities (for splitting train and val)
+        start_id = int(round(len(pid_container) * data_range[0]))
+        end_id = int(round(len(pid_container) * data_range[1]))
+        pid_container = pid_container[start_id:end_id]
+        assert len(pid_container) > 0
 
-        if relabel:
-            list_pid2label = self.get_pid2label(list_pids)
-        else:
-            list_pid2label = None
-        data = self.parse_img_pids(list_data, list_pid2label)
+        pid2label = {pid: label for label, pid in enumerate(pid_container)}
+
+        data = []
+        for ld in list_data:
+            name, pid = ld.strip().split(" ")
+            if (pid not in pid_container) or (pid == -1):
+                continue
+
+            img_path = osp.join(self.img_dir, name + ".jpg")
+            camid = 0
+            if not self.del_labels:
+                if relabel:
+                    pid = pid2label[pid]
+                data.append((img_path, pid, camid))
+            else:
+                # use 0 as labels for all images
+                data.append((img_path, 0, camid))
 
         return data
 
-    def get_pid2label(self, pids):
-        pid_container = set(pids)
-        pid2label = {pid: label for label, pid in enumerate(pid_container)}
-        return pid2label
-
-    def parse_img_pids(self, nl_pairs, pid2label=None):
-        # il_pair is the pairs of img name and label
-        output = []
-        for info in nl_pairs:
-            name = info[0]
-            pid = info[1]
-            if pid2label is not None:
-                pid = pid2label[pid]
-            camid = 0  # don't have camid information use 0 for all
-            img_path = osp.join(self.img_dir, name + ".jpg")
-            output.append((img_path, pid, camid))
-        return output
-
-    def get_train_val(self, filepath, val_split=0.3):
-        self.train_list = osp.join(self.dataset_dir, "train_list.txt")
-        self.val_list = osp.join(self.dataset_dir, "val_list.txt")
-        file_train = open(self.train_list, "w")
-        file_val = open(self.val_list, "w")
-        val_num = 13164 * val_split
-        with open(filepath, "r") as f:
-            lines = f.readlines()
-        val_data = random.sample(lines, int(val_num))
-
-        for train in lines:
-            if train not in val_data:
-                file_train.write(train)
-        for val in val_data:
-            s = val.strip()
-            file_val.write(s + "\n")
-        file_train.close()
-        file_val.close()
 
     def get_query_gallery(self, filepath, test_size):
         self.query_list = osp.join(
@@ -164,7 +158,6 @@ class VehicleID(ImageDataset):
         imgs_container = []
         for img_info in lines:
             img_path, pid = img_info.split(" ")
-            # pid = int(pid)
             if pid == -1:
                 continue
             pid_container.append(pid)
