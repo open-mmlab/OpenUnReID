@@ -201,7 +201,7 @@ def evaluate_rank(
             distmat, q_pids, g_pids, q_camids, g_camids, max_rank, use_metric_cuhk03
         )
 
-    if verbose:
+    if verbose and cfg.:
         print("\n")
         print("Mean AP: {:4.1%}".format(map))
         print("CMC Scores:")

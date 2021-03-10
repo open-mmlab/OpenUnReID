@@ -301,8 +301,11 @@ class BaseRunner(object):
                 self._rank,
                 print_freq=self.print_freq,
             )
-            better_mAP = max(better_mAP, mAP)
-
+            if self.cfg.TRAIN.num_repeat == 10:
+                better_mAP = max(better_mAP, cmc[0])
+            else:
+                better_mAP = max(better_mAP, mAP)
+                
         return better_mAP
 
     def save(self, mAP=None):
