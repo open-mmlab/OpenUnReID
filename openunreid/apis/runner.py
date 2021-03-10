@@ -314,7 +314,7 @@ class BaseRunner(object):
             self._best_mAP = max(self._best_mAP, mAP)
             print(
                 bcolors.OKGREEN
-                + "\n * Finished epoch {:3d}  mAP: {:5.1%}  best: {:5.1%}{}\n".format(
+                + "\n * Finished epoch {:3d}  current: {:5.1%}  best: {:5.1%}{}\n".format(
                     self._epoch, mAP, self._best_mAP, " *" if is_best else ""
                 )
                 + bcolors.ENDC
