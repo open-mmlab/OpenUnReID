@@ -1,6 +1,8 @@
 import os
 import sys
 
+import numpy as np
+
 from .dist_utils import get_dist_info, synchronize
 from .file_utils import mkdir_if_missing
 
@@ -42,3 +44,17 @@ class Logger(object):
         self.console.close()
         if self.file is not None:
             self.file.close()
+
+
+def display(cfg, map, cmc, cmc_topk=(1, 5, 10)):
+    if cfg.TRAIN.num_repeat == 10:
+        print("\n")
+        print("Mean AP: {:4.1%}".format(np.mean(map)))
+        print("CMC Scores:")
+        for k in cmc_topk:
+            print("  top-{:<4}{:12.1%}".format(k, np.mean(cmc, axis=0)[k - 1]))
+    else:
+        print("\n")
+        print("CMC Scores:")
+        for k in cmc_topk:
+            print("  top-{:<4}{:12.1%}".format(k, np.mean(cmc, axis=0)[k - 1]))

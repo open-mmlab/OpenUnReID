@@ -5,6 +5,8 @@ from collections import defaultdict
 
 import numpy as np
 
+from openunreid.utils.logger import display
+
 try:
     from .rank_cylib.rank_cy import evaluate_cy
 
@@ -202,16 +204,7 @@ def evaluate_rank(
             distmat, q_pids, g_pids, q_camids, g_camids, max_rank, use_metric_cuhk03
         )
 
-    if verbose and cfg.TRAIN.num_repeat == 10:
-        print("\n")
-        print("Mean AP: {:4.1%}".format(map))
-        print("CMC Scores:")
-        for k in cmc_topk:
-            print("  top-{:<4}{:12.1%}".format(k, cmc[k - 1]))
-    else:
-        print("\n")
-        print("CMC Scores:")
-        for k in cmc_topk:
-            print("  top-{:<4}{:12.1%}".format(k, cmc[k - 1]))
+    if verbose:
+        display(cfg, map, cmc, cmc_topk)
 
     return cmc, map

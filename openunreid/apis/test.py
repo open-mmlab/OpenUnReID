@@ -220,11 +220,9 @@ def final_test(cfg, model, cmc_topk=(1, 5, 10)):
             )
             all_cmc.append(cmc)
             all_mAP.append(mAP)
-    print("\n")
-    print("Mean AP: {:4.1%}".format(np.mean(all_mAP)))
-    print("CMC Scores:")
-    for k in cmc_topk:
-        print("  top-{:<4}{:12.1%}".format(k, np.mean(all_cmc, axis=0)[k - 1]))
+
+
+    display(cfg, all_mAP, all_cmc, cmc_topk)
 
     end_time = time.monotonic()
     print("Testing time: ", timedelta(seconds=end_time - start_time))
