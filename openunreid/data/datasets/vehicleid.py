@@ -122,12 +122,18 @@ class VehicleID(ImageDataset):
 
         pid2label = {pid: label for label, pid in enumerate(pid_container)}
 
+        if self.mode == "query":
+            camid = 801
+        else:
+            camid = 0
+
         data = []
         for ld in list_data:
             name, pid = ld.strip().split(" ")
             if (pid not in pid_container) or (pid == -1):
                 continue
 
+            camid += 1
             img_path = osp.join(self.img_dir, name + ".jpg")
             camid = 0
             if not self.del_labels:
