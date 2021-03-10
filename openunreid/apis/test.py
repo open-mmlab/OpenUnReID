@@ -77,7 +77,7 @@ def test_reid(
 
         # evaluate with original distance
         dist = build_dist(cfg.TEST, query_features, gallery_features)
-        cmc, map = evaluate_rank(dist, q_pids, g_pids, q_cids, g_cids)
+        cmc, map = evaluate_rank(cfg, dist, q_pids, g_pids, q_cids, g_cids)
     else:
         cmc, map = np.empty(50), 0.0
 
@@ -97,7 +97,7 @@ def test_reid(
             # dist_gg = build_dist(cfg, gallery_features, gallery_features)
             # final_dist = re_ranking_cpu(dist, dist_qq, dist_gg)
 
-            cmc, map = evaluate_rank(final_dist, q_pids, g_pids, q_cids, g_cids)
+            cmc, map = evaluate_rank(cfg, final_dist, q_pids, g_pids, q_cids, g_cids)
         else:
             cmc, map = np.empty(50), 0.0
 
@@ -137,7 +137,7 @@ def val_reid(
     # evaluate with original distance
     if rank == 0:
         dist = build_dist(cfg.TEST, features)
-        cmc, map = evaluate_rank(dist, pids, pids, cids, cids)
+        cmc, map = evaluate_rank(cfg, dist, pids, pids, cids, cids)
     else:
         cmc, map = np.empty(50), 0.0
 

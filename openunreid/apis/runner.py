@@ -305,7 +305,7 @@ class BaseRunner(object):
                 better_mAP = max(better_mAP, cmc[0])
             else:
                 better_mAP = max(better_mAP, mAP)
-                
+
         return better_mAP
 
     def save(self, mAP=None):
