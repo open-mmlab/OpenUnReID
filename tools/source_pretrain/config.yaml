@@ -59,6 +59,9 @@ TRAIN:
   datasets: {'market1501': 'trainval',}
   unsup_dataset_indexes: null
 
+  # repeated number of evaluation
+  num_repeat: 10     # 10 only for vehicleid dataset, otherwise 1
+
   epochs: 120
   iters: 200
 
