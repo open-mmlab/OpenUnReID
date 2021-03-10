@@ -9,6 +9,7 @@ import warnings
 import torch
 
 from openunreid.apis import BaseRunner, test_reid, set_random_seed
+from openunreid.apis.test import final_test
 from openunreid.core.solvers import build_lr_scheduler, build_optimizer
 from openunreid.data import build_test_dataloader, build_train_dataloader
 from openunreid.models import build_model
@@ -127,11 +128,7 @@ def main():
     runner.resume(cfg.work_dir / "model_best.pth")
 
     # final testing
-    test_loaders, queries, galleries = build_test_dataloader(cfg)
-    for i, (loader, query, gallery) in enumerate(zip(test_loaders, queries, galleries)):
-        cmc, mAP = test_reid(
-            cfg, model, loader, query, gallery, dataset_name=cfg.TEST.datasets[i]
-        )
+    final_test(cfg, model)
 
     # print time
     end_time = time.monotonic()
