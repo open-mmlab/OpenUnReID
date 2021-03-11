@@ -28,7 +28,7 @@ from ..utils.meters import Meters
 
 @torch.no_grad()
 def test_reid(
-    cfg, model, data_loader, query, gallery, dataset_name=None, rank=None, **kwargs
+    cfg, model, data_loader, query, gallery, dataset_name=None, num=1, rank=None, **kwargs
 ):
 
     if cfg.MODEL.dsbn:
@@ -47,7 +47,7 @@ def test_reid(
 
     sep = "*******************************"
     if dataset_name is not None:
-        print(f"\n{sep} Start testing {dataset_name} {sep}\n")
+        print(f"\n{sep} Start testing {dataset_name} {-num} {sep}\n")
 
     if rank is None:
         rank, _, _ = get_dist_info()
