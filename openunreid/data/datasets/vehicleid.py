@@ -109,7 +109,6 @@ class VehicleID(ImageDataset):
             list_data = f.readlines()
             for data in list_data:
                 name, pid = data.strip().split(" ")
-                # pid = int(pid)
                 if pid == -1:
                     continue  # junk images are just ignored
                 pid_container.add(pid)
@@ -124,9 +123,11 @@ class VehicleID(ImageDataset):
         pid2label = {pid: label for label, pid in enumerate(pid_container)}
 
         if self.mode == "query":
-            camid = 801
-        else:
             camid = 0
+        elif self.mode == "gallery":
+            camid = 1
+        else:
+            camid = 2
 
         data = []
         for ld in list_data:
@@ -134,9 +135,7 @@ class VehicleID(ImageDataset):
             if (pid not in pid_container) or (pid == -1):
                 continue
 
-            camid += 1
             img_path = osp.join(self.img_dir, name + ".jpg")
-            camid = 0
             if not self.del_labels:
                 if relabel:
                     pid = pid2label[pid]
