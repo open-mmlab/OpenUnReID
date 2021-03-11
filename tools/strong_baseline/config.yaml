@@ -24,8 +24,8 @@ MODEL:
 
 DATA:
 
-  height: 256
-  width: 128
+  height: 224
+  width: 224
   norm_mean: [0.485, 0.456, 0.406]
   norm_std: [0.229, 0.224, 0.225]
 
@@ -57,7 +57,7 @@ TRAIN:
   amp: False
 
   # datasets
-  datasets: {'market1501': 'trainval',}
+  datasets: {'vehicleid': 'trainval',}
   # datasets: {'market1501': 'trainval', 'dukemtmcreid': 'trainval'}
   unsup_dataset_indexes: [0,]
 
@@ -65,14 +65,14 @@ TRAIN:
   num_repeat: 10     # 10 only for vehicleid dataset, otherwise 1
 
   epochs: 50
-  iters: 400
+  iters: 800
 
   LOSS:
     losses: {'cross_entropy': 1., 'softmax_triplet': 1.}
     margin: 0.
 
   # validate
-  val_dataset: 'market1501'
+  val_dataset: 'vehicleid'
   val_freq: 5
 
   # sampler
@@ -118,7 +118,7 @@ TRAIN:
 TEST:
 
   # datasets
-  datasets: ['market1501',]
+  datasets: ['vehicleid',]
 
   # data loader
   LOADER:

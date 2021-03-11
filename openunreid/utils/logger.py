@@ -47,14 +47,14 @@ class Logger(object):
 
 
 def display(cfg, map, cmc, cmc_topk=(1, 5, 10)):
-    if cfg.TRAIN.num_repeat == 10:
+    if cfg.TRAIN.num_repeat != 1:
+        print("\n")
+        print("CMC Scores:")
+        for k in cmc_topk:
+            print("  top-{:<4}{:12.1%}".format(k, cmc[k - 1]))
+    else:
         print("\n")
         print("Mean AP: {:4.1%}".format(np.mean(map)))
         print("CMC Scores:")
         for k in cmc_topk:
-            print("  top-{:<4}{:12.1%}".format(k, np.mean(cmc, axis=0)[k - 1]))
-    else:
-        print("\n")
-        print("CMC Scores:")
-        for k in cmc_topk:
-            print("  top-{:<4}{:12.1%}".format(k, np.mean(cmc, axis=0)[k - 1]))
+            print("  top-{:<4}{:12.1%}".format(k, cmc[k - 1]))

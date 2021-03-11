@@ -11,6 +11,7 @@ import torch
 
 from .train import set_random_seed
 from openunreid.data import build_test_dataloader
+from openunreid.utils.logger import display
 from ..core.metrics.rank import evaluate_rank
 from ..core.utils.compute_dist import build_dist
 from ..models.utils.dsbn_utils import switch_target_bn
@@ -221,8 +222,11 @@ def final_test(cfg, model, cmc_topk=(1, 5, 10)):
             all_cmc.append(cmc)
             all_mAP.append(mAP)
 
-
-    display(cfg, all_mAP, all_cmc, cmc_topk)
+    if cfg.TRAIN.num_repeat != 1:
+        print("\n ")
+        print("Average CMC Scores:")
+        for k in cmc_topk:
+            print("  top-{:<4}{:12.1%}".format(k, np.mean(all_cmc, axis=0)[k - 1]))
 
     end_time = time.monotonic()
     print("Testing time: ", timedelta(seconds=end_time - start_time))
