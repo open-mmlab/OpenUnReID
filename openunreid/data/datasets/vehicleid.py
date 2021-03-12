@@ -2,9 +2,7 @@
 
 import os.path as osp
 import random
-import shutil
 import warnings
-from collections import defaultdict
 
 from ..utils.base_dataset import ImageDataset
 
@@ -122,20 +120,15 @@ class VehicleID(ImageDataset):
 
         pid2label = {pid: label for label, pid in enumerate(pid_container)}
 
-        if self.mode == "query":
-            camid = 0
-        elif self.mode == "gallery":
-            camid = 1
-        else:
-            camid = 2
-
         data = []
+        camid = 0
         for ld in list_data:
             name, pid = ld.strip().split(" ")
             if (pid not in pid_container) or (pid == -1):
                 continue
 
             img_path = osp.join(self.img_dir, name + ".jpg")
+            camid += 1
             if not self.del_labels:
                 if relabel:
                     pid = pid2label[pid]

@@ -62,7 +62,7 @@ TRAIN:
   unsup_dataset_indexes: [0,]
 
   # repeated number of evaluation
-  num_repeat: 10     # 10 only for vehicleid dataset, otherwise 1
+  num_repeat: 1     # 10 only for vehicleid dataset, otherwise 1
 
   epochs: 50
   iters: 400

@@ -11,7 +11,6 @@ import torch
 
 from .train import set_random_seed
 from openunreid.data import build_test_dataloader
-from openunreid.utils.logger import display
 from ..core.metrics.rank import evaluate_rank
 from ..core.utils.compute_dist import build_dist
 from ..models.utils.dsbn_utils import switch_target_bn

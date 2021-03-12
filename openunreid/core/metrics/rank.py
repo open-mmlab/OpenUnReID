@@ -172,7 +172,7 @@ def evaluate_rank(
     g_camids,
     max_rank=50,
     use_metric_cuhk03=False,
-    use_cython=False,
+    use_cython=True,
     cmc_topk=(1, 5, 10),
     verbose=True,
 ):
