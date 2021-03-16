@@ -18,6 +18,7 @@ from openunreid.utils.config import (
 from openunreid.utils.dist_utils import init_dist, synchronize
 from openunreid.utils.logger import Logger
 from openunreid.utils.torch_utils import copy_state_dict, load_checkpoint
+from openunreid.apis.test import final_test
 
 
 def parge_config():
@@ -88,9 +89,6 @@ def main():
     # load checkpoint
     state_dict = load_checkpoint(args.resume)
 
-    # load test data_loader
-    test_loaders, queries, galleries = build_test_dataloader(cfg)
-
     for key in state_dict:
         if not key.startswith("state_dict"):
             continue
@@ -99,12 +97,7 @@ def main():
         copy_state_dict(state_dict[key], model)
 
         # start testing
-        for i, (loader, query, gallery) in enumerate(
-            zip(test_loaders, queries, galleries)
-        ):
-            cmc, mAP = test_reid(
-                cfg, model, loader, query, gallery, dataset_name=cfg.TEST.datasets[i]
-            )
+        final_test(cfg, model)
 
     # print time
     end_time = time.monotonic()
