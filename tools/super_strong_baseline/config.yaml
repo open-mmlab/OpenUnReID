@@ -1,0 +1,138 @@
+DATA_ROOT: '../datasets/'
+LOGS_ROOT: '../logs/'
+
+
+MODEL:
+  # architecture
+  backbone: 'resnet50'
+  pooling: 'avg'
+  embed_feat: 0
+  dropout: 0.
+
+  dsbn: True
+
+  sync_bn: True
+  samples_per_bn: 16
+
+  mean_net: False
+  alpha: 0.999
+
+  # pretraining
+  imagenet_pretrained: True
+  source_pretrained: null
+
+
+DATA:
+
+  height: 256
+  width: 128
+  norm_mean: [0.485, 0.456, 0.406]
+  norm_std: [0.229, 0.224, 0.225]
+
+  TRAIN:
+    # augmentation
+    is_autoaug: False
+
+    is_flip: True
+    flip_prob: 0.5
+
+    is_pad: True
+    pad_size: 10
+
+    is_blur: False
+    blur_prob: 0.5
+
+    is_erase: True
+    erase_prob: 0.5
+
+    # dual augmentation for MMT
+    is_mutual_transform: False
+    mutual_times: 2
+
+
+TRAIN:
+  seed: 1
+  deterministic: True
+  # mixed precision training for PyTorch>=1.6
+  amp: False
+
+  # datasets
+  datasets: {'msmt17': 'trainval'}
+  unsup_dataset_indexes: [0,]
+
+  epochs: 50
+  iters: 400
+
+  LOSS:
+    losses: {'hybrid_memory': 1.,}
+    temp: 0.05
+    momentum: 0.2
+    margin: 0.3
+
+  # validate
+  val_dataset: 'msmt17'
+  val_freq: 5
+
+  # sampler
+  SAMPLER:
+    num_instances: 4
+    is_shuffle: True
+
+  # data loader
+  LOADER:
+    samples_per_gpu: 16
+    workers_per_gpu: 2
+
+  # pseudo labels
+  PSEUDO_LABELS:
+    freq: 1 # epochs
+    use_outliers: False
+    norm_feat: True
+    norm_center: True
+
+    cluster: 'dbscan'
+    eps: [0.6,]
+    min_samples: 4 # for dbscan
+    dist_metric: 'jaccard'
+    k1: 30 # for jaccard distance
+    k2: 6 # for jaccard distance
+    search_type: 0 # 0,1,2 for GPU, 3 for CPU (work for faiss)
+    cluster_num: null
+
+    # cluster: 'kmeans'
+    # cluster_num: [500,]
+    # dist_cuda: True
+
+  # optim
+  OPTIM:
+    optim: 'adam'
+    lr: 0.00035
+    weight_decay: 0.0005
+
+  SCHEDULER:
+    lr_scheduler: 'single_step'
+    stepsize: 20
+    gamma: 0.1
+
+
+TEST:
+
+  # datasets
+  datasets: ['msmt17',]
+
+  # data loader
+  LOADER:
+    samples_per_gpu: 32
+    workers_per_gpu: 2
+
+  # ranking setting
+  dist_metric: 'euclidean'
+  norm_feat: True
+  dist_cuda: True
+
+  # post processing
+  rerank: False
+  search_type: 0 # 0,1,2 for GPU, 3 for CPU (work for faiss)
+  k1: 20
+  k2: 6
+  lambda_value: 0.3
