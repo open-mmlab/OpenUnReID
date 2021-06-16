@@ -7,18 +7,15 @@ from datetime import timedelta
 from pathlib import Path
 
 import torch
-from torch.nn.parallel import DataParallel, DistributedDataParallel
 
 from openunreid.apis import GANBaseRunner, set_random_seed, infer_gan
 from openunreid.core.solvers import build_lr_scheduler, build_optimizer
 from openunreid.data import (
-    build_test_dataloader,
     build_train_dataloader,
     build_val_dataloader,
 )
 from openunreid.models import build_gan_model
 from openunreid.models.losses import build_loss
-from openunreid.models.utils.extract import extract_features
 from openunreid.utils.config import (
     cfg,
     cfg_from_list,

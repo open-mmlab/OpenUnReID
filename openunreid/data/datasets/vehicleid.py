@@ -2,9 +2,7 @@
 
 import os.path as osp
 import random
-import shutil
 import warnings
-from collections import defaultdict
 
 from ..utils.base_dataset import ImageDataset
 
@@ -34,6 +32,7 @@ class VehicleID(ImageDataset):
     ):
         self.root = osp.abspath(osp.expanduser(root))
         self.dataset_dir = osp.join(self.root, self.dataset_dir)
+        self.mode = mode
         self.del_labels = del_labels
         self.download_dataset(self.dataset_dir, self.dataset_url)
         assert (val_split > 0.0) and (
@@ -108,7 +107,6 @@ class VehicleID(ImageDataset):
             list_data = f.readlines()
             for data in list_data:
                 name, pid = data.strip().split(" ")
-                # pid = int(pid)
                 if pid == -1:
                     continue  # junk images are just ignored
                 pid_container.add(pid)
@@ -123,13 +121,14 @@ class VehicleID(ImageDataset):
         pid2label = {pid: label for label, pid in enumerate(pid_container)}
 
         data = []
+        camid = 0
         for ld in list_data:
             name, pid = ld.strip().split(" ")
             if (pid not in pid_container) or (pid == -1):
                 continue
 
             img_path = osp.join(self.img_dir, name + ".jpg")
-            camid = 0
+            camid += 1
             if not self.del_labels:
                 if relabel:
                     pid = pid2label[pid]

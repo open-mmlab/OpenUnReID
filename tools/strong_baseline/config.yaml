@@ -61,8 +61,11 @@ TRAIN:
   # datasets: {'market1501': 'trainval', 'dukemtmcreid': 'trainval'}
   unsup_dataset_indexes: [0,]
 
+  # repeated number of evaluation
+  num_repeat: 1     # 10 only for vehicleid dataset, otherwise 1
+
   epochs: 50
-  iters: 400
+  iters: 800
 
   LOSS:
     losses: {'cross_entropy': 1., 'softmax_triplet': 1.}

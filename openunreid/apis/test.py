@@ -8,8 +8,9 @@ from datetime import timedelta
 
 import numpy as np
 import torch
-import torchvision
 
+from .train import set_random_seed
+from openunreid.data import build_test_dataloader
 from ..core.metrics.rank import evaluate_rank
 from ..core.utils.compute_dist import build_dist
 from ..models.utils.dsbn_utils import switch_target_bn
@@ -26,10 +27,8 @@ from ..utils.meters import Meters
 
 @torch.no_grad()
 def test_reid(
-    cfg, model, data_loader, query, gallery, dataset_name=None, rank=None, **kwargs
+    cfg, model, data_loader, query, gallery, dataset_name=None, num=1, rank=None, **kwargs
 ):
-
-    start_time = time.monotonic()
 
     if cfg.MODEL.dsbn:
         assert (
@@ -47,7 +46,7 @@ def test_reid(
 
     sep = "*******************************"
     if dataset_name is not None:
-        print(f"\n{sep} Start testing {dataset_name} {sep}\n")
+        print(f"\n{sep} Start testing {dataset_name} {-num} {sep}\n")
 
     if rank is None:
         rank, _, _ = get_dist_info()
@@ -78,7 +77,7 @@ def test_reid(
 
         # evaluate with original distance
         dist = build_dist(cfg.TEST, query_features, gallery_features)
-        cmc, map = evaluate_rank(dist, q_pids, g_pids, q_cids, g_cids)
+        cmc, map = evaluate_rank(cfg, dist, q_pids, g_pids, q_cids, g_cids)
     else:
         cmc, map = np.empty(50), 0.0
 
@@ -98,13 +97,9 @@ def test_reid(
             # dist_gg = build_dist(cfg, gallery_features, gallery_features)
             # final_dist = re_ranking_cpu(dist, dist_qq, dist_gg)
 
-            cmc, map = evaluate_rank(final_dist, q_pids, g_pids, q_cids, g_cids)
+            cmc, map = evaluate_rank(cfg, final_dist, q_pids, g_pids, q_cids, g_cids)
         else:
             cmc, map = np.empty(50), 0.0
-
-    end_time = time.monotonic()
-    print("Testing time: ", timedelta(seconds=end_time - start_time))
-    print(f"\n{sep} Finished testing {sep}\n")
 
     return cmc, map
 
@@ -142,7 +137,7 @@ def val_reid(
     # evaluate with original distance
     if rank == 0:
         dist = build_dist(cfg.TEST, features)
-        cmc, map = evaluate_rank(dist, pids, pids, cids, cids)
+        cmc, map = evaluate_rank(cfg, dist, pids, pids, cids, cids)
     else:
         cmc, map = np.empty(50), 0.0
 
@@ -207,3 +202,31 @@ def infer_gan(
     print(f"\n{sep} Finished translating {sep}\n")
 
     return
+
+
+@torch.no_grad()
+def final_test(cfg, model, cmc_topk=(1, 5, 10)):
+    sep = "*******************************"
+    start_time = time.monotonic()
+
+    all_cmc = []
+    all_mAP = []
+    for num in range(cfg.TRAIN.num_repeat):
+        set_random_seed(num + 1, cfg.TRAIN.deterministic)
+        test_loaders, queries, galleries = build_test_dataloader(cfg)
+        for i, (loader, query, gallery) in enumerate(zip(test_loaders, queries, galleries)):
+            cmc, mAP = test_reid(
+                cfg, model, loader, query, gallery, dataset_name=cfg.TEST.datasets[i], num=num+1
+            )
+            all_cmc.append(cmc)
+            all_mAP.append(mAP)
+
+    if cfg.TRAIN.num_repeat != 1:
+        print("\n ")
+        print("Average CMC Scores:")
+        for k in cmc_topk:
+            print("  top-{:<4}{:12.1%}".format(k, np.mean(all_cmc, axis=0)[k - 1]))
+
+    end_time = time.monotonic()
+    print("Testing time: ", timedelta(seconds=end_time - start_time))
+    print(f"\n{sep} Finished testing {sep}\n")
