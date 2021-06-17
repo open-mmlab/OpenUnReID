@@ -44,8 +44,61 @@ For the leaderboard on public benchmarks, please refer to [LEADERBOARD.md](LEADE
 | [MMT](../tools/MMT/) | ResNet50 | ImageNet | 60.3 | 75.6 | 86.0 | 89.2 | ~4.5h | [[config]](https://drive.google.com/file/d/1kXKdq-mZ-wiWrgsss5Ny_vmdTSnvLAhH/view?usp=sharing) [[model]](https://drive.google.com/file/d/11qtWjAgGtjCa_G3G1hWLWj0Mpko9N7D3/view?usp=sharing) |
 | [SpCL](../tools/SpCL/) | ResNet50 | ImageNet | 67.1 | 82.4 | 90.8 | 93.0 | ~2h | [[config]](https://drive.google.com/file/d/1QXrH0apN0QqsgU0Bie8Vk7kXKDfYxFL_/view?usp=sharing) [[model]](https://drive.google.com/file/d/1B5nlhSj8AfTpzSW8bkx-LMj-Loa1ENul/view?usp=sharing) |
 
-#### ... (TBD)
+#### MSMT17
 
+<!-- | Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet | 0.7 | 3.5 | 7.3 | 9.7 | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 15.5 | 37.8 | 50.4 | 56.3 | ~3h | [[config]]() [[model]]() [[log]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet | 20.5 | 43.6 | 57.1 | 63.2 | ~5.5h | [[config]]() [[model]]() [[log]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet | 19.6 | 42.8 | 55.4 | 61.1 | ~4.5h | [[config]]() [[model]]() [[log]]() | -->
+
+| Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet | 0.7 | 3.5 | 7.3 | 9.7 | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 15.5 | 37.8 | 50.4 | 56.3 | ~3h | [[config]]() [[model]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet | 20.5 | 43.6 | 57.1 | 63.2 | ~5.5h | [[config]]() [[model]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet | 19.6 | 42.8 | 55.4 | 61.1 | ~4.5h | [[config]]() [[model]]() |
+
+#### Veri
+
+<!-- | Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet | 7.6 | 30.3 | 44.9 | 52.2 | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 31.9 | 71.9 | 80.5 | 85.7 | ~3h | [[config]]() [[model]]() [[log]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet | 35.8 | 76.8 | 83.7 | 87.4 | ~7h | [[config]]() [[model]]() [[log]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet | 36.9 | 79.9 | 86.8 | 89.9 | ~5h | [[config]]() [[model]]() [[log]]() | -->
+
+| Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet | 7.6 | 30.3 | 44.9 | 52.2 | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 31.9 | 71.9 | 80.5 | 85.7 | ~3h | [[config]]() [[model]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet | 35.8 | 76.8 | 83.7 | 87.4 | ~7h | [[config]]() [[model]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet | 36.9 | 79.9 | 86.8 | 89.9 | ~5h | [[config]]() [[model]]() |
+
+#### VehicleID
+
+<!-- | Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet |  |  |  |  | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() | -->
+
+| Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet |  |  |  |  | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+
+#### ... (TBD)
 
 ### Unsupervised domain adaptation (UDA) on object re-ID
 
@@ -69,7 +122,6 @@ For the leaderboard on public benchmarks, please refer to [LEADERBOARD.md](LEADE
 | [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 75.6 | 90.9 | 96.6 | 97.8 | ~3h | [[config]](https://drive.google.com/file/d/1Oe5QQ-NEJy9YsQr7hsMr5CJlZ0XHJS5P/view?usp=sharing) [[model]](https://drive.google.com/file/d/18t9HOCnQzQlgkRkSs8uFaDFYioGRtcLO/view?usp=sharing) |
 | [MMT](../tools/MMT/) | ResNet50 | ImageNet | 80.9 | 92.2 | 97.6 | 98.4 | ~6h | [[config]](https://drive.google.com/file/d/1iFiOLbrzVQcEtIlFvsDIcDf4FcT9Z60U/view?usp=sharing) [[model]](https://drive.google.com/file/d/1XGOrt1iTHQNuFPebBcNjPrkTEwBXXRr_/view?usp=sharing) |
 | [SpCL](../tools/SpCL/) | ResNet50 | ImageNet | 78.2 | 90.5 | 96.6 | 97.8 | ~3h | [[config]](https://drive.google.com/file/d/1O8XxCJDzpI7VIRR7crh0kkOK8vebmIgj/view?usp=sharing) [[model]](https://drive.google.com/file/d/1LvrHptXgzWspN2jwYtom4L_jUKYHpU_z/view?usp=sharing) |
-<!-- | [SDA](../tools/SDA/) | ResNet50 | DukeMTMC-reID | -->
 
 #### Market-1501 -> DukeMTMC-reID
 
@@ -88,7 +140,167 @@ For the leaderboard on public benchmarks, please refer to [LEADERBOARD.md](LEADE
 | [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 60.4 | 75.9 | 86.2 | 89.8 | ~3h | [[config]](https://drive.google.com/file/d/1-y5o5j6_K037s1BKKlY5IHf-hJ37XEtK/view?usp=sharing) [[model]](https://drive.google.com/file/d/1IVTJkfdlubV_bfH_ipxIEsubraxGbQMI/view?usp=sharing) |
 | [MMT](../tools/MMT/) | ResNet50 | ImageNet | 67.7 | 80.3 | 89.9 | 92.9 | ~6h | [[config]](https://drive.google.com/file/d/1KcRmKH-8VZudb6N-KHj12DhV3ECmdBuM/view?usp=sharing) [[model]](https://drive.google.com/file/d/1tgqTZDLIZQrPS56PF0Yguy6lfNdSAIa9/view?usp=sharing) |
 | [SpCL](../tools/SpCL/) | ResNet50 | ImageNet | 70.4 | 83.8 | 91.2 | 93.4 | ~3h | [[config]](https://drive.google.com/file/d/1ILiId7BF_49kv4dT1pcZE0HQEdeTPXjU/view?usp=sharing) [[model]](https://drive.google.com/file/d/17WQyMnS7PiDy3EpD2RJbk45LVxcRZNi2/view?usp=sharing) |
-<!-- | [SDA](../tools/SDA/) | ResNet50 | Market-1501 | -->
 
+#### DukeMTMC-reID -> MSMT17
+
+<!-- | Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet | 11.9 | 35.9 | 48.4 | 54.2 | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 20.3 | 45.7 | 58.6 | 64.5 | ~3.5h | [[config]]() [[model]]() [[log]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet | 25.7 | 51.1 | 63.9 | 69.2 | ~7h | [[config]]() [[model]]() [[log]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet | 26.5 | 53.1 | 65.8 | 70.5 | ~6h | [[config]]() [[model]]() [[log]]() | -->
+
+| Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet | 11.9 | 35.9 | 48.4 | 54.2 | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 20.3 | 45.7 | 58.6 | 64.5 | ~3.5h | [[config]]() [[model]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet | 25.7 | 51.1 | 63.9 | 69.2 | ~7h | [[config]]() [[model]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet | 26.5 | 53.1 | 65.8 | 70.5 | ~6h | [[config]]() [[model]]() |
+
+#### MSMT17 -> DukeMTMC-reID
+
+<!-- | Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet | 38.1 | 60.2 | 74.7 | 79 | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 62.3 | 77.4 | 88.0 | 91.7 | ~2.5h | [[config]]() [[model]]() [[log]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet | 66.6 | 79.1 | 88.9 | 91.7 | ~6h | [[config]]() [[model]]() [[log]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet | 67.5 | 82.8 | 90.5 | 92.6 | ~5h | [[config]]() [[model]]() [[log]]() | -->
+
+| Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet | 38.1 | 60.2 | 74.7 | 79 | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 62.3 | 77.4 | 88.0 | 91.7 | ~2.5h | [[config]]() [[model]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet | 66.6 | 79.1 | 88.9 | 91.7 | ~6h | [[config]]() [[model]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet | 67.5 | 82.8 | 90.5 | 92.6 | ~5h | [[config]]() [[model]]() |
+
+#### Market-1501 -> MSMT17
+
+<!-- | Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet | 9.6 | 29.4 | 41.5 | 46.8 | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 22.8 | 49.3 | 61.7 | 67.2 | ~3.5h | [[config]]() [[model]]() [[log]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet | 25.6 | 50.9 | 63.5 | 68.8 | ~7.5h | [[config]]() [[model]]() [[log]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() | -->
+
+| Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet | 9.6 | 29.4 | 41.5 | 46.8 | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 22.8 | 49.3 | 61.7 | 67.2 | ~3.5h | [[config]]() [[model]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet | 25.6 | 50.9 | 63.5 | 68.8 | ~7.5h | [[config]]() [[model]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+
+#### MSMT17 -> Market-1501
+
+<!-- | Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet | 30.1 | 61.0 | 76.8 | 81.7 | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 76.0 | 89.7 | 96.5 | 97.9 | ~3h | [[config]]() [[model]]() [[log]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() | -->
+
+| Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet | 30.1 | 61.0 | 76.8 | 81.7 | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 76 | 89.7 | 96.5 | 97.9 | ~3h | [[config]]() [[model]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet | 78.4 | 90.8 | 97.0 | 98.0 | ~6.5h | [[config]]() [[model]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet | 77.5 | 89.7 | 96.1 | 97.6 | ~5h | [[config]]() [[model]]() |
+
+#### PersonX -> DukeMTMC-reID
+
+<!-- | Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet | 18.3 | 39.2 | 53.1 | 58.7 | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 58.6 | 74.4 | 85.5 | 89.7 | ~2.5h | [[config]]() [[model]]() [[log]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet | 64.1 | 78.2 | 87.3 | 90.8 | ~6h | [[config]]() [[model]]() [[log]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() | -->
+
+| Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet | 18.3 | 39.2 | 53.1 | 58.7 | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 58.6 | 74.4 | 85.5 | 89.7 | ~2.5h | [[config]]() [[model]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet | 64.1 | 78.2 | 87.3 | 90.8 | ~6h | [[config]]() [[model]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+
+#### PersonX -> Market-1501
+
+<!-- | Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet | 20.3 | 46.4 | 63.5 | 71.1 | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 74.2 | 89.4 | 96.1 | 97.5 | ~2.5h | [[config]]() [[model]]() [[log]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet | 78.1 | 90.3 | 96.9 | 97.9 | ~6h | [[config]]() [[model]]() [[log]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() | -->
+
+| Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet | 20.3 | 46.4 | 63.5 | 71.1 | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 74.2 | 89.4 | 96.1 | 97.5 | ~2.5h | [[config]]() [[model]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet | 78.1 | 90.3 | 96.9 | 97.9 | ~6h | [[config]]() [[model]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+
+#### PersonX -> MSMT17
+
+<!-- | Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet | 5.3 | 19.0 | 29.0 | 34.0 | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 19.9 | 45.0 | 57.9 | 63.4 | ~3.5h | [[config]]() [[model]]() [[log]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet | 24.2 | 49.4 | 62.6 | 68.0 | ~7.5h | [[config]]() [[model]]() [[log]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() | -->
+
+| Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet | 5.3 | 19.0 | 29.0 | 34.0 | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet | 19.9 | 45.0 | 57.9 | 63.4 | ~3.5h | [[config]]() [[model]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet | 24.2 | 49.4 | 62.6 | 68.0 | ~7.5h | [[config]]() [[model]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+
+#### VehicleID -> Veri
+
+<!-- | Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet |  |  |  |  | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() | -->
+
+| Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet |  |  |  |  | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+
+#### Veri -> VehicleID
+
+<!-- | Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet |  |  |  |  | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() [[log]]() | -->
+
+| Method | Backbone | Pre-trained | mAP(%) | top-1(%) | top-5(%) | top-10(%) | Train time | Download |
+| ----- | :------: | :---------: | :----: | :------: | :------: | :-------: | :------: | :------: |
+| Direct infer | ResNet50 | ImageNet |  |  |  |  | n/a |
+| [UDA_TP](../tools/UDA_TP) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+| [strong_baseline](../tools/strong_baseline) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+| [MMT](../tools/MMT/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
+| [SpCL](../tools/SpCL/) | ResNet50 | ImageNet |  |  |  |  | ~h | [[config]]() [[model]]() |
 
 #### ... (TBD)
